@@ -4,42 +4,47 @@ using Microsoft.Xna.Framework.Graphics;
 using factoryRL.Inputs;
 namespace factoryRL.GameObjects;
 
-public class World
+public class World : Scene
 {
-    private List<Entity> gameEntities = new List<Entity>();
-    public List<Entity> entitiesToAdd = new List<Entity>();
-    readonly GameAssets assets;
-    readonly Game1 game;
-    public InputManager _inputManager;
+    private readonly int tileSizePixels = 32;
+    private readonly Entity[,] map = new Entity[5000, 5000];
 
-    public World(Game1 _game, GameAssets _assets)
+    public World(Game1 game, GameAssets assets) : base(game, assets)
     {
-        game = _game;
-        assets = _assets;  
-        _inputManager = game._inputManager;
+        GenerateMap();
     }
 
-    public void Add(Entity entity)
+    public void GenerateMap()
     {
-        entitiesToAdd.Add(entity);
+        // We probably want to pass in some seed data here but idk exactly what that looks like atm. So I am going to hardcode it for now.
     }
-
-    public void Update(GameTime gameTime) 
+    
+    public void AdjustEntityPositions()
     {
-        foreach (var e in gameEntities)
+        for (int x = 0; x < map.GetLength(0); x++)
         {
-            e.Update(gameTime);
+            for (int y = 0; y < map.GetLength(1); y++)
+            {
+                Entity entity = map[x, y];
+                if (entity != null)
+                {
+                    entity._position = new Vector2(
+                        x * tileSizePixels,
+                        y * tileSizePixels
+                    );
+                }
+            }
         }
-
-        gameEntities.AddRange(entitiesToAdd);
-        entitiesToAdd.Clear();
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public new void Update(GameTime gameTime) 
     {
-        foreach (var e in gameEntities)
-        {
-            e.Draw(spriteBatch);
-        }
+        AdjustEntityPositions(); // I feel like we dont want to be doing this every frame. I am not sure though where we want to call it.
+        base.Update(gameTime);
+    }
+
+    public new void Draw(SpriteBatch spriteBatch)
+    {
+        base.Draw(spriteBatch);
     }
 }
