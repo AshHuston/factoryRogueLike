@@ -1,0 +1,13 @@
+using Microsoft.Xna.Framework.Graphics;
+namespace factoryRL.GameObjects;
+
+public class GameAssets
+{
+    public Texture2D Bird1;
+    public Texture2D Bird2;
+    public Texture2D Bird3;
+    public Texture2D Pipe;
+    public Texture2D Restart;
+}
+
+// 3/3/26 Pretty sure this needs to just have an array there and have a function to load them in, but for now this is fine.  I just want to get something on the screen.

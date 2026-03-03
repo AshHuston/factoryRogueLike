@@ -1,0 +1,6 @@
+/Users/anthonyhuston/code/factoryRogueLike/obj/Debug/net9.0/mgcb.tool.restore
+/Users/anthonyhuston/code/factoryRogueLike/obj/Debug/net9.0/factoryRogueLike.csproj.AssemblyReference.cache
+/Users/anthonyhuston/code/factoryRogueLike/obj/Debug/net9.0/factoryRogueLike.GeneratedMSBuildEditorConfig.editorconfig
+/Users/anthonyhuston/code/factoryRogueLike/obj/Debug/net9.0/factoryRogueLike.AssemblyInfoInputs.cache
+/Users/anthonyhuston/code/factoryRogueLike/obj/Debug/net9.0/factoryRogueLike.AssemblyInfo.cs
+/Users/anthonyhuston/code/factoryRogueLike/obj/Debug/net9.0/factoryRogueLike.csproj.CoreCompileInputs.cache
