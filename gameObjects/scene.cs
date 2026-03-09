@@ -9,7 +9,7 @@ public class Scene
     protected List<Entity> gameEntities = [];
     protected List<Entity> entitiesToAdd = [];
     protected List<Entity> entitiesToRemove = [];
-    readonly GameAssets assets;
+    protected readonly GameAssets assets;
     readonly Game1 game;
     public InputManager _inputManager;
 
@@ -30,7 +30,7 @@ public class Scene
         entitiesToRemove.Add(entity);
     }
 
-    public void Update(GameTime gameTime) 
+    public virtual void Update(GameTime gameTime) 
     {
         foreach (var e in gameEntities)
         {

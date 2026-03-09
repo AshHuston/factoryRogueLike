@@ -1,1 +1,9 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"/Users/anthonyhuston/code/factoryRogueLike/Content/coalTerrain.png","/Users/anthonyhuston/code/factoryRogueLike/Content/bin/DesktopGL/Content/coalTerrain.xnb","TextureProcessor","Texture2DContent",456,4181,0.169183
+"/Users/anthonyhuston/code/factoryRogueLike/Content/copperTerrain.png","/Users/anthonyhuston/code/factoryRogueLike/Content/bin/DesktopGL/Content/copperTerrain.xnb","TextureProcessor","Texture2DContent",447,4181,0.001374
+"/Users/anthonyhuston/code/factoryRogueLike/Content/courier.png","/Users/anthonyhuston/code/factoryRogueLike/Content/bin/DesktopGL/Content/courier.xnb","TextureProcessor","Texture2DContent",390,4181,0.000824
+"/Users/anthonyhuston/code/factoryRogueLike/Content/forestTerrain.png","/Users/anthonyhuston/code/factoryRogueLike/Content/bin/DesktopGL/Content/forestTerrain.xnb","TextureProcessor","Texture2DContent",621,4181,0.000602
+"/Users/anthonyhuston/code/factoryRogueLike/Content/ironTerrain.png","/Users/anthonyhuston/code/factoryRogueLike/Content/bin/DesktopGL/Content/ironTerrain.xnb","TextureProcessor","Texture2DContent",444,4181,0.000708
+"/Users/anthonyhuston/code/factoryRogueLike/Content/player.png","/Users/anthonyhuston/code/factoryRogueLike/Content/bin/DesktopGL/Content/player.xnb","TextureProcessor","Texture2DContent",327,4181,0.000627
+"/Users/anthonyhuston/code/factoryRogueLike/Content/stoneTerrain.png","/Users/anthonyhuston/code/factoryRogueLike/Content/bin/DesktopGL/Content/stoneTerrain.xnb","TextureProcessor","Texture2DContent",468,4181,0.00055
+"/Users/anthonyhuston/code/factoryRogueLike/Content/worker.png","/Users/anthonyhuston/code/factoryRogueLike/Content/bin/DesktopGL/Content/worker.xnb","TextureProcessor","Texture2DContent",327,4181,0.000618

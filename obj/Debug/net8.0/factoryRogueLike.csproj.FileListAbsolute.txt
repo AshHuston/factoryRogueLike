@@ -32,3 +32,11 @@
 /Users/anthonyhuston/code/factoryRogueLike/obj/Debug/net8.0/factoryRogueLike.pdb
 /Users/anthonyhuston/code/factoryRogueLike/obj/Debug/net8.0/factoryRogueLike.genruntimeconfig.cache
 /Users/anthonyhuston/code/factoryRogueLike/obj/Debug/net8.0/ref/factoryRogueLike.dll
+/Users/anthonyhuston/code/factoryRogueLike/bin/Debug/net8.0/Content/coalTerrain.xnb
+/Users/anthonyhuston/code/factoryRogueLike/bin/Debug/net8.0/Content/copperTerrain.xnb
+/Users/anthonyhuston/code/factoryRogueLike/bin/Debug/net8.0/Content/courier.xnb
+/Users/anthonyhuston/code/factoryRogueLike/bin/Debug/net8.0/Content/forestTerrain.xnb
+/Users/anthonyhuston/code/factoryRogueLike/bin/Debug/net8.0/Content/ironTerrain.xnb
+/Users/anthonyhuston/code/factoryRogueLike/bin/Debug/net8.0/Content/player.xnb
+/Users/anthonyhuston/code/factoryRogueLike/bin/Debug/net8.0/Content/stoneTerrain.xnb
+/Users/anthonyhuston/code/factoryRogueLike/bin/Debug/net8.0/Content/worker.xnb

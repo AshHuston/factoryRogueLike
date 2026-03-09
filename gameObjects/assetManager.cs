@@ -8,6 +8,16 @@ public class GameAssets
     public Texture2D Bird3;
     public Texture2D Pipe;
     public Texture2D Restart;
+
+    public Texture2D IronOre { get; internal set; }
+    public Texture2D CopperOre { get; internal set; }
+    public Texture2D CoalOre { get; internal set; }
+    public Texture2D StoneOre { get; internal set; }
+    public Texture2D Forest { get; internal set; }
+    public Texture2D StoneTerrain { get; internal set; }
+    public Texture2D CoalTerrain { get; internal set; }
+    public Texture2D IronTerrain { get; internal set; }
+    public Texture2D CopperTerrain { get; internal set; }
 }
 
 // 3/3/26 Pretty sure this needs to just have an array there and have a function to load them in, but for now this is fine.  I just want to get something on the screen.
