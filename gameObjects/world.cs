@@ -1,9 +1,4 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using factoryRL.Inputs;
-using factoryRL.GameObjects.Terrain;
-using System.Diagnostics;
 using System;
 namespace factoryRL.GameObjects;
 
@@ -11,15 +6,16 @@ public class World : Scene
 {
     private readonly int tileSizePixels = 32;
     private readonly Entity[,] map = new Entity[500, 500];
-    private int removeThisLater = 0;
+    //private HarvestableTerrain testOre;
 
     public World(Game1 game, GameAssets assets) : base(game, assets)
     {
         Console.WriteLine("Initializing world...");
         GenerateMap();
-        HarvestableTerrain testOre = new HarvestableTerrain(assets.IronTerrain, new Vector2(10, 10));
-        map[0, 0] = testOre;
-        gameEntities.Add(testOre);
+        
+        //map[0, 0] = testOre;
+        Player player = new Player(game, this, assets, new Vector2(60, 60));
+        gameEntities.Add(player);
         Console.WriteLine($"Created world with {gameEntities.Count} entities.");
     }
 
@@ -49,9 +45,6 @@ public class World : Scene
 
     public override void Update(GameTime gameTime) 
     {
-        removeThisLater++;
-        map[removeThisLater, removeThisLater] = new HarvestableTerrain(assets.IronTerrain, new Vector2(removeThisLater, removeThisLater));
-        gameEntities.Add(map[removeThisLater, removeThisLater]);
         AdjustEntityPositions(); // I feel like we dont want to be doing this every frame. I am not sure though where we want to call it though.
         base.Update(gameTime);
     }

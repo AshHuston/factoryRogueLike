@@ -22,6 +22,8 @@ public class Game1 : Game
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
+        _inputManager = new InputManager();
+
         _graphics.PreferredBackBufferWidth = 1280;
         _graphics.PreferredBackBufferHeight = 720;
         _graphics.ApplyChanges();
@@ -36,8 +38,11 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _assets = new GameAssets();
-        _assets.IronTerrain = Content.Load<Texture2D>("ironTerrain");
+        _assets = new GameAssets
+        {
+            IronTerrain = Content.Load<Texture2D>("ironTerrain"),
+            Player = Content.Load<Texture2D>("player")
+        };
 
         ResourceDatabase.Initialize(_assets);
         TerrainDatabase.Initialize(_assets);
