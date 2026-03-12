@@ -44,7 +44,9 @@ public class Game1 : Game
             StoneTerrain = Content.Load<Texture2D>("stoneTerrain"),
             CopperTerrain = Content.Load<Texture2D>("copperTerrain"),
             Forest = Content.Load<Texture2D>("forestTerrain"),
-            Player = Content.Load<Texture2D>("player")
+            Player = Content.Load<Texture2D>("player"),
+            Worker = Content.Load<Texture2D>("worker"),
+            IronOre = Content.Load<Texture2D>("ironTerrain"),
         };
 
         ResourceDatabase.Initialize(_assets);

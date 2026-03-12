@@ -3,7 +3,7 @@ using factoryRL.GameObjects.Terrain;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 namespace factoryRL.GameObjects;
 
 public class World : Scene
@@ -12,7 +12,7 @@ public class World : Scene
     private Entity[,] map;
     public Vector2 camCenter;
     private Game1 game;
-    private Player player;
+    internal Player player;
 
     public World(Game1 _game, GameAssets assets) : base(_game, assets)
     {
@@ -24,6 +24,7 @@ public class World : Scene
         
         player = new Player(game, this, assets, camCenter);
         gameEntities.Add(player);
+        gameEntities.Add(new Worker(game, this, assets, camCenter));
     }
 
     public void GenerateMap()
@@ -85,6 +86,17 @@ public class World : Scene
                 }
             }
         }
+
+        foreach (var entity in gameEntities)
+        {
+            if (entity is Meeple m)
+            {
+                m._position = new Vector2(
+                m.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / 2),
+                m.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)
+            );
+            }
+        }
     }
 
     private bool IsInvalidHarvestableTerrain(Entity entity)
@@ -106,6 +118,7 @@ public class World : Scene
 
     public override void Update(GameTime gameTime) 
     {
+        AdjustEntityPositions();
         player._position = new Vector2(
             player.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / 2),
             player.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)
@@ -119,8 +132,6 @@ public class World : Scene
         if (player._position.Y > game.GraphicsDevice.Viewport.Height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
         // ------------------------------------------------------------------------------------
         
-        int nonNullCount = map.Cast<Entity>().Count(element => element != null);
-        AdjustEntityPositions();
         base.Update(gameTime);
     }
 }

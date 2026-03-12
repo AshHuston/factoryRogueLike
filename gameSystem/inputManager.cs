@@ -44,6 +44,16 @@ public class InputManager
         return Keyboard.GetState().IsKeyDown(Keys.Right);
     }
 
+    public bool isTPressed()
+    {
+        return Keyboard.GetState().IsKeyDown(Keys.T);
+    }
+
+    public bool isGPressed()
+    {
+        return Keyboard.GetState().IsKeyDown(Keys.G);
+    }
+
     public void EndUpdate()
     {
         _previousMouse = _currentMouse;
