@@ -3,9 +3,7 @@ using factoryRL.GameObjects.Terrain;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 namespace factoryRL.GameObjects;
 
 public class World : Scene

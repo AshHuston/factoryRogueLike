@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using factoryRL.Inputs;
-using System.Reflection;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
 using factoryRL.GameObjects;

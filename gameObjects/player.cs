@@ -1,9 +1,5 @@
-
-using System.Data;
-using System.Diagnostics;
 using factoryRL.Inputs;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace factoryRL.GameObjects;
 
