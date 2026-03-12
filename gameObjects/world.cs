@@ -32,7 +32,7 @@ public class World : Scene
     {
         List<HarvestableTerrain> harvestableTerrains = new List<HarvestableTerrain>();
         Vector2 worldCenter = new Vector2(map.GetLength(0) / 2, map.GetLength(1) / 2);
-        float decayFactor = 0.09f;
+        float decayFactor = 0.25f;
         ResourceType[] resourceTypes = [
             ResourceType.Iron,
             ResourceType.Coal,
@@ -68,12 +68,7 @@ public class World : Scene
                 }
             }
         }
-
-        // foreach (var e in harvestableTerrains)
-        // {
-        //     map[(int)e._position.X, (int)e._position.Y] = e;
-        //     gameEntities.Add(e);
-        // }
+        RemoveInvalidHarvestableTerrain();
     }
     
     public void AdjustEntityPositions()
@@ -86,8 +81,8 @@ public class World : Scene
                 if (entity != null)
                 {
                     entity._position = new Vector2(
-                        (x * tileSizePixels) - camCenter.X,// + (game.GraphicsDevice.Viewport.Width / 2),
-                        (y * tileSizePixels) - camCenter.Y// + (game.GraphicsDevice.Viewport.Height / 2)
+                        (x * tileSizePixels) - camCenter.X + (game.GraphicsDevice.Viewport.Width / 2),
+                        (y * tileSizePixels) - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)
                     );
                 }
             }
@@ -99,6 +94,15 @@ public class World : Scene
         if (entity is HarvestableTerrain terrain)
         {
             // If the map no longer contains this terrain at its position, remove it
+            Debug.WriteLine($"Checking terrain at {terrain._position}");
+            if (terrain._position.X < 0
+            || terrain._position.Y < 0
+            || terrain._position.X >= map.GetLength(0)
+            || terrain._position.Y >= map.GetLength(1))
+            {
+                Debug.WriteLine($"Terrain at {terrain._position} is out of bounds and will be removed.");
+                return true;
+            }
             return map[(int)terrain._position.X, (int)terrain._position.Y] != terrain;
         }
 
@@ -127,7 +131,6 @@ public class World : Scene
         // ------------------------------------------------------------------------------------
         int nonNullCount = map.Cast<Entity>().Count(element => element != null);
         //Debug.WriteLine($"Non-null elements in map: {nonNullCount} - entities in gameEntities: {gameEntities.Count}");
-        RemoveInvalidHarvestableTerrain();
         AdjustEntityPositions();
         base.Update(gameTime);
     }
