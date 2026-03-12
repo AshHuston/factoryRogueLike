@@ -93,21 +93,12 @@ public class World : Scene
     {
         if (entity is HarvestableTerrain terrain)
         {
-            // If the map no longer contains this terrain at its position, remove it
-            Debug.WriteLine($"Checking terrain at {terrain._position}");
-            if (terrain._position.X < 0
-            || terrain._position.Y < 0
-            || terrain._position.X >= map.GetLength(0)
-            || terrain._position.Y >= map.GetLength(1))
-            {
-                Debug.WriteLine($"Terrain at {terrain._position} is out of bounds and will be removed.");
-                return true;
-            }
-            return map[(int)terrain._position.X, (int)terrain._position.Y] != terrain;
-        }
+            bool isOutOfMap = terrain._position.X < 0 || terrain._position.Y < 0 || terrain._position.X >= map.GetLength(0) || terrain._position.Y >= map.GetLength(1);
 
-        // Do not remove non-harvestable entities
-        return false;
+            return isOutOfMap || map[(int)terrain._position.X, (int)terrain._position.Y] != terrain;
+        } else {
+            return false;
+        }
     }
 
     public void RemoveInvalidHarvestableTerrain()
@@ -129,8 +120,8 @@ public class World : Scene
         if (player._position.X > game.GraphicsDevice.Viewport.Width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
         if (player._position.Y > game.GraphicsDevice.Viewport.Height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
         // ------------------------------------------------------------------------------------
+        
         int nonNullCount = map.Cast<Entity>().Count(element => element != null);
-        //Debug.WriteLine($"Non-null elements in map: {nonNullCount} - entities in gameEntities: {gameEntities.Count}");
         AdjustEntityPositions();
         base.Update(gameTime);
     }
