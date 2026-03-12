@@ -41,6 +41,10 @@ public class Game1 : Game
         _assets = new GameAssets
         {
             IronTerrain = Content.Load<Texture2D>("ironTerrain"),
+            CoalTerrain = Content.Load<Texture2D>("coalTerrain"),
+            StoneTerrain = Content.Load<Texture2D>("stoneTerrain"),
+            CopperTerrain = Content.Load<Texture2D>("copperTerrain"),
+            Forest = Content.Load<Texture2D>("forestTerrain"),
             Player = Content.Load<Texture2D>("player")
         };
 

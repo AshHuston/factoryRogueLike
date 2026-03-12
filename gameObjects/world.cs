@@ -1,28 +1,79 @@
+using factoryRL.GameObjects.Resources;
+using factoryRL.GameObjects.Terrain;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Linq.Expressions;
 namespace factoryRL.GameObjects;
 
 public class World : Scene
 {
     private readonly int tileSizePixels = 32;
-    private readonly Entity[,] map = new Entity[500, 500];
-    //private HarvestableTerrain testOre;
+    private Entity[,] map;
+    public Vector2 camCenter;
+    private Game1 game;
+    private Player player;
 
-    public World(Game1 game, GameAssets assets) : base(game, assets)
+    public World(Game1 _game, GameAssets assets) : base(_game, assets)
     {
+        game = _game;
         Console.WriteLine("Initializing world...");
+        map = new Entity[500, 500];
+        camCenter = new Vector2(map.GetLength(0) * tileSizePixels / 2, map.GetLength(1) * tileSizePixels / 2);
         GenerateMap();
         
-        //map[0, 0] = testOre;
-        Player player = new Player(game, this, assets, new Vector2(60, 60));
+        player = new Player(game, this, assets, camCenter);
         gameEntities.Add(player);
-        Console.WriteLine($"Created world with {gameEntities.Count} entities.");
     }
 
     public void GenerateMap()
     {
-        // We probably want to pass in some seed data here but idk exactly what that looks like atm. So I am going to hardcode it for now.
-        
+        List<HarvestableTerrain> harvestableTerrains = new List<HarvestableTerrain>();
+        Vector2 worldCenter = new Vector2(map.GetLength(0) / 2, map.GetLength(1) / 2);
+        float decayFactor = 0.09f;
+        ResourceType[] resourceTypes = [
+            ResourceType.Iron,
+            ResourceType.Coal,
+            ResourceType.Copper,
+            ResourceType.Stone,
+            ResourceType.Wood
+        ];
+
+        Random random = new Random();
+        int maxRangeFromCenterTiles = 15;
+
+        foreach (var resourceType in resourceTypes)
+        {
+            Vector2 seedTile = new Vector2(
+                MathF.Floor(worldCenter.X) + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles),
+                MathF.Floor(worldCenter.Y) + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles)
+            );
+            
+            for (int x = 0; x < map.GetLength(0); x++)
+            {
+                for (int y = 0; y < map.GetLength(1); y++)
+                {
+                    Vector2 targetTile = new Vector2(x, y);
+                    float distanceFromSeed = Vector2.Distance(seedTile, targetTile);
+                    float probability = MathF.Max(0, 1 - (distanceFromSeed * decayFactor));
+                    if (random.NextDouble() < probability)
+                    {
+                        //Debug.WriteLine(targetTile);
+                        HarvestableTerrain terrain = new HarvestableTerrain(TerrainDatabase.Data[resourceType], targetTile);
+                        gameEntities.Add(terrain);
+                        map[x, y] = terrain;
+                    }
+                }
+            }
+        }
+
+        // foreach (var e in harvestableTerrains)
+        // {
+        //     map[(int)e._position.X, (int)e._position.Y] = e;
+        //     gameEntities.Add(e);
+        // }
     }
     
     public void AdjustEntityPositions()
@@ -35,17 +86,49 @@ public class World : Scene
                 if (entity != null)
                 {
                     entity._position = new Vector2(
-                        x * tileSizePixels,
-                        y * tileSizePixels
+                        (x * tileSizePixels) - camCenter.X,// + (game.GraphicsDevice.Viewport.Width / 2),
+                        (y * tileSizePixels) - camCenter.Y// + (game.GraphicsDevice.Viewport.Height / 2)
                     );
                 }
             }
         }
     }
 
+    private bool IsInvalidHarvestableTerrain(Entity entity)
+    {
+        if (entity is HarvestableTerrain terrain)
+        {
+            // If the map no longer contains this terrain at its position, remove it
+            return map[(int)terrain._position.X, (int)terrain._position.Y] != terrain;
+        }
+
+        // Do not remove non-harvestable entities
+        return false;
+    }
+
+    public void RemoveInvalidHarvestableTerrain()
+    {
+        gameEntities.RemoveAll(IsInvalidHarvestableTerrain);
+    }
+
     public override void Update(GameTime gameTime) 
     {
-        AdjustEntityPositions(); // I feel like we dont want to be doing this every frame. I am not sure though where we want to call it though.
+        player._position = new Vector2(
+            player.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / 2),
+            player.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)
+        );
+
+        // This makes the character, not the mouse, move the screen. This is probably temporary.
+        int edgeWidth = 65;
+        if (player._position.X < edgeWidth){ camCenter.X -= player.mvSpdPx; }
+        if (player._position.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
+        if (player._position.X > game.GraphicsDevice.Viewport.Width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
+        if (player._position.Y > game.GraphicsDevice.Viewport.Height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
+        // ------------------------------------------------------------------------------------
+        int nonNullCount = map.Cast<Entity>().Count(element => element != null);
+        //Debug.WriteLine($"Non-null elements in map: {nonNullCount} - entities in gameEntities: {gameEntities.Count}");
+        RemoveInvalidHarvestableTerrain();
+        AdjustEntityPositions();
         base.Update(gameTime);
     }
 }

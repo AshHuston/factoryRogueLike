@@ -4,14 +4,14 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/Ash Huston/code/factoryRogueLike/Content/coalTerrain.png</File>
-    <File>C:/Users/Ash Huston/code/factoryRogueLike/Content/copperTerrain.png</File>
-    <File>C:/Users/Ash Huston/code/factoryRogueLike/Content/courier.png</File>
-    <File>C:/Users/Ash Huston/code/factoryRogueLike/Content/forestTerrain.png</File>
-    <File>C:/Users/Ash Huston/code/factoryRogueLike/Content/ironTerrain.png</File>
-    <File>C:/Users/Ash Huston/code/factoryRogueLike/Content/player.png</File>
-    <File>C:/Users/Ash Huston/code/factoryRogueLike/Content/stoneTerrain.png</File>
-    <File>C:/Users/Ash Huston/code/factoryRogueLike/Content/worker.png</File>
+    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/coalTerrain.png</File>
+    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/copperTerrain.png</File>
+    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/courier.png</File>
+    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/forestTerrain.png</File>
+    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/ironTerrain.png</File>
+    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/player.png</File>
+    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/stoneTerrain.png</File>
+    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/worker.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

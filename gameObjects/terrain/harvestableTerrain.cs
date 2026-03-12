@@ -1,26 +1,18 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace factoryRL.GameObjects.Terrain
+namespace factoryRL.GameObjects.Terrain;
+public class HarvestableTerrain : Entity
 {
-    public class HarvestableTerrain : Entity
+    public TerrainData terrainData;
+    public HarvestableTerrain(TerrainData _terrainData, Vector2 position)
     {
-        
-        public HarvestableTerrain(Texture2D texture, Vector2 position)
-        {
-            _texture = texture;
-            _position = position;
-        }
+        terrainData = _terrainData;
+        _texture = terrainData.Texture;
+        _position = position;
+    }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, _position, Color.White);
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            // Logic for harvesting the terrain would go here
-        }
-
+    public override void Update(GameTime gameTime)
+    {
+        // Logic for harvesting the terrain would go here
     }
 }

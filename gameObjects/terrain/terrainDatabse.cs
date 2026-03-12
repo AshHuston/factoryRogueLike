@@ -34,36 +34,36 @@ public static class TerrainDatabase
                     Type = ResourceType.Copper,
                     MiningTimeMiliseconds = 1500,
                 }
-             },
-             {
-                 ResourceType.Coal,
-                 new TerrainData
-                 {
-                     Name = "Coal",
-                     Texture = _assets.CoalTerrain,
-                     Type = ResourceType.Coal,
-                     MiningTimeMiliseconds = 1500,
-                 }
-              },
-              {
-                  ResourceType.Stone,
-                  new TerrainData
-                  {
-                      Name = "Stone",
-                      Texture = _assets.StoneTerrain,
-                      Type = ResourceType.Stone,
-                      MiningTimeMiliseconds = 1500,
-                  }
-               },
-               {
-                   ResourceType.Wood,
-                   new TerrainData
-                   {
-                       Name = "Wood",
-                       Texture = _assets.Forest,
-                       Type = ResourceType.Wood,
-                       MiningTimeMiliseconds = 750,
-                   }
+            },
+            {
+                ResourceType.Coal,
+                new TerrainData
+                {
+                    Name = "Coal",
+                    Texture = _assets.CoalTerrain,
+                    Type = ResourceType.Coal,
+                    MiningTimeMiliseconds = 1500,
+                }
+            },
+            {
+                ResourceType.Stone,
+                new TerrainData
+                {
+                    Name = "Stone",
+                    Texture = _assets.StoneTerrain,
+                    Type = ResourceType.Stone,
+                    MiningTimeMiliseconds = 1500,
+                }
+            },
+            {
+                ResourceType.Wood,
+                new TerrainData
+                {
+                    Name = "Wood",
+                    Texture = _assets.Forest,
+                    Type = ResourceType.Wood,
+                    MiningTimeMiliseconds = 750,
+                }
             },
         };
     }

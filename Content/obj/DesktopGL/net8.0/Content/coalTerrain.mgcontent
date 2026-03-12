@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/Ash Huston/code/factoryRogueLike/Content/coalTerrain.png</SourceFile>
-  <SourceTime>2026-03-09T19:51:40.2139189-04:00</SourceTime>
-  <DestFile>C:/Users/Ash Huston/code/factoryRogueLike/Content/bin/DesktopGL/Content/coalTerrain.xnb</DestFile>
-  <DestTime>2026-03-09T23:03:25.9675657-04:00</DestTime>
+  <SourceFile>/Users/anthonyhuston/code/factoryRogueLike/Content/coalTerrain.png</SourceFile>
+  <SourceTime>2026-03-04T09:20:44.1783577-05:00</SourceTime>
+  <DestFile>/Users/anthonyhuston/code/factoryRogueLike/Content/bin/DesktopGL/Content/coalTerrain.xnb</DestFile>
+  <DestTime>2026-03-10T08:43:54.6014142-04:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2025-10-20T10:25:32-04:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

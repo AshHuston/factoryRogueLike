@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ash Huston\\code\\factoryRogueLike\\factoryRogueLike.csproj": {}
+    "/Users/anthonyhuston/code/factoryRogueLike/factoryRogueLike.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ash Huston\\code\\factoryRogueLike\\factoryRogueLike.csproj": {
+    "/Users/anthonyhuston/code/factoryRogueLike/factoryRogueLike.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ash Huston\\code\\factoryRogueLike\\factoryRogueLike.csproj",
+        "projectUniqueName": "/Users/anthonyhuston/code/factoryRogueLike/factoryRogueLike.csproj",
         "projectName": "factoryRogueLike",
-        "projectPath": "C:\\Users\\Ash Huston\\code\\factoryRogueLike\\factoryRogueLike.csproj",
-        "packagesPath": "C:\\Users\\Ash Huston\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ash Huston\\code\\factoryRogueLike\\obj\\",
+        "projectPath": "/Users/anthonyhuston/code/factoryRogueLike/factoryRogueLike.csproj",
+        "packagesPath": "/Users/anthonyhuston/.nuget/packages/",
+        "outputPath": "/Users/anthonyhuston/code/factoryRogueLike/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Ash Huston\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/anthonyhuston/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,11 +32,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -68,7 +63,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet@8/8.0.124/libexec/sdk/8.0.124/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
