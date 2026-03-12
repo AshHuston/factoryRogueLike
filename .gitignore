@@ -1,0 +1,33 @@
+# Build outputs
+bin/
+obj/
+
+# MonoGame compiled content
+*.xnb
+
+# User-specific IDE files
+*.user
+*.suo
+*.userprefs
+
+# Visual Studio folders
+.vs/
+
+# VS Code
+.vscode/*
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# NuGet packages (if not using packages.config)
+packages/
+
+# Rider
+.idea/
+
+# Mac
+*.dSYM
