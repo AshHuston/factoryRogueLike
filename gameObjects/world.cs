@@ -124,12 +124,13 @@ public class World : Scene
             player.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)
         );
 
-        // This makes the character, not the mouse, move the screen. This is probably temporary.
+        // TEMP This makes the character, not the mouse, move the screen. This is likely temporary.
         int edgeWidth = 65;
         if (player._position.X < edgeWidth){ camCenter.X -= player.mvSpdPx; }
         if (player._position.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
         if (player._position.X > game.GraphicsDevice.Viewport.Width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
         if (player._position.Y > game.GraphicsDevice.Viewport.Height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
+        
         // ------------------------------------------------------------------------------------
         
         base.Update(gameTime);

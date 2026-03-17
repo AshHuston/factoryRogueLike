@@ -21,7 +21,7 @@ public class Game1 : Game
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
 
-        _inputManager = new InputManager();
+        _inputManager = new InputManager(this);
 
         _graphics.PreferredBackBufferWidth = 1280;
         _graphics.PreferredBackBufferHeight = 720;
@@ -47,6 +47,7 @@ public class Game1 : Game
             Player = Content.Load<Texture2D>("player"),
             Worker = Content.Load<Texture2D>("worker"),
             IronOre = Content.Load<Texture2D>("ironTerrain"),
+            MovmentIndicicator = Content.Load<Texture2D>("MovementIndicator")
         };
 
         ResourceDatabase.Initialize(_assets);
@@ -57,11 +58,13 @@ public class Game1 : Game
 
     protected override void Update(GameTime gameTime)
     {
+        _inputManager.Update();
         if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
         currentScene.Update(gameTime);
 
         base.Update(gameTime);
+        _inputManager.EndUpdate();
     }
 
     protected override void Draw(GameTime gameTime)
