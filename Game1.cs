@@ -47,7 +47,9 @@ public class Game1 : Game
             Player = Content.Load<Texture2D>("player"),
             Worker = Content.Load<Texture2D>("worker"),
             IronOre = Content.Load<Texture2D>("ironTerrain"),
-            MovmentIndicicator = Content.Load<Texture2D>("MovementIndicator")
+            MovmentIndicicator = Content.Load<Texture2D>("MovementIndicator"),
+            backgroundTextureTile = Content.Load<Texture2D>("grassTile"),
+            hoveredTileIndicator = Content.Load<Texture2D>("tileFrame")
         };
 
         ResourceDatabase.Initialize(_assets);

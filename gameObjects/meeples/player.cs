@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using factoryRL.Inputs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,7 +27,10 @@ public class Player : Meeple
     public override void Update(GameTime gameTime)
     {
         StepTowards(targetWorldPosition);
-        if (input.IsLeftClick(true)) { targetWorldPosition = input.MouseWorldPosition; }
+        if (input.IsLeftClick(true)) { targetWorldPosition = new Vector2(
+            world.mouseWorldMapPosition.X - _texture.Width/2,
+            world.mouseWorldMapPosition.Y - _texture.Height/2
+        ); }
         if (input.IsRightClick(true)||input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Space)) { targetWorldPosition = worldPosition; } 
     }
 
@@ -36,7 +40,7 @@ public class Player : Meeple
         {
             spriteBatch.Draw(
                 indicatorTexture,
-                targetWorldPosition - world.camCenter + new Vector2(viewport.Width / 2, viewport.Height / 2),
+                targetWorldPosition - world.camCenter + new Vector2(viewport.Width / 2, viewport.Height / 2) + new Vector2(_texture.Width/2, _texture.Height/2),
                 null,
                 Color.White,
                 0f,

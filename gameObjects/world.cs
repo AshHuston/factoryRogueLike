@@ -1,6 +1,8 @@
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
+using factoryRL.Inputs;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
@@ -8,14 +10,16 @@ namespace factoryRL.GameObjects;
 
 public class World : Scene
 {
-    private readonly int tileSizePixels = 32;
     private Entity[,] map;
     public Vector2 camCenter;
     private Game1 game;
     internal Player player;
+    private Texture2D hoverIndicatorTexture;
+    internal Vector2 mouseWorldMapPosition = new Vector2(0, 0);
 
     public World(Game1 _game, GameAssets assets) : base(_game, assets)
     {
+        tileSizePixels = 32;
         game = _game;
         Console.WriteLine("Initializing world...");
         map = new Entity[500, 500];
@@ -25,6 +29,8 @@ public class World : Scene
         player = new Player(game, this, assets, camCenter);
         gameEntities.Add(player);
         gameEntities.Add(new Worker(game, this, assets, camCenter));
+        backgroundTexture = assets.backgroundTextureTile;
+        hoverIndicatorTexture = assets.hoveredTileIndicator;
     }
 
     public void GenerateMap()
@@ -69,7 +75,7 @@ public class World : Scene
         }
         RemoveInvalidHarvestableTerrain();
     }
-    
+
     public void AdjustEntityPositions()
     {
         for (int x = 0; x < map.GetLength(0); x++)
@@ -92,9 +98,9 @@ public class World : Scene
             if (entity is Meeple m)
             {
                 m._position = new Vector2(
-                m.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / 2),
-                m.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)
-            );
+                    m.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / 2),
+                    m.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)
+                );
             }
         }
     }
@@ -116,6 +122,34 @@ public class World : Scene
         gameEntities.RemoveAll(IsInvalidHarvestableTerrain);
     }
 
+    private Vector2 GetTileCoordinates(Vector2 worldPosition)
+    {
+        return new Vector2(
+            MathF.Floor(worldPosition.X / tileSizePixels),
+            MathF.Floor(worldPosition.Y / tileSizePixels)
+        );
+    }
+
+    public override void DrawBackground(SpriteBatch spriteBatch)
+    {
+        int tilesX = (game.GraphicsDevice.Viewport.Width / tileSizePixels) + 2;
+        int tilesY = (game.GraphicsDevice.Viewport.Height / tileSizePixels) + 2;
+        Vector2 topLeftTile = GetTileCoordinates(camCenter) - new Vector2(tilesX, tilesY) / 2;
+
+        for (int x = 0; x < tilesX; x++)
+        {
+            for (int y = 0; y < tilesY; y++)
+            {
+                Vector2 tilePos = topLeftTile + new Vector2(x, y);
+                spriteBatch.Draw(
+                    backgroundTexture,
+                    new Vector2(tilePos.X * tileSizePixels - camCenter.X + (game.GraphicsDevice.Viewport.Width / 2), tilePos.Y * tileSizePixels - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)),
+                    Color.White
+                );
+            }
+        }
+    }
+
     public override void Update(GameTime gameTime) 
     {
         AdjustEntityPositions();
@@ -123,6 +157,8 @@ public class World : Scene
             player.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / 2),
             player.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)
         );
+
+        mouseWorldMapPosition = new Vector2(_inputManager.MouseWorldPosition.X - (_inputManager.MouseWorldPosition.X % tileSizePixels) + tileSizePixels / 2, _inputManager.MouseWorldPosition.Y - (_inputManager.MouseWorldPosition.Y % tileSizePixels) + tileSizePixels / 2);
 
         // TEMP This makes the character, not the mouse, move the screen. This is likely temporary.
         int edgeWidth = 65;
@@ -134,5 +170,21 @@ public class World : Scene
         // ------------------------------------------------------------------------------------
         
         base.Update(gameTime);
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        base.Draw(spriteBatch);
+        spriteBatch.Draw(
+            hoverIndicatorTexture,
+            mouseWorldMapPosition - camCenter + new Vector2(game.GraphicsDevice.Viewport.Width / 2, game.GraphicsDevice.Viewport.Height / 2),
+            null,
+            Color.White,
+            0f,
+            new Vector2(hoverIndicatorTexture.Width / 2, hoverIndicatorTexture.Height / 2),
+            1f,
+            SpriteEffects.None,
+            0f
+        );   
     }
 }

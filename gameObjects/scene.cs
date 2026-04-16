@@ -12,6 +12,8 @@ public class Scene
     protected readonly GameAssets assets;
     readonly Game1 game;
     public InputManager _inputManager;
+    internal int tileSizePixels;
+    internal Texture2D backgroundTexture;
 
     public Scene(Game1 _game, GameAssets _assets)
     {
@@ -30,6 +32,10 @@ public class Scene
         entitiesToRemove.Add(entity);
     }
 
+    public virtual void DrawBackground(SpriteBatch spriteBatch)
+    {
+    }
+
     public virtual void Update(GameTime gameTime) 
     {
         foreach (var e in gameEntities)
@@ -43,8 +49,9 @@ public class Scene
         entitiesToRemove.Clear();
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public virtual void Draw(SpriteBatch spriteBatch)
     {
+        DrawBackground(spriteBatch);
         foreach (var e in gameEntities)
         {
             e.Draw(spriteBatch);
