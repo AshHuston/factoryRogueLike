@@ -10,7 +10,10 @@ public abstract class Entity
     protected World world;
     protected GameAssets assets;
 
+    public virtual void Interact(Meeple meeple) { }
+
     public virtual void Update(GameTime gameTime) { }
+
     public virtual void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(_texture, _position, Color.White);

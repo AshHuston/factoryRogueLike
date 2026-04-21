@@ -9,6 +9,8 @@ public class GameAssets
     public Texture2D Pipe;
     public Texture2D Restart;
     public Texture2D backgroundTextureTile;
+    public Texture2D ProgressWheel;
+
     public Texture2D IronOre { get; internal set; }
     public Texture2D CopperOre { get; internal set; }
     public Texture2D CoalOre { get; internal set; }

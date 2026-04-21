@@ -1,4 +1,4 @@
-using System.ComponentModel;
+using System;
 using factoryRL.Inputs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,7 +10,7 @@ public class Player : Meeple
     private readonly InputManager input;
     private readonly Texture2D indicatorTexture;
     private Viewport viewport;
-    private readonly int indicatorDrawDistance = 15;
+    private readonly int interactionRange = 15;
 
     public Player(Game1 _game, World _world, GameAssets gameAssets, Vector2 _worldPosition)
     {
@@ -24,19 +24,44 @@ public class Player : Meeple
         targetWorldPosition = worldPosition;
     }
 
+    private void interact(Vector2 interactionMapPosition)
+    {
+        var (X, Y) = world.GetTileCoordinates(new Vector2(interactionMapPosition.X, (int)interactionMapPosition.Y));
+        try
+        {
+            world.map[(int)X, (int)Y].Interact(this);
+        }
+        catch (Exception)
+        {
+            return;
+        }
+    }
+
     public override void Update(GameTime gameTime)
     {
         StepTowards(targetWorldPosition);
-        if (input.IsLeftClick(true)) { targetWorldPosition = new Vector2(
-            world.mouseWorldMapPosition.X - _texture.Width/2,
-            world.mouseWorldMapPosition.Y - _texture.Height/2
-        ); }
-        if (input.IsRightClick(true)||input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Space)) { targetWorldPosition = worldPosition; } 
+
+        if (input.IsLeftClick()) { 
+            targetWorldPosition = new Vector2(
+                world.mouseWorldMapPosition.X - _texture.Width/2,
+                world.mouseWorldMapPosition.Y - _texture.Height/2
+            );
+
+            if (Vector2.Distance(worldPosition, targetWorldPosition) <= interactionRange)
+            {
+                interact(world.mouseWorldMapPosition);
+            }
+        }
+
+        if (input.IsRightClick(true)||input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
+        { 
+            targetWorldPosition = worldPosition;
+        } 
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        if (Vector2.Distance(worldPosition, targetWorldPosition) > indicatorDrawDistance)
+        if (Vector2.Distance(worldPosition, targetWorldPosition) > interactionRange)
         {
             spriteBatch.Draw(
                 indicatorTexture,

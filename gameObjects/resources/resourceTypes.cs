@@ -9,4 +9,15 @@ namespace factoryRL.GameObjects.Resources
         Stone,
         Wood
     }
+
+    public enum ResourceItemType
+    {
+        IronOre,
+        IronIngot,
+        CopperOre,
+        CopperIngot,
+        Coal,
+        Stone,
+        Wood
+    }
 }

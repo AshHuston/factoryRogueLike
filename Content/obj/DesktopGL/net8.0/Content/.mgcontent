@@ -12,11 +12,13 @@
     <File>/Users/anthonyhuston/code/factoryRogueLike/Content/ironTerrain.png</File>
     <File>/Users/anthonyhuston/code/factoryRogueLike/Content/MovementIndicator.png</File>
     <File>/Users/anthonyhuston/code/factoryRogueLike/Content/player.png</File>
+    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/progressWheel.png</File>
     <File>/Users/anthonyhuston/code/factoryRogueLike/Content/stoneTerrain.png</File>
     <File>/Users/anthonyhuston/code/factoryRogueLike/Content/tileFrame.png</File>
     <File>/Users/anthonyhuston/code/factoryRogueLike/Content/worker.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

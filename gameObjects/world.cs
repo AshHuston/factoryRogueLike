@@ -10,7 +10,7 @@ namespace factoryRL.GameObjects;
 
 public class World : Scene
 {
-    private Entity[,] map;
+    internal Entity[,] map;
     public Vector2 camCenter;
     private Game1 game;
     internal Player player;
@@ -66,7 +66,7 @@ public class World : Scene
                     if (random.NextDouble() < probability)
                     {
                         //Debug.WriteLine(targetTile);
-                        HarvestableTerrain terrain = new HarvestableTerrain(TerrainDatabase.Data[resourceType], targetTile);
+                        HarvestableTerrain terrain = new HarvestableTerrain(this, assets, TerrainDatabase.Data[resourceType], targetTile);
                         gameEntities.Add(terrain);
                         map[x, y] = terrain;
                     }
@@ -122,7 +122,7 @@ public class World : Scene
         gameEntities.RemoveAll(IsInvalidHarvestableTerrain);
     }
 
-    private Vector2 GetTileCoordinates(Vector2 worldPosition)
+    internal Vector2 GetTileCoordinates(Vector2 worldPosition)
     {
         return new Vector2(
             MathF.Floor(worldPosition.X / tileSizePixels),
