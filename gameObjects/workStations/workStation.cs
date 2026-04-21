@@ -21,6 +21,7 @@ public abstract class WorkStation : Entity
     {
         world = _world;
         assets = _assets;
+        targetTerrain = _targetTerrain;
         _position = targetTerrain._position;
         maxNumWorkers = maxWorkers;
     }
