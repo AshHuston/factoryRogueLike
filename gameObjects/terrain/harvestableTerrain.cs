@@ -1,4 +1,4 @@
-using System;
+using factoryRL.GameObjects.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -6,9 +6,10 @@ namespace factoryRL.GameObjects.Terrain;
 public class HarvestableTerrain : Entity
 {
     public TerrainData terrainData;
-    private int minetimeRemainingMiliseconds;
-    private Meeple miningMeeple = null;
-    private ProgressSprite miningProgressWheel;
+    public ProgressSprite harvestProgressWheel;
+    private float harvestCountDowntimeFrames = 0;
+    private const int harvestCountDowntimeFramesMax = 15;
+    private float harvestProgressPrevFrame = 0;
 
     public HarvestableTerrain(World _world, GameAssets assets, TerrainData _terrainData, Vector2 position)
     {
@@ -16,44 +17,36 @@ public class HarvestableTerrain : Entity
         _texture = terrainData.Texture;
         _position = position;
         world = _world;
-        miningProgressWheel = new ProgressSprite(assets.ProgressWheel, 32, 32);
+        harvestProgressWheel = new ProgressSprite(assets.ProgressWheel, 32, 32);
     }
 
-    public override void Interact(Meeple meeple)
+    public override void Interact(Player player)
     {
-        miningMeeple = meeple;
-        minetimeRemainingMiliseconds = terrainData.MiningTimeMiliseconds;
+       player.startHarvesting(this);
+    }
+
+    public (ResourceItemType Type, int Amount) HarvestResource(int amountToHarvest = 1)
+    {
+        terrainData.quantity -= amountToHarvest;
+        return (terrainData.ItemType, amountToHarvest);   
     }
 
     public override void Update(GameTime gameTime)
     {
-        if (miningMeeple != null) {
-            if (world._inputManager.IsLeftClickReleased())
+        if (harvestProgressWheel.GetProgress() == harvestProgressPrevFrame)
+        {
+            harvestCountDowntimeFrames++;
+            if (harvestCountDowntimeFrames >= harvestCountDowntimeFramesMax)
             {
-                miningMeeple = null;
-                minetimeRemainingMiliseconds = 0;
-            }
-            else
-            {
-                float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                minetimeRemainingMiliseconds -= (int)deltaTime;
-                miningProgressWheel.SetProgress(1 - (float)minetimeRemainingMiliseconds / terrainData.MiningTimeMiliseconds);
-                miningProgressWheel._position = _position - new Vector2(12, 12); // Should move this probably
-
-                if (minetimeRemainingMiliseconds <= 0 && miningMeeple != null)
-                {
-                    miningMeeple.inventory.Add(terrainData.Type);
-                    minetimeRemainingMiliseconds = terrainData.MiningTimeMiliseconds;
-                }
+                harvestProgressWheel.SetProgress(0);
             }
         }
+        harvestProgressPrevFrame = harvestProgressWheel.GetProgress();
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
-        if (miningMeeple != null){
-            miningProgressWheel.Draw(spriteBatch);
-        }
+        harvestProgressWheel.Draw(spriteBatch);
     }
 }

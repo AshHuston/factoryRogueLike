@@ -13,7 +13,7 @@ public class Worker : Meeple
     public Worker(Game1 _game, World _world, GameAssets gameAssets, Vector2 _worldPosition)
     {
         // This is just a test for now.
-        inventory.Add(ResourceType.Iron);
+        AddToInventory(ResourceItemType.IronOre, 1);
         // ------------------------------
 
         worldPosition = _worldPosition;
@@ -32,11 +32,11 @@ public class Worker : Meeple
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
-        if (inventory.Count == 1)
-        {
-            Texture2D resourceTexture = ResourceDatabase.Data[inventory[0]].Texture;
-            Vector2 resourcePosition = _position - new Vector2(0, _texture.Height/2);
-            spriteBatch.Draw(resourceTexture, resourcePosition, Color.White);
-        }
+        // if (inventory.Count == 1)
+        // {
+        //     Texture2D resourceTexture = ResourceDatabase.Data[inventory[0].Type].Texture;
+        //     Vector2 resourcePosition = _position - new Vector2(0, _texture.Height/2);
+        //     spriteBatch.Draw(resourceTexture, resourcePosition, Color.White);
+        // }
     }
 }

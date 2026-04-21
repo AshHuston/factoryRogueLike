@@ -22,6 +22,7 @@ public static class TerrainDatabase
                     Name = "Iron",
                     Texture = _assets.IronTerrain,
                     Type = ResourceType.Iron,
+                    ItemType = ResourceItemType.IronOre,
                     MiningTimeMiliseconds = 1500,
                 }
             },
@@ -32,6 +33,7 @@ public static class TerrainDatabase
                     Name = "Copper",
                     Texture = _assets.CopperTerrain,
                     Type = ResourceType.Copper,
+                    ItemType = ResourceItemType.CopperOre,
                     MiningTimeMiliseconds = 1500,
                 }
             },
@@ -42,7 +44,8 @@ public static class TerrainDatabase
                     Name = "Coal",
                     Texture = _assets.CoalTerrain,
                     Type = ResourceType.Coal,
-                    MiningTimeMiliseconds = 1500,
+                    ItemType = ResourceItemType.Coal,
+                    MiningTimeMiliseconds = 1000,
                 }
             },
             {
@@ -52,7 +55,8 @@ public static class TerrainDatabase
                     Name = "Stone",
                     Texture = _assets.StoneTerrain,
                     Type = ResourceType.Stone,
-                    MiningTimeMiliseconds = 1500,
+                    ItemType = ResourceItemType.Stone,
+                    MiningTimeMiliseconds = 1000,
                 }
             },
             {
@@ -62,6 +66,7 @@ public static class TerrainDatabase
                     Name = "Wood",
                     Texture = _assets.Forest,
                     Type = ResourceType.Wood,
+                    ItemType = ResourceItemType.Wood,
                     MiningTimeMiliseconds = 750,
                 }
             },

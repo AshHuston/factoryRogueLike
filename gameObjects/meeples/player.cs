@@ -1,7 +1,9 @@
 using System;
+using factoryRL.GameObjects.Terrain;
 using factoryRL.Inputs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace factoryRL.GameObjects;
 
@@ -11,6 +13,8 @@ public class Player : Meeple
     private readonly Texture2D indicatorTexture;
     private Viewport viewport;
     private readonly int interactionRange = 15;
+    private  Entity entityInteractingWith = null;
+    private int harvestTimeRemainingMiliseconds;
 
     public Player(Game1 _game, World _world, GameAssets gameAssets, Vector2 _worldPosition)
     {
@@ -30,11 +34,18 @@ public class Player : Meeple
         try
         {
             world.map[(int)X, (int)Y].Interact(this);
+            Console.WriteLine($"Interacted with tile at ({X}, {Y})");
         }
         catch (Exception)
         {
             return;
         }
+    }
+
+    public void startHarvesting(HarvestableTerrain terrain)
+    {
+        entityInteractingWith = terrain;
+        harvestTimeRemainingMiliseconds = terrain.terrainData.MiningTimeMiliseconds;
     }
 
     public override void Update(GameTime gameTime)
@@ -57,6 +68,28 @@ public class Player : Meeple
         { 
             targetWorldPosition = worldPosition;
         } 
+
+        if (input.IsLeftClickReleased() && entityInteractingWith != null)
+        {
+            entityInteractingWith = null;
+            harvestTimeRemainingMiliseconds = 0;
+        }
+    
+        if (entityInteractingWith is HarvestableTerrain terrain && Vector2.Distance(worldPosition, targetWorldPosition) <= interactionRange)
+        {
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            harvestTimeRemainingMiliseconds -= (int)deltaTime;
+            terrain.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / terrain.terrainData.MiningTimeMiliseconds);
+            terrain.harvestProgressWheel._position = new(Mouse.GetState().X, Mouse.GetState().Y);
+
+            if (harvestTimeRemainingMiliseconds <= 0)
+            {
+                var (type, amount) = terrain.HarvestResource();
+                AddToInventory(type, amount);
+                harvestTimeRemainingMiliseconds = terrain.terrainData.MiningTimeMiliseconds;
+                Console.WriteLine(inventory.Count);
+            }   
+        }
     }
 
     public override void Draw(SpriteBatch spriteBatch)

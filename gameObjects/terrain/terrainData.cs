@@ -9,4 +9,6 @@ public class TerrainData
     public int MiningTimeMiliseconds { get; set; }
     public Texture2D Texture { get; set; }
     public ResourceType Type { get; set; }
+    public ResourceItemType ItemType { get; set; }
+    public int quantity { get; set; }
 }

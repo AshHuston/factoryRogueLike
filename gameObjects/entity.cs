@@ -10,7 +10,7 @@ public abstract class Entity
     protected World world;
     protected GameAssets assets;
 
-    public virtual void Interact(Meeple meeple) { }
+    public virtual void Interact(Player player) { }
 
     public virtual void Update(GameTime gameTime) { }
 
