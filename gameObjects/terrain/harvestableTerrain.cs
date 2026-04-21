@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace factoryRL.GameObjects.Terrain;
 public class HarvestableTerrain : Entity
@@ -40,7 +39,7 @@ public class HarvestableTerrain : Entity
                 minetimeRemainingMiliseconds -= (int)deltaTime;
                 miningProgressWheel.SetProgress(1 - (float)minetimeRemainingMiliseconds / terrainData.MiningTimeMiliseconds);
                 miningProgressWheel._position = _position - new Vector2(12, 12); // Should move this probably
-                
+
                 if (minetimeRemainingMiliseconds <= 0 && miningMeeple != null)
                 {
                     miningMeeple.inventory.Add(terrainData.Type);
@@ -52,9 +51,9 @@ public class HarvestableTerrain : Entity
 
     public override void Draw(SpriteBatch spriteBatch)
     {
+        base.Draw(spriteBatch);
         if (miningMeeple != null){
             miningProgressWheel.Draw(spriteBatch);
         }
-        base.Draw(spriteBatch);
     }
 }

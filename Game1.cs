@@ -72,9 +72,9 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue); // Clears previous frame
+        GraphicsDevice.Clear(Color.Black); // Clears previous frame
 
-        _spriteBatch.Begin();
+        _spriteBatch.Begin(SpriteSortMode.Immediate);
         currentScene.Draw(_spriteBatch);
         _spriteBatch.End();
 
