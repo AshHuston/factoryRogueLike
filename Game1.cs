@@ -14,6 +14,10 @@ public class Game1 : Game
     public InputManager _inputManager;
     private GameAssets _assets;
     public Scene currentScene;
+    private RenderTarget2D _gameRenderTarget;
+    public (int width, int height) VirtualResolution => (300, 150);
+    public (int width, int height) ViewportResolution => (1800, 900);
+    public float scale;
 
     public Game1()
     {
@@ -23,8 +27,8 @@ public class Game1 : Game
 
         _inputManager = new InputManager(this);
 
-        _graphics.PreferredBackBufferWidth = 1280;
-        _graphics.PreferredBackBufferHeight = 720;
+        _graphics.PreferredBackBufferWidth = ViewportResolution.width;
+        _graphics.PreferredBackBufferHeight = ViewportResolution.height;
         _graphics.ApplyChanges();
     }
 
@@ -50,8 +54,17 @@ public class Game1 : Game
             MovmentIndicicator = Content.Load<Texture2D>("MovementIndicator"),
             backgroundTextureTile = Content.Load<Texture2D>("grassTile"),
             hoveredTileIndicator = Content.Load<Texture2D>("tileFrame"),
-            ProgressWheel = Content.Load<Texture2D>("progressWheel")
+            ProgressWheel = Content.Load<Texture2D>("progressWheel"),
+            Mine = Content.Load<Texture2D>("mineStation"),
+            LumberMill = Content.Load<Texture2D>("sawmill"),
+            MenuBackgroundNS = Content.Load<Texture2D>("v2-menuTextureNS"),
         };
+
+        _gameRenderTarget = new RenderTarget2D(
+            GraphicsDevice,
+            VirtualResolution.width,
+            VirtualResolution.height
+        );
 
         ResourceDatabase.Initialize(_assets);
         TerrainDatabase.Initialize(_assets);
@@ -61,6 +74,8 @@ public class Game1 : Game
 
     protected override void Update(GameTime gameTime)
     {
+        scale = GraphicsDevice.Viewport.Width / VirtualResolution.width;
+
         _inputManager.Update();
         if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
@@ -72,10 +87,48 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.Black); // Clears previous frame
+        // GraphicsDevice.Clear(Color.Black); // Clears previous frame
 
-        _spriteBatch.Begin(SpriteSortMode.Immediate);
+        // _spriteBatch.Begin(SpriteSortMode.Immediate);
+        // currentScene.Draw(_spriteBatch);
+        // _spriteBatch.End();
+
+        // base.Draw(gameTime);
+
+
+
+        GraphicsDevice.SetRenderTarget(_gameRenderTarget);
+        GraphicsDevice.Clear(Color.CornflowerBlue);
+
+        _spriteBatch.Begin(
+            samplerState: SamplerState.PointClamp
+        );
+
+        // Draw your game normally here
         currentScene.Draw(_spriteBatch);
+
+        _spriteBatch.End();
+
+        // Switch back to screen
+        GraphicsDevice.SetRenderTarget(null);
+        GraphicsDevice.Clear(Color.Black);
+
+        // Draw scaled render target to window
+        _spriteBatch.Begin(
+            samplerState: SamplerState.PointClamp
+        );
+
+        _spriteBatch.Draw(
+            _gameRenderTarget,
+            destinationRectangle: new Rectangle(
+                0,
+                0,
+                GraphicsDevice.Viewport.Width,
+                GraphicsDevice.Viewport.Height
+            ),
+            Color.White
+        );
+
         _spriteBatch.End();
 
         base.Draw(gameTime);

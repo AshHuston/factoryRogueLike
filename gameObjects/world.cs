@@ -1,6 +1,5 @@
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
-using factoryRL.Inputs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -28,7 +27,13 @@ public class World : Scene
         
         player = new Player(game, this, assets, camCenter);
         gameEntities.Add(player);
-        gameEntities.Add(new Worker(game, this, assets, camCenter));
+
+        //Test station vvv
+        HarvestableTerrain testTerrain = new(this, assets, TerrainDatabase.Data[ResourceType.Wood], new Vector2(10, 10));
+        map[255, 255] = testTerrain;
+        gameEntities.Add(testTerrain);
+        gameEntities.Add(new LumberMill(this, assets, testTerrain));
+
         backgroundTexture = assets.backgroundTextureTile;
         hoverIndicatorTexture = assets.hoveredTileIndicator;
     }
@@ -66,7 +71,7 @@ public class World : Scene
                     if (random.NextDouble() < probability)
                     {
                         //Debug.WriteLine(targetTile);
-                        HarvestableTerrain terrain = new HarvestableTerrain(this, assets, TerrainDatabase.Data[resourceType], targetTile);
+                        HarvestableTerrain terrain = new(this, assets, TerrainDatabase.Data[resourceType], targetTile);
                         gameEntities.Add(terrain);
                         map[x, y] = terrain;
                     }

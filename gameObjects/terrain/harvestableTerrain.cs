@@ -1,3 +1,4 @@
+using System;
 using factoryRL.GameObjects.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,6 +28,7 @@ public class HarvestableTerrain : Entity
 
     public (ResourceItemType Type, int Amount) HarvestResource(int amountToHarvest = 1)
     {
+        Console.WriteLine($"Harvesting {terrainData.ItemType} from terrain");
         terrainData.quantity -= amountToHarvest;
         return (terrainData.ItemType, amountToHarvest);   
     }

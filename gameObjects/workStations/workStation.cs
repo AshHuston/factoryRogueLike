@@ -81,28 +81,18 @@ public abstract class WorkStation : Entity
         return false;
     }
 
-    public bool HarvestResource()
-    {
-        if (targetTerrain != null)
-        {
-            ResourceType resourceType = targetTerrain.terrainData.Type;
-            AddToInventory((ResourceItemType)resourceType, 1);
-            targetTerrain.terrainData.quantity--;
-            return true;
-        }
-        return false;
-    }
-
     public override void Update(GameTime gameTime)
     {
+        _position = targetTerrain._position;
         currentNumWorkers = assignedWorkers.Count;
+        //currentNumWorkers = 1; //TEMP
 
         if (targetTerrain != null) {
             {
                 float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 harvestTimeRemainingMiliseconds -= (int)(deltaTime*currentNumWorkers);
                 targetTerrain.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / targetTerrain.terrainData.MiningTimeMiliseconds);
-                targetTerrain.harvestProgressWheel._position = _position + new Vector2(0, -16);
+                targetTerrain.harvestProgressWheel._position = _position;
 
                 if (harvestTimeRemainingMiliseconds <= 0)
                 {
