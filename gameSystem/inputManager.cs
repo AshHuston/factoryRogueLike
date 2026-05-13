@@ -2,11 +2,13 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System;
 namespace factoryRL.Inputs;
 
 public class InputManager(Game1 _game)
 {
     private MouseState _previousMouse;
+    private int previousScrollValue = 0;
     private MouseState _currentMouse;
     public Vector2 MouseWorldPosition;
     public Vector2 MouseScreenPosition;
@@ -14,6 +16,7 @@ public class InputManager(Game1 _game)
 
     public void Update()
     {
+        previousScrollValue = _previousMouse.ScrollWheelValue;
         _currentMouse = Mouse.GetState();
         MouseScreenPosition = new Vector2(
             _currentMouse.X / game.scale,
@@ -30,6 +33,16 @@ public class InputManager(Game1 _game)
         {
             MouseWorldPosition = MouseScreenPosition;
         }
+    }
+
+    public bool IsMouseScrolledUp()
+    {
+        return _currentMouse.ScrollWheelValue > previousScrollValue;
+    }
+
+    public bool IsMouseScrolledDown()
+    {
+        return _currentMouse.ScrollWheelValue < previousScrollValue;
     }
 
     public bool IsLeftClick(bool checkHeld = false){

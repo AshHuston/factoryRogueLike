@@ -5,6 +5,8 @@ using factoryRL.Inputs;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
 using factoryRL.GameObjects;
+using System;
+using System.Reflection.Metadata;
 namespace factoryRL;
 
 public class Game1 : Game
@@ -15,8 +17,9 @@ public class Game1 : Game
     private GameAssets _assets;
     public Scene currentScene;
     private RenderTarget2D _gameRenderTarget;
-    public (int width, int height) VirtualResolution => (900, 450);
-    public (int width, int height) ViewportResolution => (1800, 900);
+    public (int width, int height) VirtualResolution { get; set; } = (900, 450);
+    public (int width, int height) ViewportResolution { get; set; } = (1800, 900);
+    public (int width, int height) MaxResolution => (2400, 1200);
     public float scale = 1f;
 
     public Game1()
@@ -34,7 +37,6 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-
         base.Initialize();
     }
 
@@ -60,12 +62,6 @@ public class Game1 : Game
             MenuBackgroundNS = Content.Load<Texture2D>("v2-menuTextureNS"),
         };
 
-        _gameRenderTarget = new RenderTarget2D(
-            GraphicsDevice,
-            VirtualResolution.width,
-            VirtualResolution.height
-        );
-
         ResourceDatabase.Initialize(_assets);
         TerrainDatabase.Initialize(_assets);
 
@@ -74,7 +70,37 @@ public class Game1 : Game
 
     protected override void Update(GameTime gameTime)
     {
-        scale = GraphicsDevice.Viewport.Width / VirtualResolution.width;
+        // Just for testing purpose, change viewport resolution with QWER keys
+        if (_inputManager.IsKeyPressed(Keys.Q)){ Console.WriteLine("Q"); ViewportResolution = (300, 150); }
+        if (_inputManager.IsKeyPressed(Keys.W)){ ViewportResolution = (600, 300); }
+        if (_inputManager.IsKeyPressed(Keys.E)){ ViewportResolution = (900, 450); }
+        if (_inputManager.IsKeyPressed(Keys.R)){ ViewportResolution = (1800, 900); }
+        // -----------------------------------------------------------------------------------------------
+
+        // IMPROVE: Zoom in/out with mouse scroll. This current;y does not work. Well, it does, but the worldmap grid does not scale right unless you are at certain scales of the base VirtualResolution. This is likely because of how the world map grid is drawn, but I have not looked into it yet.
+        const float scrollSensitivity = 10f;
+        float aspectRatio = VirtualResolution.width / VirtualResolution.height;
+        if(_inputManager.IsMouseScrolledDown()) { 
+            VirtualResolution = (
+                (int)(VirtualResolution.width + (scrollSensitivity * aspectRatio)),
+                (int)(VirtualResolution.height + scrollSensitivity)
+            );
+            Console.WriteLine($"Scrolled down. New virtual resolution: {VirtualResolution.width}x{VirtualResolution.height}");
+        }
+        if(_inputManager.IsMouseScrolledUp()) { 
+            VirtualResolution = (
+                (int)(VirtualResolution.width - (scrollSensitivity * aspectRatio)),
+                (int)(VirtualResolution.height - scrollSensitivity)
+            );
+            Console.WriteLine($"Scrolled down. New virtual resolution: {VirtualResolution.width}x{VirtualResolution.height}");
+        }
+        // -------------------------------------------------------------------------------------------------------------------
+
+        _graphics.PreferredBackBufferWidth = ViewportResolution.width;
+        _graphics.PreferredBackBufferHeight = ViewportResolution.height;
+        _graphics.ApplyChanges();
+
+        scale = ViewportResolution.width / VirtualResolution.width;
 
         _inputManager.Update();
         if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
@@ -83,26 +109,22 @@ public class Game1 : Game
 
         base.Update(gameTime);
         _inputManager.EndUpdate();
+
+        Console.WriteLine($"Current Scale: {scale}");
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        // GraphicsDevice.Clear(Color.Black); // Clears previous frame
-
-        // _spriteBatch.Begin(SpriteSortMode.Immediate);
-        // currentScene.Draw(_spriteBatch);
-        // _spriteBatch.End();
-
-        // base.Draw(gameTime);
-
-
+        _gameRenderTarget = new RenderTarget2D(
+            GraphicsDevice,
+            VirtualResolution.width,
+            VirtualResolution.height
+        );
 
         GraphicsDevice.SetRenderTarget(_gameRenderTarget);
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        _spriteBatch.Begin(
-            samplerState: SamplerState.PointClamp
-        );
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
         // Draw your game normally here
         currentScene.Draw(_spriteBatch);
@@ -114,18 +136,11 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.Black);
 
         // Draw scaled render target to window
-        _spriteBatch.Begin(
-            samplerState: SamplerState.PointClamp
-        );
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
         _spriteBatch.Draw(
             _gameRenderTarget,
-            destinationRectangle: new Rectangle(
-                0,
-                0,
-                GraphicsDevice.Viewport.Width,
-                GraphicsDevice.Viewport.Height
-            ),
+            destinationRectangle: new Rectangle(0, 0, ViewportResolution.width, ViewportResolution.height),
             Color.White
         );
 

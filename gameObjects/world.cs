@@ -159,8 +159,8 @@ public class World : Scene
     {
         AdjustEntityPositions();
         player._position = new Vector2(
-            player.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / (game.scale*2)),
-            player.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / (game.scale*2))
+            player.worldPosition.X - camCenter.X + (game.ViewportResolution.width / (game.scale*2)),
+            player.worldPosition.Y - camCenter.Y + (game.ViewportResolution.height / (game.scale*2))
         );
 
         mouseWorldMapPosition = new Vector2(
@@ -173,8 +173,8 @@ public class World : Scene
         int edgeWidth = 65;
         if (player._position.X < edgeWidth){ camCenter.X -= player.mvSpdPx; }
         if (player._position.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
-        if (player._position.X > game.GraphicsDevice.Viewport.Width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
-        if (player._position.Y > game.GraphicsDevice.Viewport.Height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
+        if (player._position.X > game.ViewportResolution.width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
+        if (player._position.Y > game.ViewportResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
         
         // ------------------------------------------------------------------------------------
         

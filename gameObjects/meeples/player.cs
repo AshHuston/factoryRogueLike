@@ -32,7 +32,7 @@ public class Player : Meeple
         targetWorldPosition = worldPosition;
 
         Texture2D menuTexture = gameAssets.MenuBackgroundNS;
-        test = new NineSlicedSprite(menuTexture, 4, 4, 50, 100);
+        test = new NineSlicedSprite(menuTexture, 4, 4, 70, 70);
         test._position = new Vector2(25, 25);
     }
 
