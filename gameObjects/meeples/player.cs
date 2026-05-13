@@ -15,11 +15,13 @@ public class Player : Meeple
     private readonly int interactionRange = 15;
     private Entity entityInteractingWith = null;
     private int harvestTimeRemainingMiliseconds;
+    private Game1 game;
 
     private NineSlicedSprite test;
 
     public Player(Game1 _game, World _world, GameAssets gameAssets, Vector2 _worldPosition)
     {
+        game = _game;
         worldPosition = _worldPosition;
         world = _world;
         input = _game._inputManager;
@@ -57,7 +59,6 @@ public class Player : Meeple
     public override void Update(GameTime gameTime)
     {
         StepTowards(targetWorldPosition);
-
         if (input.IsLeftClick()) { 
             targetWorldPosition = new Vector2(
                 world.mouseWorldMapPosition.X - _texture.Width/2,
@@ -104,9 +105,10 @@ public class Player : Meeple
 
         if (Vector2.Distance(worldPosition, targetWorldPosition) > interactionRange)
         {
+            Console.WriteLine($"Drawing indicator at {targetWorldPosition}");
             spriteBatch.Draw(
                 indicatorTexture,
-                targetWorldPosition - world.camCenter + new Vector2(viewport.Width / 2, viewport.Height / 2) + new Vector2(_texture.Width/2, _texture.Height/2),
+                targetWorldPosition - world.camCenter + new Vector2(game.VirtualResolution.width/2, game.VirtualResolution.height/2) + new Vector2(_texture.Width/2, _texture.Height/2),
                 null,
                 Color.White,
                 0f,

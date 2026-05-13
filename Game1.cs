@@ -15,9 +15,9 @@ public class Game1 : Game
     private GameAssets _assets;
     public Scene currentScene;
     private RenderTarget2D _gameRenderTarget;
-    public (int width, int height) VirtualResolution => (300, 150);
+    public (int width, int height) VirtualResolution => (900, 450);
     public (int width, int height) ViewportResolution => (1800, 900);
-    public float scale;
+    public float scale = 1f;
 
     public Game1()
     {

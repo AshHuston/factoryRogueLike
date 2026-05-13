@@ -15,10 +15,16 @@ public class InputManager(Game1 _game)
     public void Update()
     {
         _currentMouse = Mouse.GetState();
-        MouseScreenPosition = new Vector2(_currentMouse.X, _currentMouse.Y);
+        MouseScreenPosition = new Vector2(
+            _currentMouse.X / game.scale,
+            _currentMouse.Y / game.scale
+        );
         if (game.currentScene is GameObjects.World currentWorld)
         {
-            MouseWorldPosition = currentWorld.camCenter + MouseScreenPosition - new Vector2(game.GraphicsDevice.Viewport.Width / 2, game.GraphicsDevice.Viewport.Height / 2);
+            MouseWorldPosition = currentWorld.camCenter + MouseScreenPosition - new Vector2(
+                game.GraphicsDevice.Viewport.Width / (game.scale*2),
+                game.GraphicsDevice.Viewport.Height / (game.scale*2)
+            );
         }
         else
         {

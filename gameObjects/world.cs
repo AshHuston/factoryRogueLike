@@ -18,13 +18,15 @@ public class World : Scene
 
     public World(Game1 _game, GameAssets assets) : base(_game, assets)
     {
-        tileSizePixels = 32;
-        game = _game;
-        Console.WriteLine("Initializing world...");
+        game=_game;
+        tileSizePixels = (int)Math.Round(32*game.scale);
         map = new Entity[500, 500];
         camCenter = new Vector2(map.GetLength(0) * tileSizePixels / 2, map.GetLength(1) * tileSizePixels / 2);
         GenerateMap();
-        
+
+        backgroundTexture = assets.backgroundTextureTile;
+        hoverIndicatorTexture = assets.hoveredTileIndicator;
+
         player = new Player(game, this, assets, camCenter);
         gameEntities.Add(player);
 
@@ -33,9 +35,7 @@ public class World : Scene
         map[255, 255] = testTerrain;
         gameEntities.Add(testTerrain);
         gameEntities.Add(new LumberMill(this, assets, testTerrain));
-
-        backgroundTexture = assets.backgroundTextureTile;
-        hoverIndicatorTexture = assets.hoveredTileIndicator;
+        // ----------------------------------------------------------------------------------------------------------------
     }
 
     public void GenerateMap()
@@ -91,8 +91,8 @@ public class World : Scene
                 if (entity != null)
                 {
                     entity._position = new Vector2(
-                        (x * tileSizePixels) - camCenter.X + (game.GraphicsDevice.Viewport.Width / 2),
-                        (y * tileSizePixels) - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)
+                        (x * tileSizePixels) - camCenter.X + (game.GraphicsDevice.Viewport.Width / (game.scale*2)),
+                        (y * tileSizePixels) - camCenter.Y + (game.GraphicsDevice.Viewport.Height / (game.scale*2))
                     );
                 }
             }
@@ -103,8 +103,8 @@ public class World : Scene
             if (entity is Meeple m)
             {
                 m._position = new Vector2(
-                    m.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / 2),
-                    m.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)
+                    m.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / (game.scale*2)),
+                    m.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / (game.scale*2))
                 );
             }
         }
@@ -159,11 +159,15 @@ public class World : Scene
     {
         AdjustEntityPositions();
         player._position = new Vector2(
-            player.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / 2),
-            player.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / 2)
+            player.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / (game.scale*2)),
+            player.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / (game.scale*2))
         );
 
-        mouseWorldMapPosition = new Vector2(_inputManager.MouseWorldPosition.X - (_inputManager.MouseWorldPosition.X % tileSizePixels) + tileSizePixels / 2, _inputManager.MouseWorldPosition.Y - (_inputManager.MouseWorldPosition.Y % tileSizePixels) + tileSizePixels / 2);
+        mouseWorldMapPosition = new Vector2(
+            _inputManager.MouseWorldPosition.X - (_inputManager.MouseWorldPosition.X % tileSizePixels) + tileSizePixels / 2,
+            _inputManager.MouseWorldPosition.Y - (_inputManager.MouseWorldPosition.Y % tileSizePixels) + tileSizePixels / 2
+        );
+
 
         // TEMP This makes the character, not the mouse, move the screen. This is likely temporary.
         int edgeWidth = 65;
