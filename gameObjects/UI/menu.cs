@@ -7,6 +7,7 @@ public abstract class Menu : Entity
 {
     public Rectangle screenBounds;
     public bool isHovered;
+    public bool hoveredOption;
 
     public override void Update(GameTime gameTime)
     {

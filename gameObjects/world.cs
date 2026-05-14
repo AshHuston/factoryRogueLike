@@ -173,8 +173,8 @@ public class World : Scene
         int edgeWidth = 65;
         if (player._position.X < edgeWidth){ camCenter.X -= player.mvSpdPx; }
         if (player._position.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
-        if (player._position.X > game.ViewportResolution.width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
-        if (player._position.Y > game.ViewportResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
+        if (player._position.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
+        if (player._position.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
         
         // ------------------------------------------------------------------------------------
         

@@ -87,7 +87,7 @@ public class Player : Meeple
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             harvestTimeRemainingMiliseconds -= (int)deltaTime;
             terrain.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / terrain.terrainData.MiningTimeMiliseconds);
-            terrain.harvestProgressWheel._position = new(Mouse.GetState().X, Mouse.GetState().Y);
+            terrain.harvestProgressWheel._position = new(Mouse.GetState().X/game.scale, Mouse.GetState().Y/game.scale);
 
             if (harvestTimeRemainingMiliseconds <= 0)
             {

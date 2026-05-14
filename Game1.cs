@@ -6,7 +6,6 @@ using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
 using factoryRL.GameObjects;
 using System;
-using System.Reflection.Metadata;
 namespace factoryRL;
 
 public class Game1 : Game
@@ -17,9 +16,8 @@ public class Game1 : Game
     private GameAssets _assets;
     public Scene currentScene;
     private RenderTarget2D _gameRenderTarget;
-    public (int width, int height) VirtualResolution { get; set; } = (900, 450);
-    public (int width, int height) ViewportResolution { get; set; } = (1800, 900);
-    public (int width, int height) MaxResolution => (2400, 1200);
+    public (int width, int height) VirtualResolution { get; set; } = (1200, 800);
+    public (int width, int height) ViewportResolution { get; set; } = (1200, 800);
     public float scale = 1f;
 
     public Game1()
@@ -70,30 +68,28 @@ public class Game1 : Game
 
     protected override void Update(GameTime gameTime)
     {
-        // Just for testing purpose, change viewport resolution with QWER keys
-        if (_inputManager.IsKeyPressed(Keys.Q)){ Console.WriteLine("Q"); ViewportResolution = (300, 150); }
-        if (_inputManager.IsKeyPressed(Keys.W)){ ViewportResolution = (600, 300); }
-        if (_inputManager.IsKeyPressed(Keys.E)){ ViewportResolution = (900, 450); }
-        if (_inputManager.IsKeyPressed(Keys.R)){ ViewportResolution = (1800, 900); }
-        // -----------------------------------------------------------------------------------------------
-
         // IMPROVE: Zoom in/out with mouse scroll. This current;y does not work. Well, it does, but the worldmap grid does not scale right unless you are at certain scales of the base VirtualResolution. This is likely because of how the world map grid is drawn, but I have not looked into it yet.
-        const float scrollSensitivity = 10f;
-        float aspectRatio = VirtualResolution.width / VirtualResolution.height;
-        if(_inputManager.IsMouseScrolledDown()) { 
-            VirtualResolution = (
-                (int)(VirtualResolution.width + (scrollSensitivity * aspectRatio)),
-                (int)(VirtualResolution.height + scrollSensitivity)
-            );
-            Console.WriteLine($"Scrolled down. New virtual resolution: {VirtualResolution.width}x{VirtualResolution.height}");
-        }
-        if(_inputManager.IsMouseScrolledUp()) { 
-            VirtualResolution = (
-                (int)(VirtualResolution.width - (scrollSensitivity * aspectRatio)),
-                (int)(VirtualResolution.height - scrollSensitivity)
-            );
-            Console.WriteLine($"Scrolled down. New virtual resolution: {VirtualResolution.width}x{VirtualResolution.height}");
-        }
+        // const float scrollSensitivity = 10f;
+        // float aspectRatio = VirtualResolution.width / VirtualResolution.height;
+        // if(_inputManager.IsMouseScrolledDown()) { 
+        //     VirtualResolution = (
+        //         (int)(VirtualResolution.width + (scrollSensitivity * aspectRatio)),
+        //         (int)(VirtualResolution.height + scrollSensitivity)
+        //     );
+        //     Console.WriteLine($"Scrolled down. New virtual resolution: {VirtualResolution.width}x{VirtualResolution.height}");
+        // }
+        // if(_inputManager.IsMouseScrolledUp()) { 
+        //     VirtualResolution = (
+        //         (int)(VirtualResolution.width - (scrollSensitivity * aspectRatio)),
+        //         (int)(VirtualResolution.height - scrollSensitivity)
+        //     );
+        //     Console.WriteLine($"Scrolled down. New virtual resolution: {VirtualResolution.width}x{VirtualResolution.height}");
+        // }
+        // 
+        // if (_inputManager.IsKeyPressed(Keys.Q)){ Console.WriteLine("Q"); ViewportResolution = (300, 150); }
+        // if (_inputManager.IsKeyPressed(Keys.W)){ ViewportResolution = (600, 300); }
+        // if (_inputManager.IsKeyPressed(Keys.E)){ ViewportResolution = (900, 450); }
+        // if (_inputManager.IsKeyPressed(Keys.R)){ ViewportResolution = (1800, 900); }
         // -------------------------------------------------------------------------------------------------------------------
 
         _graphics.PreferredBackBufferWidth = ViewportResolution.width;
@@ -109,8 +105,6 @@ public class Game1 : Game
 
         base.Update(gameTime);
         _inputManager.EndUpdate();
-
-        Console.WriteLine($"Current Scale: {scale}");
     }
 
     protected override void Draw(GameTime gameTime)
