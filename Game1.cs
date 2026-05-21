@@ -16,7 +16,7 @@ public class Game1 : Game
     private GameAssets _assets;
     public Scene currentScene;
     private RenderTarget2D _gameRenderTarget;
-    public (int width, int height) VirtualResolution { get; set; } = (1200, 800);
+    public (int width, int height) VirtualResolution { get; set; } = (600, 400);
     public (int width, int height) ViewportResolution { get; set; } = (1200, 800);
     public float scale = 1f;
 
@@ -58,6 +58,7 @@ public class Game1 : Game
             Mine = Content.Load<Texture2D>("mineStation"),
             LumberMill = Content.Load<Texture2D>("sawmill"),
             MenuBackgroundNS = Content.Load<Texture2D>("v2-menuTextureNS"),
+            Pixel1Font = Content.Load<SpriteFont>("fonts/pixel1")
         };
 
         ResourceDatabase.Initialize(_assets);

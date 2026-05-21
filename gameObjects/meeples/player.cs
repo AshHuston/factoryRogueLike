@@ -17,7 +17,7 @@ public class Player : Meeple
     private int harvestTimeRemainingMiliseconds;
     private Game1 game;
 
-    private NineSlicedSprite test;
+    //private NineSlicedSprite test;
 
     public Player(Game1 _game, World _world, GameAssets gameAssets, Vector2 _worldPosition)
     {
@@ -31,9 +31,9 @@ public class Player : Meeple
         mvSpdPx = 5;
         targetWorldPosition = worldPosition;
 
-        Texture2D menuTexture = gameAssets.MenuBackgroundNS;
-        test = new NineSlicedSprite(menuTexture, 4, 4, 70, 70);
-        test._position = new Vector2(25, 25);
+        // Texture2D menuTexture = gameAssets.MenuBackgroundNS;
+        // test = new NineSlicedSprite(menuTexture, 4, 4, 70, 70);
+        // test._position = new Vector2(25, 25);
     }
 
     private void interact(Vector2 interactionMapPosition)
@@ -101,7 +101,7 @@ public class Player : Meeple
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        test.Draw(spriteBatch);
+        //test.Draw(spriteBatch);
 
         if (Vector2.Distance(worldPosition, targetWorldPosition) > interactionRange)
         {

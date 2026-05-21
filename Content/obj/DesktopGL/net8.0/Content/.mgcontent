@@ -4,23 +4,25 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/coalTerrain.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/copperTerrain.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/courier.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/forestTerrain.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/grassTile.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/ironTerrain.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/mineStation.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/MovementIndicator.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/player.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/progressWheel.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/sawmill.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/stoneTerrain.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/tileFrame.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/v2-menuTextureNS.png</File>
-    <File>/Users/anthonyhuston/code/factoryRogueLike/Content/worker.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/coalTerrain.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/copperTerrain.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/courier.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/fonts/pixel1.spritefont</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/forestTerrain.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/grassTile.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/ironTerrain.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/mineStation.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/MovementIndicator.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/player.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/progressWheel.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/sawmill.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/stoneTerrain.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/tileFrame.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/v2-menuTextureNS.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/worker.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

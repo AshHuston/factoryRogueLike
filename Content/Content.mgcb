@@ -49,6 +49,13 @@
 /processorParam:TextureFormat=Color
 /build:courier.png
 
+#begin fonts/pixel1.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/pixel1.spritefont
+
 #begin forestTerrain.png
 /importer:TextureImporter
 /processor:TextureProcessor

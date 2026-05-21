@@ -16,6 +16,8 @@ public class World : Scene
     private Texture2D hoverIndicatorTexture;
     internal Vector2 mouseWorldMapPosition = new Vector2(0, 0);
 
+    private SpriteFont testFont;
+
     public World(Game1 _game, GameAssets assets) : base(_game, assets)
     {
         game=_game;
@@ -36,6 +38,25 @@ public class World : Scene
         gameEntities.Add(testTerrain);
         gameEntities.Add(new LumberMill(this, assets, testTerrain));
         // ----------------------------------------------------------------------------------------------------------------
+
+        testFont = assets.Pixel1Font;
+
+        TextMenuOption[] options = {
+            new TextMenuOption("Option 1qfwefbeefbeqfbqebeqbqegbqebqebrgbrgbrb", testFont, Color.Black, () => Console.WriteLine("Option 1 clicked!")),
+            new TextMenuOption("Option 2egberbtwhrngbegrwnhegbqebeqbeqb", testFont, Color.Black, () => Console.WriteLine("Option 2 clicked!")),
+            new TextMenuOption("Option 3yil.uk,yjmthnrgrbgefvdwevbgrnthmjw1wegwgveqbaeqfb qeb234567890", testFont, Color.Black, () => Console.WriteLine("Option 3 clicked!"))
+        };
+
+        Menu testMenu = new TextMenu(
+            this,
+            assets,
+            new Rectangle(25, 25, 0, 0),
+            options,
+            320,
+            170
+        );
+
+        gameEntities.Add(testMenu);
     }
 
     public void GenerateMap()

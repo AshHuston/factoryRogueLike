@@ -7,13 +7,18 @@ namespace factoryRL.GameObjects;
 public class NineSlicedSprite : Entity
 {
     public Rectangle[] slicedSegments;
-    private readonly int[][] gridPositions;
-    private readonly int[][] gridDimensions;
+    private int[][] gridPositions;
+    private int[][] gridDimensions;
 
     public NineSlicedSprite(Texture2D sprite, int segmentWidthPixels, int segmentHeightPixels, int targetHeightPixels, int targetWidthPixels)
     {
         _texture = sprite;
-        slicedSegments = GetSegments(sprite, segmentWidthPixels, segmentHeightPixels);
+        Resize(segmentWidthPixels, segmentHeightPixels, targetHeightPixels, targetWidthPixels);
+    }
+
+    public void Resize(int segmentWidthPixels, int segmentHeightPixels, int targetHeightPixels, int targetWidthPixels)
+    {
+        slicedSegments = GetSegments(_texture, segmentWidthPixels, segmentHeightPixels);
         
         gridPositions = [
             [0, 0], // Top-left corner
