@@ -105,7 +105,6 @@ public class Player : Meeple
 
         if (Vector2.Distance(worldPosition, targetWorldPosition) > interactionRange)
         {
-            Console.WriteLine($"Drawing indicator at {targetWorldPosition}");
             spriteBatch.Draw(
                 indicatorTexture,
                 targetWorldPosition - world.camCenter + new Vector2(game.VirtualResolution.width/2, game.VirtualResolution.height/2) + new Vector2(_texture.Width/2, _texture.Height/2),

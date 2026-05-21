@@ -42,17 +42,17 @@ public class World : Scene
         testFont = assets.Pixel1Font;
 
         TextMenuOption[] options = {
-            new TextMenuOption("Option 1qfwefbeefbeqfbqebeqbqegbqebqebrgbrgbrb", testFont, Color.Black, () => Console.WriteLine("Option 1 clicked!")),
-            new TextMenuOption("Option 2egberbtwhrngbegrwnhegbqebeqbeqb", testFont, Color.Black, () => Console.WriteLine("Option 2 clicked!")),
-            new TextMenuOption("Option 3yil.uk,yjmthnrgrbgefvdwevbgrnthmjw1wegwgveqbaeqfb qeb234567890", testFont, Color.Black, () => Console.WriteLine("Option 3 clicked!"))
+            new TextMenuOption("Option 1   ----------------------------------", testFont, Color.Black, () => Console.WriteLine("Option 1 clicked!")),
+            new TextMenuOption("Option 2   --------------------", testFont, Color.Black, () => Console.WriteLine("Option 2 clicked!")),
+            new TextMenuOption("Option 3   -----------", testFont, Color.Black, () => Console.WriteLine("Option 3 clicked!"))
         };
 
         Menu testMenu = new TextMenu(
             this,
             assets,
-            new Rectangle(25, 25, 0, 0),
+            new Rectangle(45, 45, 0, 0),
             options,
-            320,
+            220,
             170
         );
 

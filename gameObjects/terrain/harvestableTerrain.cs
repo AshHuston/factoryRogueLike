@@ -28,7 +28,6 @@ public class HarvestableTerrain : Entity
 
     public (ResourceItemType Type, int Amount) HarvestResource(int amountToHarvest = 1)
     {
-        Console.WriteLine($"Harvesting {terrainData.ItemType} from terrain");
         terrainData.quantity -= amountToHarvest;
         return (terrainData.ItemType, amountToHarvest);   
     }
