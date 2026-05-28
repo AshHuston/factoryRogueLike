@@ -205,16 +205,18 @@ public class World : Scene
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
-        spriteBatch.Draw(
-            hoverIndicatorTexture,
-            mouseWorldMapPosition - camCenter + new Vector2(game.GraphicsDevice.Viewport.Width / 2, game.GraphicsDevice.Viewport.Height / 2),
-            null,
-            Color.White,
-            0f,
-            new Vector2(hoverIndicatorTexture.Width / 2, hoverIndicatorTexture.Height / 2),
-            1f,
-            SpriteEffects.None,
-            0f
-        );   
+        if (!hasHoveredMenu) {
+            spriteBatch.Draw(
+                hoverIndicatorTexture,
+                mouseWorldMapPosition - camCenter + new Vector2(game.GraphicsDevice.Viewport.Width / 2, game.GraphicsDevice.Viewport.Height / 2),
+                null,
+                Color.White,
+                0f,
+                new Vector2(hoverIndicatorTexture.Width / 2, hoverIndicatorTexture.Height / 2),
+                1f,
+                SpriteEffects.None,
+                0f
+            );   
+        }
     }
 }

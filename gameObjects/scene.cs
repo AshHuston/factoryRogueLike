@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using factoryRL.Inputs;
+using System.Linq;
 namespace factoryRL.GameObjects;
 
 public class Scene
@@ -14,6 +15,7 @@ public class Scene
     public InputManager _inputManager;
     internal int tileSizePixels;
     internal Texture2D backgroundTexture;
+    public bool hasHoveredMenu = false;
 
     public Scene(Game1 _game, GameAssets _assets)
     {
@@ -42,6 +44,8 @@ public class Scene
         {
             e.Update(gameTime);
         }
+
+        hasHoveredMenu = gameEntities.Any(o => o is Menu menu && menu.isHovered);
 
         gameEntities.AddRange(entitiesToAdd);
         entitiesToAdd.Clear();

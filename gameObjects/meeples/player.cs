@@ -59,27 +59,29 @@ public class Player : Meeple
     public override void Update(GameTime gameTime)
     {
         StepTowards(targetWorldPosition);
-        if (input.IsLeftClick()) { 
-            targetWorldPosition = new Vector2(
-                world.mouseWorldMapPosition.X - _texture.Width/2,
-                world.mouseWorldMapPosition.Y - _texture.Height/2
-            );
+        if (!world.hasHoveredMenu){
+            if (input.IsLeftClick()) { 
+                targetWorldPosition = new Vector2(
+                    world.mouseWorldMapPosition.X - _texture.Width/2,
+                    world.mouseWorldMapPosition.Y - _texture.Height/2
+                );
 
-            if (Vector2.Distance(worldPosition, targetWorldPosition) <= interactionRange)
-            {
-                interact(world.mouseWorldMapPosition);
+                if (Vector2.Distance(worldPosition, targetWorldPosition) <= interactionRange)
+                {
+                    interact(world.mouseWorldMapPosition);
+                }
             }
-        }
 
-        if (input.IsRightClick(true)||input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
-        { 
-            targetWorldPosition = worldPosition;
-        } 
+            if (input.IsRightClick(true)||input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
+            { 
+                targetWorldPosition = worldPosition;
+            } 
 
-        if (input.IsLeftClickReleased() && entityInteractingWith != null)
-        {
-            entityInteractingWith = null;
-            harvestTimeRemainingMiliseconds = 0;
+            if (input.IsLeftClickReleased() && entityInteractingWith != null)
+            {
+                entityInteractingWith = null;
+                harvestTimeRemainingMiliseconds = 0;
+            }
         }
     
         if (entityInteractingWith is HarvestableTerrain terrain && Vector2.Distance(worldPosition, targetWorldPosition) <= interactionRange)
