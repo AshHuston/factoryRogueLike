@@ -2,7 +2,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace factoryRL.GameObjects;
 

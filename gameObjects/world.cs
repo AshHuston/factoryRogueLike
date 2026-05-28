@@ -11,7 +11,7 @@ public class World : Scene
 {
     internal Entity[,] map;
     public Vector2 camCenter;
-    private Game1 game;
+    internal Game1 game;
     internal Player player;
     private Texture2D hoverIndicatorTexture;
     internal Vector2 mouseWorldMapPosition = new Vector2(0, 0);
@@ -57,6 +57,10 @@ public class World : Scene
         );
 
         gameEntities.Add(testMenu);
+
+        StationBuilder stationBuilder = new(this, assets, typeof(Mine));
+        map[250, 250] = stationBuilder;
+        gameEntities.Add(stationBuilder);
     }
 
     public void GenerateMap()
