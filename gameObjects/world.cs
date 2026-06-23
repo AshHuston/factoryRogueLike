@@ -15,6 +15,8 @@ public class World : Scene
     internal Player player;
     private Texture2D hoverIndicatorTexture;
     internal Vector2 mouseWorldMapPosition = new Vector2(0, 0);
+    private BuildMenu buildMenu;
+    private bool isDisplayingBuildMenu = false;
 
     private SpriteFont testFont;
 
@@ -41,26 +43,11 @@ public class World : Scene
 
         testFont = assets.Pixel1Font;
 
-        TextMenuOption[] options = {
-            new TextMenuOption("Option 1   ----------------------------------", testFont, Color.Black, () => Console.WriteLine("Option 1 clicked!")),
-            new TextMenuOption("Option 2   --------------------", testFont, Color.Black, () => Console.WriteLine("Option 2 clicked!")),
-            new TextMenuOption("Option 3   -----------", testFont, Color.Black, () => Console.WriteLine("Option 3 clicked!"))
-        };
-
-        Menu testMenu = new TextMenu(
+        buildMenu = new BuildMenu(
             this,
             assets,
-            new Rectangle(45, 45, 0, 0),
-            options,
-            220,
-            170
+            new Rectangle(15, 15, 0, 0)
         );
-
-        gameEntities.Add(testMenu);
-
-        StationBuilder stationBuilder = new(this, assets, typeof(Mine));
-        map[250, 250] = stationBuilder;
-        gameEntities.Add(stationBuilder);
     }
 
     public void GenerateMap()
@@ -193,6 +180,20 @@ public class World : Scene
             _inputManager.MouseWorldPosition.Y - (_inputManager.MouseWorldPosition.Y % tileSizePixels) + tileSizePixels / 2
         );
 
+        //                                          Arbitrary key choice  v
+        if (_inputManager.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.M))
+        {
+            if (isDisplayingBuildMenu)
+            {
+                buildMenu.close();
+                isDisplayingBuildMenu = false;
+            }
+            else
+            {
+                buildMenu.open();
+                isDisplayingBuildMenu = true;
+            }
+        }
 
         // TEMP This makes the character, not the mouse, move the screen. This is likely temporary.
         int edgeWidth = 65;

@@ -5,7 +5,7 @@ using factoryRL.Inputs;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
 using factoryRL.GameObjects;
-using System;
+
 namespace factoryRL;
 
 public class Game1 : Game

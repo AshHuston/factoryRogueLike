@@ -7,7 +7,7 @@ namespace factoryRL.GameObjects;
 
 public class Scene
 {
-    protected List<Entity> gameEntities = [];
+    internal List<Entity> gameEntities = [];
     protected List<Entity> entitiesToAdd = [];
     protected List<Entity> entitiesToRemove = [];
     protected readonly GameAssets assets;

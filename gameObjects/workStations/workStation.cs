@@ -13,7 +13,7 @@ public abstract class WorkStation : Entity
     public int currentNumWorkers = 0;
     private HarvestableTerrain targetTerrain;
     internal List<Worker> assignedWorkers = [];
-    internal List<ResourceType> mineableResourceTypes = [];
+    public static readonly ResourceType[] mineableResourceTypes = [];
     public List<(ResourceItemType Type, int Amount)> inventory = [];
     private int harvestTimeRemainingMiliseconds;
 

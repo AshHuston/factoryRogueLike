@@ -7,6 +7,8 @@ namespace factoryRL.Inputs;
 
 public class InputManager(Game1 _game)
 {
+    private KeyboardState currentKeyboard;
+    private KeyboardState previousKeyboard;
     private MouseState _previousMouse;
     private int previousScrollValue = 0;
     private MouseState _currentMouse;
@@ -18,6 +20,7 @@ public class InputManager(Game1 _game)
     {
         previousScrollValue = _previousMouse.ScrollWheelValue;
         _currentMouse = Mouse.GetState();
+        currentKeyboard = Keyboard.GetState();
         MouseScreenPosition = new Vector2(
             _currentMouse.X / game.scale,
             _currentMouse.Y / game.scale
@@ -60,9 +63,10 @@ public class InputManager(Game1 _game)
         return _currentMouse.RightButton == ButtonState.Pressed && _previousMouse.RightButton == ButtonState.Released;
     }
 
-    public bool IsKeyPressed(Keys key)
+    public bool IsKeyPressed(Keys key, bool once = true)
     {
-        return Keyboard.GetState().IsKeyDown(key);
+        if (once) {return currentKeyboard.IsKeyDown(key) && !previousKeyboard.IsKeyDown(key);}
+        return currentKeyboard.IsKeyDown(key);
     }
 
     // public bool isUpPressed()
@@ -98,5 +102,6 @@ public class InputManager(Game1 _game)
     public void EndUpdate()
     {
         _previousMouse = _currentMouse;
+        previousKeyboard = currentKeyboard;
     }
 }
