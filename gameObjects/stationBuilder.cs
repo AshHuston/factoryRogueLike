@@ -58,7 +58,7 @@ public class StationBuilder : Entity
             if (resources.Contains(terrain.terrainData.Type)) { return true; }
         }
 
-        if (resources.Length == 0) { return true; } // For now, non-harvesting stations can go anywhere.
+        if (resources.Length == 0) { return true; }
         
         return false;
     }

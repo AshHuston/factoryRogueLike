@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using factoryRL.Inputs;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System;
 namespace factoryRL.GameObjects;
 
 public class Scene
@@ -32,6 +34,31 @@ public class Scene
     public void Remove(Entity entity)
     {
         entitiesToRemove.Add(entity);
+    }
+
+    public T FindClosestEntity<T>(
+        Vector2 target,
+        Func<T, bool> filter = null)
+        where T : Entity
+    {
+        T closest = null;
+        float closestDistSq = float.MaxValue;
+
+        foreach (var e in gameEntities.OfType<T>())
+        {
+            if (filter != null && !filter(e))
+                continue;
+
+            float distSq = Vector2.DistanceSquared(e._position, target);
+
+            if (distSq < closestDistSq)
+            {
+                closestDistSq = distSq;
+                closest = e;
+            }
+        }
+
+        return closest;
     }
 
     public virtual void DrawBackground(SpriteBatch spriteBatch)

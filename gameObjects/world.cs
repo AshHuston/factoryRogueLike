@@ -32,13 +32,13 @@ public class World : Scene
         hoverIndicatorTexture = assets.hoveredTileIndicator;
 
         player = new Player(game, this, assets, camCenter);
-        gameEntities.Add(player);
+        Add(player);
 
         //Test station vvv
         HarvestableTerrain testTerrain = new(this, assets, TerrainDatabase.Data[ResourceType.Wood], new Vector2(10, 10));
         map[255, 255] = testTerrain;
-        gameEntities.Add(testTerrain);
-        gameEntities.Add(new LumberMill(this, assets, testTerrain));
+        Add(testTerrain);
+        Add(new LumberMill(this, assets, testTerrain));
         // ----------------------------------------------------------------------------------------------------------------
 
         testFont = assets.Pixel1Font;
@@ -48,6 +48,9 @@ public class World : Scene
             assets,
             new Rectangle(15, 15, 0, 0)
         );
+
+        Worker worker = new Worker(game, this, assets, camCenter + new Vector2(30,30));
+        Add(worker);
     }
 
     public void GenerateMap()
