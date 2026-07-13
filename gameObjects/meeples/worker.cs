@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using factoryRL.Inputs;
 using Microsoft.Xna.Framework;
-using factoryRL.GameObjects.Resources;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.ComponentModel;
 using System.Linq;
 
 namespace factoryRL.GameObjects;
@@ -16,7 +13,7 @@ public class Worker : Meeple
     public Worker(Game1 _game, World _world, GameAssets gameAssets, Vector2 _worldPosition)
     {
         // This is just a test for now.
-        AddToInventory(ResourceItemType.IronOre, 1);
+        // Inventory.Add(ResourceItemType.IronOre, 1);
         // ------------------------------
 
         worldPosition = _worldPosition;
@@ -46,6 +43,7 @@ public class Worker : Meeple
         {
             station.UnassignWorker(this);
         }
+
     }
 
     public bool IsIdle()

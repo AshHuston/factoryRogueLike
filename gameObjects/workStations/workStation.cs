@@ -14,7 +14,7 @@ public abstract class WorkStation : Entity
     private HarvestableTerrain targetTerrain;
     internal List<Worker> assignedWorkers = [];
     public static readonly ResourceType[] mineableResourceTypes = [];
-    public List<(ResourceItemType Type, int Amount)> inventory = [];
+    public Inventory Inventory { get; } = new();
     private int harvestTimeRemainingMiliseconds;
 
     public WorkStation(World _world, GameAssets _assets, int maxWorkers, HarvestableTerrain _targetTerrain)
@@ -24,35 +24,6 @@ public abstract class WorkStation : Entity
         targetTerrain = _targetTerrain;
         _position = targetTerrain._position;
         maxNumWorkers = maxWorkers;
-    }
-
-    public void AddToInventory(ResourceItemType type, int amount)
-    {
-        var existingItem = inventory.Find(item => item.Type == type);
-        if (existingItem != default)
-        {
-            existingItem.Amount += amount;
-        }
-        else
-        {
-            inventory.Add((type, amount));
-        }
-    }
-
-    public (ResourceItemType Type, int Amount) RemoveFromInventory(ResourceItemType type, int amount)
-    {
-        var existingItem = inventory.Find(item => item.Type == type);
-        if (existingItem != default)
-        {
-            int amountToRemove = Math.Min(existingItem.Amount, amount);
-            existingItem.Amount -= amountToRemove;
-            if (existingItem.Amount <= 0)
-            {
-                inventory.Remove(existingItem);
-            }
-            return (type, amountToRemove);
-        }
-        return (type, 0);
     }
 
     public bool CanAssignWorker()
@@ -97,7 +68,7 @@ public abstract class WorkStation : Entity
                 if (harvestTimeRemainingMiliseconds <= 0)
                 {
                     var (type, amount) = targetTerrain.HarvestResource();
-                    AddToInventory(type, amount);
+                    Inventory.Add(type, amount);
                     harvestTimeRemainingMiliseconds = targetTerrain.terrainData.MiningTimeMiliseconds;
                 }
             }

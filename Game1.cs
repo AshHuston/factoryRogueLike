@@ -57,6 +57,7 @@ public class Game1 : Game
             ProgressWheel = Content.Load<Texture2D>("progressWheel"),
             Mine = Content.Load<Texture2D>("mineStation"),
             LumberMill = Content.Load<Texture2D>("sawmill"),
+            TimberYard = Content.Load<Texture2D>("timberyard"),
             MenuBackgroundNS = Content.Load<Texture2D>("v2-menuTextureNS"),
             Pixel1Font = Content.Load<SpriteFont>("fonts/pixel1")
         };

@@ -94,9 +94,8 @@ public class Player : Meeple
             if (harvestTimeRemainingMiliseconds <= 0)
             {
                 var (type, amount) = terrain.HarvestResource();
-                AddToInventory(type, amount);
+                Inventory.Add(type, amount);
                 harvestTimeRemainingMiliseconds = terrain.terrainData.MiningTimeMiliseconds;
-                Console.WriteLine(inventory.Count);
             }   
         }
     }
