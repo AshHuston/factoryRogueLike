@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using factoryRL.GameObjects.Resources;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.ComponentModel;
+using System.Linq;
 
 namespace factoryRL.GameObjects;
 
@@ -23,29 +25,58 @@ public class Worker : Meeple
         mvSpdPx = 3;
         targetWorldPosition = worldPosition;
     }
+    
+    private void SetIdleTargetPosition(Vector2 rangeCenter)
+    {
+        if (IsIdle())
+        {
+            int range = 6;
+            Vector2 offset = new(
+                Random.Shared.Next(-range, range + 1),
+                Random.Shared.Next(-range, range + 1)
+            );
+            targetWorldPosition = (rangeCenter+offset)*world.tileSizePixels;
+        }
+    }
+
+    private void UnasignFromAll()
+    {
+        List<WorkStation> stations = (List<WorkStation>)world.gameEntities.Where(s => s is WorkStation);
+        foreach (WorkStation station in stations)
+        {
+            station.UnassignWorker(this);
+        }
+    }
+
+    public bool IsIdle()
+    {
+        foreach (WorkStation station in world.gameEntities.OfType<WorkStation>())
+        {
+            if (station.assignedWorkers.Contains(this))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public override void Update(GameTime gameTime)
     {
+        int avgFramesToMoveWhileIdle = 300;
+        if (Random.Shared.Next(0, avgFramesToMoveWhileIdle) == 0)
+        {
+            SetIdleTargetPosition(world.mapCenter);
+        }
         StepTowards(targetWorldPosition);
 
         Rectangle hitBox = new Rectangle((int)worldPosition.X, (int)worldPosition.Y, _texture.Width, _texture.Height);
-        if (hitBox.Contains(world.game._inputManager.MouseWorldPosition))
+        if (world.game._inputManager.IsRightClick())
         {
-            if (world.game._inputManager.IsRightClick())
+            if (hitBox.Contains(world.game._inputManager.MouseWorldPosition) && Alpha != 0)// Invisible (inside a station) = nonclickable
             {
-                // This needs to remove all assignments from this worker, and then...
-                // This needs to find a camp that is not full    v Camp           v filter for NOT full
-                targetWorldPosition = world.FindClosestEntity<Player>(worldPosition).worldPosition;
-            }
-            if (world.game._inputManager.IsLeftClick())
-            {
-                //Got left clicked
+                UnasignFromAll();
             }
         }
-
-        // Testing only
-        //targetWorldPosition = world.player.worldPosition;
-        // ------------------------------
     }
 
     public override void Draw(SpriteBatch spriteBatch)

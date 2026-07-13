@@ -10,6 +10,7 @@ namespace factoryRL.GameObjects;
 public class World : Scene
 {
     internal Entity[,] map;
+    internal Vector2 mapCenter;
     public Vector2 camCenter;
     internal Game1 game;
     internal Player player;
@@ -24,7 +25,10 @@ public class World : Scene
     {
         game=_game;
         tileSizePixels = (int)Math.Round(32*game.scale);
-        map = new Entity[500, 500];
+        int mapWidth = 500;
+        int mapHeight = 500;
+        map = new Entity[mapWidth, mapHeight];
+        mapCenter = new(mapWidth / 2, mapHeight / 2);
         camCenter = new Vector2(map.GetLength(0) * tileSizePixels / 2, map.GetLength(1) * tileSizePixels / 2);
         GenerateMap();
 
@@ -36,7 +40,7 @@ public class World : Scene
 
         //Test station vvv
         HarvestableTerrain testTerrain = new(this, assets, TerrainDatabase.Data[ResourceType.Wood], new Vector2(10, 10));
-        map[255, 255] = testTerrain;
+        map[(int)mapCenter.X, (int)mapCenter.Y] = testTerrain;
         Add(testTerrain);
         Add(new LumberMill(this, assets, testTerrain));
         // ----------------------------------------------------------------------------------------------------------------
@@ -49,6 +53,10 @@ public class World : Scene
             new Rectangle(15, 15, 0, 0)
         );
 
+        for (int i=0; i<20; i++)
+        {
+            Add(new Worker(game, this, assets, camCenter));
+        }
         Worker worker = new Worker(game, this, assets, camCenter + new Vector2(30,30));
         Add(worker);
     }
@@ -56,7 +64,6 @@ public class World : Scene
     public void GenerateMap()
     {
         List<HarvestableTerrain> harvestableTerrains = new List<HarvestableTerrain>();
-        Vector2 worldCenter = new Vector2(map.GetLength(0) / 2, map.GetLength(1) / 2);
         float decayFactor = 0.25f;
         ResourceType[] resourceTypes = [
             ResourceType.Iron,
@@ -72,8 +79,8 @@ public class World : Scene
         foreach (var resourceType in resourceTypes)
         {
             Vector2 seedTile = new Vector2(
-                MathF.Floor(worldCenter.X) + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles),
-                MathF.Floor(worldCenter.Y) + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles)
+                MathF.Floor(mapCenter.X) + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles),
+                MathF.Floor(mapCenter.Y) + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles)
             );
             
             for (int x = 0; x < map.GetLength(0); x++)

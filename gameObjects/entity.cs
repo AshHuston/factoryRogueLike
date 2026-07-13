@@ -9,6 +9,7 @@ public abstract class Entity
     public Vector2 _position;
     protected World world;
     protected GameAssets assets;
+    public float Alpha = 1;
 
     public virtual void Interact(Player player) { }
 
@@ -16,6 +17,6 @@ public abstract class Entity
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(_texture, _position, Color.White);
+        spriteBatch.Draw(_texture, _position, Color.White*Alpha);
     }
 }
