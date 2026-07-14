@@ -12,6 +12,7 @@ namespace factoryRL.GameObjects.Resources
 
     public enum ResourceItemType
     {
+        None,
         IronOre,
         IronIngot,
         CopperOre,

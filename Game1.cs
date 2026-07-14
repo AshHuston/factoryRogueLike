@@ -5,6 +5,8 @@ using factoryRL.Inputs;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
 using factoryRL.GameObjects;
+using System;
+using factoryRL.Functions;
 
 namespace factoryRL;
 
@@ -19,6 +21,8 @@ public class Game1 : Game
     public (int width, int height) VirtualResolution { get; set; } = (600, 400);
     public (int width, int height) ViewportResolution { get; set; } = (1200, 800);
     public float scale = 1f;
+
+    private Texture2D pixel;
 
     public Game1()
     {
@@ -41,6 +45,10 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+        pixel = new Texture2D(GraphicsDevice, 1, 1);
+        pixel.SetData(new[] { Color.White });
+
         _assets = new GameAssets
         {
             IronTerrain = Content.Load<Texture2D>("ironTerrain"),
@@ -59,13 +67,37 @@ public class Game1 : Game
             LumberMill = Content.Load<Texture2D>("sawmill"),
             TimberYard = Content.Load<Texture2D>("timberyard"),
             MenuBackgroundNS = Content.Load<Texture2D>("v2-menuTextureNS"),
-            Pixel1Font = Content.Load<SpriteFont>("fonts/pixel1")
+            Pixel1Font = Content.Load<SpriteFont>("fonts/pixel1"),
+            Courier = Content.Load<Texture2D>("courier")
         };
 
         ResourceDatabase.Initialize(_assets);
         TerrainDatabase.Initialize(_assets);
 
         currentScene = new World(this, _assets);
+    }
+
+    public void DrawLine(
+        SpriteBatch spriteBatch,
+        Vector2 start,
+        Vector2 end,
+        Color color,
+        float thickness = 1f)
+    {
+        Vector2 edge = end - start;
+
+        float angle = MathF.Atan2(edge.Y, edge.X);
+
+        spriteBatch.Draw(
+            pixel,
+            start,
+            null,
+            color,
+            angle,
+            Vector2.Zero,
+            new Vector2(edge.Length(), thickness),
+            SpriteEffects.None,
+            0);
     }
 
     protected override void Update(GameTime gameTime)

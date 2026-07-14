@@ -31,6 +31,7 @@ public class World : Scene
         mapCenter = new(mapWidth / 2, mapHeight / 2);
         camCenter = new Vector2(map.GetLength(0) * tileSizePixels / 2, map.GetLength(1) * tileSizePixels / 2);
         GenerateMap();
+        Add(new CourierRouteAssigner(this, assets));
 
         backgroundTexture = assets.backgroundTextureTile;
         hoverIndicatorTexture = assets.hoveredTileIndicator;
@@ -39,10 +40,10 @@ public class World : Scene
         Add(player);
 
         //Test station vvv
-        HarvestableTerrain testTerrain = new(this, assets, TerrainDatabase.Data[ResourceType.Wood], new Vector2(10, 10));
-        map[(int)mapCenter.X, (int)mapCenter.Y] = testTerrain;
-        Add(testTerrain);
-        Add(new LumberMill(this, assets, testTerrain));
+        // HarvestableTerrain testTerrain = new(this, assets, TerrainDatabase.Data[ResourceType.Wood], new Vector2(10, 10));
+        // map[(int)mapCenter.X, (int)mapCenter.Y] = testTerrain;
+        // Add(testTerrain);
+        // Add(new LumberMill(this, assets, testTerrain));
         // ----------------------------------------------------------------------------------------------------------------
 
         testFont = assets.Pixel1Font;
@@ -53,12 +54,12 @@ public class World : Scene
             new Rectangle(15, 15, 0, 0)
         );
 
-        for (int i=0; i<20; i++)
+        for (int i=0; i<1; i++)
         {
             Add(new Worker(game, this, assets, camCenter));
         }
-        Worker worker = new Worker(game, this, assets, camCenter + new Vector2(30,30));
-        Add(worker);
+        // Worker worker = new Worker(game, this, assets, camCenter + new Vector2(30,30));
+        // Add(worker);
     }
 
     public void GenerateMap()
@@ -157,6 +158,11 @@ public class World : Scene
         );
     }
 
+    public Vector2 GetContainingTileScreenCoordinates(Vector2 worldPosition)
+    {
+        return worldPosition - camCenter + new Vector2(game.GraphicsDevice.Viewport.Width / 2, game.GraphicsDevice.Viewport.Height / 2);
+    }
+
     public override void DrawBackground(SpriteBatch spriteBatch)
     {
         int tilesX = (game.GraphicsDevice.Viewport.Width / tileSizePixels) + 2;
@@ -223,7 +229,7 @@ public class World : Scene
         if (!hasHoveredMenu) {
             spriteBatch.Draw(
                 hoverIndicatorTexture,
-                mouseWorldMapPosition - camCenter + new Vector2(game.GraphicsDevice.Viewport.Width / 2, game.GraphicsDevice.Viewport.Height / 2),
+                GetContainingTileScreenCoordinates(mouseWorldMapPosition),
                 null,
                 Color.White,
                 0f,

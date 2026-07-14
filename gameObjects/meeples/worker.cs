@@ -3,12 +3,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
+using factoryRL.courierRoute;
 
 namespace factoryRL.GameObjects;
 
 public class Worker : Meeple
 {
     public int inventoryCapacity = 1;
+    public CourierRoute route = null;
+    public WorkStation assignedWorkStation = null;
 
     public Worker(Game1 _game, World _world, GameAssets gameAssets, Vector2 _worldPosition)
     {
@@ -21,6 +24,7 @@ public class Worker : Meeple
         _texture = gameAssets.Worker;
         mvSpdPx = 3;
         targetWorldPosition = worldPosition;
+        assets = gameAssets;
     }
     
     private void SetIdleTargetPosition(Vector2 rangeCenter)
@@ -43,7 +47,9 @@ public class Worker : Meeple
         {
             station.UnassignWorker(this);
         }
-
+        route = null;
+        assignedWorkStation = null;
+        _texture = assets.Worker;
     }
 
     public bool IsIdle()
@@ -55,8 +61,15 @@ public class Worker : Meeple
                 return false;
             }
         }
-        return true;
+        assignedWorkStation = null;
+        return route == null;
     }
+
+    public void AssignRoute(CourierRoute routeToAssign)
+    {
+        route = routeToAssign;
+        _texture = assets.Courier;
+    } 
 
     public override void Update(GameTime gameTime)
     {

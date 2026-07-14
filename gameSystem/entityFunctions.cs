@@ -33,10 +33,10 @@ public static class EntityFunctions
         return SpritesCollideRectangles(origin1, texture1, origin2, texture2);
     }
 
-    public static bool Clicked(Rectangle rect, bool mouseClicked){
+    public static bool Clicked(Rectangle rect, bool mouseClicked = true){
         if (!mouseClicked) { return false; }
         MouseState mouseState = Mouse.GetState();
-        return rect.Contains(mouseState.X, mouseState.Y);
+        return rect.Contains(mouseState.X/2, mouseState.Y/2);
     }
 
     // This will need to be added when I add circles.
@@ -46,14 +46,14 @@ public static class EntityFunctions
     //     return rect.Contains(mouseState.X, mouseState.Y);
     // }
 
-    public static bool Clicked(Entity e, bool mouseClicked){
+    public static bool Clicked(Entity e, bool mouseClicked = true){
         if (!mouseClicked) { return false; }
         Vector2 origin = e._position;
         Texture2D texture = e._texture;
 
         Rectangle rect = new Rectangle(
-            (int)MathF.Round(origin.X),
-            (int)MathF.Round(origin.Y),
+            (int)MathF.Round(origin.X)+texture.Width/2,
+            (int)MathF.Round(origin.Y)+texture.Height/2,
             texture.Width,
             texture.Height
         );

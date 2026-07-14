@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SourceFile>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/worker.png</SourceFile>
-  <SourceTime>2026-03-04T09:10:12.5485565-05:00</SourceTime>
+  <SourceTime>2026-07-13T10:54:12.9444792-04:00</SourceTime>
   <DestFile>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/bin/DesktopGL/Content/worker.xnb</DestFile>
-  <DestTime>2026-05-21T14:43:31.6351562-04:00</DestTime>
+  <DestTime>2026-07-13T13:51:40.7321236-04:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2025-10-20T10:25:32-04:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
