@@ -42,7 +42,7 @@ public class Worker : Meeple
 
     private void UnasignFromAll()
     {
-        List<WorkStation> stations = (List<WorkStation>)world.gameEntities.Where(s => s is WorkStation);
+        WorkStation[] stations = world.gameEntities.OfType<WorkStation>().ToArray();
         foreach (WorkStation station in stations)
         {
             station.UnassignWorker(this);
