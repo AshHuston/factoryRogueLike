@@ -22,7 +22,7 @@ public abstract class WorkStation : Entity
         world = _world;
         assets = _assets;
         targetTerrain = _targetTerrain;
-        _position = targetTerrain._position;
+        if (targetTerrain != null){ _position = targetTerrain._position; }
         maxNumWorkers = maxWorkers;
     }
 
@@ -54,7 +54,7 @@ public abstract class WorkStation : Entity
 
     public override void Update(GameTime gameTime)
     {
-        _position = targetTerrain._position;
+        if (targetTerrain != null){ _position = targetTerrain._position; }
         currentNumWorkers = assignedWorkers.Count;
         //currentNumWorkers = 1; //TEMP
 

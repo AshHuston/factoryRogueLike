@@ -40,10 +40,10 @@ public class World : Scene
         Add(player);
 
         //Test station vvv
-        // HarvestableTerrain testTerrain = new(this, assets, TerrainDatabase.Data[ResourceType.Wood], new Vector2(10, 10));
-        // map[(int)mapCenter.X, (int)mapCenter.Y] = testTerrain;
-        // Add(testTerrain);
-        // Add(new LumberMill(this, assets, testTerrain));
+        HarvestableTerrain testTerrain = new(this, assets, TerrainDatabase.Data[ResourceType.Wood], new Vector2(10, 10));
+        map[(int)mapCenter.X, (int)mapCenter.Y] = testTerrain;
+        Add(testTerrain);
+        Add(new TimberYard(this, assets, testTerrain));
         // ----------------------------------------------------------------------------------------------------------------
 
         testFont = assets.Pixel1Font;
@@ -58,8 +58,6 @@ public class World : Scene
         {
             Add(new Worker(game, this, assets, camCenter));
         }
-        // Worker worker = new Worker(game, this, assets, camCenter + new Vector2(30,30));
-        // Add(worker);
     }
 
     public void GenerateMap()

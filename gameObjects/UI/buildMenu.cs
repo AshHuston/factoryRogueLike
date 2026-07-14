@@ -35,11 +35,10 @@ public class BuildMenu : Menu
             _screenBounds,
             [ //Length = 5
                 new BuildMenuOption(_assets.Mine, Color.Black, () => _world.Add(new StationBuilder(_world, _assets, typeof(Mine)))),
-                new BuildMenuOption(_assets.LumberMill, Color.Black, () => _world.Add(new StationBuilder(_world, _assets, typeof(LumberMill)))),
+                new BuildMenuOption(_assets.TimberYard, Color.Black, () => _world.Add(new StationBuilder(_world, _assets, typeof(TimberYard)))),
                 // Below this needs to be felled with real thinbgs. Smelter, dredger maybe?
-                new BuildMenuOption(_assets.Mine, Color.Black, () => _world.Add(new StationBuilder(_world, _assets, typeof(Mine)))),
-                new BuildMenuOption(_assets.LumberMill, Color.Black, () => _world.Add(new StationBuilder(_world, _assets, typeof(LumberMill)))),
-                new BuildMenuOption(_assets.Mine, Color.Black, () => _world.Add(new StationBuilder(_world, _assets, typeof(Mine)))),
+                new BuildMenuOption(_assets.Warehouse, Color.Black, () => _world.Add(new StationBuilder(_world, _assets, typeof(Warehouse)))),
+                new BuildMenuOption(_assets.Worker, Color.Black, () => _world.Add(new Worker(_world.game, _world, _assets, _world.camCenter))),
             ],
             52, // option width + padding + padding
             220 // option width + padding*5 + padding

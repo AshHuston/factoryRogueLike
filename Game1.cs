@@ -68,7 +68,8 @@ public class Game1 : Game
             TimberYard = Content.Load<Texture2D>("timberyard"),
             MenuBackgroundNS = Content.Load<Texture2D>("v2-menuTextureNS"),
             Pixel1Font = Content.Load<SpriteFont>("fonts/pixel1"),
-            Courier = Content.Load<Texture2D>("courier")
+            Courier = Content.Load<Texture2D>("courier"),
+            Warehouse = Content.Load<Texture2D>("warehouse")
         };
 
         ResourceDatabase.Initialize(_assets);

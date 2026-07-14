@@ -26,6 +26,8 @@ public class StationBuilder : Entity
         {
             { typeof(Mine), _assets.Mine },
             { typeof(LumberMill), _assets.LumberMill },
+            { typeof(TimberYard), _assets.TimberYard },
+            { typeof(Warehouse), _assets.Warehouse },
         };
 
         world = _world;
@@ -35,6 +37,8 @@ public class StationBuilder : Entity
         {
             { typeof(Mine), (world, assets, targetTerrain) => new Mine(world, assets, targetTerrain) },
             { typeof(LumberMill), (world, assets, targetTerrain) => new LumberMill(world, assets, targetTerrain) },
+            { typeof(TimberYard), (world, assets, targetTerrain) => new TimberYard(world, assets, targetTerrain) },
+            { typeof(Warehouse), (world, assets, targetTerrain) => new Warehouse(world, assets) },
         };
         
         _texture = _textures[_stationType];
@@ -52,7 +56,7 @@ public class StationBuilder : Entity
         Entity tile = getTile(worldTileCoords);
         var field = StationType.GetField("mineableResourceTypes");
         var resources = (ResourceType[])field.GetValue(null);
-
+        Console.WriteLine(resources.Length);
         if (tile is HarvestableTerrain terrain)
         {
             if (resources.Contains(terrain.terrainData.Type)) { return true; }

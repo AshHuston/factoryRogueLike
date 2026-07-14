@@ -26,6 +26,7 @@ public class GameAssets
     public SpriteFont Pixel1Font { get; internal set; }
     public Texture2D TimberYard { get; internal set; }
     public Texture2D Courier { get; internal set; }
+    public Texture2D Warehouse { get; internal set; }
 }
 
 // 3/3/26 Pretty sure this needs to just have an array there and have a function to load them in, but for now this is fine.  I just want to get something on the screen.
