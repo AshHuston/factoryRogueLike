@@ -6,7 +6,7 @@ public abstract class Entity
 {
     public bool IsAlive = true;
     public Texture2D _texture;
-    public Vector2 _position;
+    public Vector2 _position = new(-5000, -5000); //Just to avoid new sprites flickering on screen
     public World world;
     protected GameAssets assets;
     public float Alpha = 1;

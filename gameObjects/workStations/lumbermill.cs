@@ -10,7 +10,7 @@ public class LumberMill : WorkStation
         ResourceType.Wood
     ];
 
-    public LumberMill(World world, GameAssets assets, HarvestableTerrain targetTerrain) : base(world, assets, 2, targetTerrain)
+    public LumberMill(World world, GameAssets assets, HarvestableTerrainTile targetTerrain) : base(world, assets, 2, targetTerrain)
     {
         maxNumWorkers = 2;
         _texture = assets.LumberMill;

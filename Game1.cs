@@ -69,11 +69,12 @@ public class Game1 : Game
             MenuBackgroundNS = Content.Load<Texture2D>("v2-menuTextureNS"),
             Pixel1Font = Content.Load<SpriteFont>("fonts/pixel1"),
             Courier = Content.Load<Texture2D>("courier"),
-            Warehouse = Content.Load<Texture2D>("warehouse")
+            Warehouse = Content.Load<Texture2D>("warehouse"),
+            pixel = pixel
         };
 
         ResourceDatabase.Initialize(_assets);
-        TerrainDatabase.Initialize(_assets);
+        HarvestableTerrainTileDatabase.Initialize(_assets);
 
         currentScene = new World(this, _assets);
     }

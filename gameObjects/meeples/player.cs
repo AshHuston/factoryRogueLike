@@ -50,10 +50,10 @@ public class Player : Meeple
         }
     }
 
-    public void startHarvesting(HarvestableTerrain terrain)
+    public void startHarvesting(HarvestableTerrainTile terrain)
     {
         entityInteractingWith = terrain;
-        harvestTimeRemainingMiliseconds = terrain.terrainData.MiningTimeMiliseconds;
+        harvestTimeRemainingMiliseconds = terrain.HarvestableTerrainTileData.MiningTimeMiliseconds;
     }
 
     public override void Update(GameTime gameTime)
@@ -84,18 +84,18 @@ public class Player : Meeple
             }
         }
     
-        if (entityInteractingWith is HarvestableTerrain terrain && Vector2.Distance(worldPosition, targetWorldPosition) <= interactionRange)
+        if (entityInteractingWith is HarvestableTerrainTile terrain && Vector2.Distance(worldPosition, targetWorldPosition) <= interactionRange)
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             harvestTimeRemainingMiliseconds -= (int)deltaTime;
-            terrain.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / terrain.terrainData.MiningTimeMiliseconds);
+            terrain.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / terrain.HarvestableTerrainTileData.MiningTimeMiliseconds);
             terrain.harvestProgressWheel._position = new(Mouse.GetState().X/game.scale, Mouse.GetState().Y/game.scale);
 
             if (harvestTimeRemainingMiliseconds <= 0)
             {
                 var (type, amount) = terrain.HarvestResource();
                 Inventory.Add(type, amount);
-                harvestTimeRemainingMiliseconds = terrain.terrainData.MiningTimeMiliseconds;
+                harvestTimeRemainingMiliseconds = terrain.HarvestableTerrainTileData.MiningTimeMiliseconds;
             }   
         }
     }

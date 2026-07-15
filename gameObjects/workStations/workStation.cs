@@ -11,13 +11,13 @@ public abstract class WorkStation : Entity
 {
     public int maxNumWorkers;
     public int currentNumWorkers = 0;
-    private HarvestableTerrain targetTerrain;
+    private TerrainTile targetTerrain;
     internal List<Worker> assignedWorkers = [];
     public static readonly ResourceType[] mineableResourceTypes = [];
     public Inventory Inventory { get; } = new();
     private int harvestTimeRemainingMiliseconds;
 
-    public WorkStation(World _world, GameAssets _assets, int maxWorkers, HarvestableTerrain _targetTerrain)
+    public WorkStation(World _world, GameAssets _assets, int maxWorkers, TerrainTile _targetTerrain)
     {
         world = _world;
         assets = _assets;
@@ -54,22 +54,21 @@ public abstract class WorkStation : Entity
 
     public override void Update(GameTime gameTime)
     {
-        if (targetTerrain != null){ _position = targetTerrain._position; }
+        _position = targetTerrain._position;
         currentNumWorkers = assignedWorkers.Count;
-        //currentNumWorkers = 1; //TEMP
 
-        if (targetTerrain != null) {
+        if (targetTerrain is HarvestableTerrainTile t) {
             {
                 float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 harvestTimeRemainingMiliseconds -= (int)(deltaTime*currentNumWorkers);
-                targetTerrain.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / targetTerrain.terrainData.MiningTimeMiliseconds);
-                targetTerrain.harvestProgressWheel._position = _position;
+                t.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / t.HarvestableTerrainTileData.MiningTimeMiliseconds);
+                t.harvestProgressWheel._position = _position;
 
                 if (harvestTimeRemainingMiliseconds <= 0)
                 {
-                    var (type, amount) = targetTerrain.HarvestResource();
+                    var (type, amount) = t.HarvestResource();
                     Inventory.Add(type, amount);
-                    harvestTimeRemainingMiliseconds = targetTerrain.terrainData.MiningTimeMiliseconds;
+                    harvestTimeRemainingMiliseconds = t.HarvestableTerrainTileData.MiningTimeMiliseconds;
                 }
             }
         }

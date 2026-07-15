@@ -40,7 +40,7 @@ public class World : Scene
         Add(player);
 
         //Test station vvv
-        HarvestableTerrain testTerrain = new(this, assets, TerrainDatabase.Data[ResourceType.Wood], new Vector2(10, 10));
+        HarvestableTerrainTile testTerrain = new(this, assets, HarvestableTerrainTileDatabase.Data[ResourceType.Wood], new Vector2(10, 10));
         map[(int)mapCenter.X, (int)mapCenter.Y] = testTerrain;
         Add(testTerrain);
         Add(new TimberYard(this, assets, testTerrain));
@@ -62,7 +62,7 @@ public class World : Scene
 
     public void GenerateMap()
     {
-        List<HarvestableTerrain> harvestableTerrains = new List<HarvestableTerrain>();
+        List<HarvestableTerrainTile> HarvestableTerrainTiles = new List<HarvestableTerrainTile>();
         float decayFactor = 0.25f;
         ResourceType[] resourceTypes = [
             ResourceType.Iron,
@@ -89,17 +89,17 @@ public class World : Scene
                     Vector2 targetTile = new Vector2(x, y);
                     float distanceFromSeed = Vector2.Distance(seedTile, targetTile);
                     float probability = MathF.Max(0, 1 - (distanceFromSeed * decayFactor));
+                    TerrainTile terrain = new(this, assets, targetTile);
                     if (random.NextDouble() < probability)
                     {
-                        //Debug.WriteLine(targetTile);
-                        HarvestableTerrain terrain = new(this, assets, TerrainDatabase.Data[resourceType], targetTile);
+                        terrain = new HarvestableTerrainTile(this, assets, HarvestableTerrainTileDatabase.Data[resourceType], targetTile);
                         gameEntities.Add(terrain);
-                        map[x, y] = terrain;
                     }
+                    map[x, y] = terrain;
                 }
             }
         }
-        RemoveInvalidHarvestableTerrain();
+        RemoveInvalidHarvestableTerrainTile();
     }
 
     public void AdjustEntityPositions()
@@ -131,9 +131,9 @@ public class World : Scene
         }
     }
 
-    private bool IsInvalidHarvestableTerrain(Entity entity)
+    private bool IsInvalidHarvestableTerrainTile(Entity entity)
     {
-        if (entity is HarvestableTerrain terrain)
+        if (entity is HarvestableTerrainTile terrain)
         {
             bool isOutOfMap = terrain._position.X < 0 || terrain._position.Y < 0 || terrain._position.X >= map.GetLength(0) || terrain._position.Y >= map.GetLength(1);
 
@@ -143,9 +143,9 @@ public class World : Scene
         }
     }
 
-    public void RemoveInvalidHarvestableTerrain()
+    public void RemoveInvalidHarvestableTerrainTile()
     {
-        gameEntities.RemoveAll(IsInvalidHarvestableTerrain);
+        gameEntities.RemoveAll(IsInvalidHarvestableTerrainTile);
     }
 
     internal Vector2 GetTileCoordinates(Vector2 worldPosition)

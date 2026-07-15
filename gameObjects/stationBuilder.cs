@@ -10,7 +10,7 @@ namespace factoryRL.GameObjects;
 public class StationBuilder : Entity
 {
     private Type StationType;
-    private readonly Dictionary<Type, Func<World, GameAssets, HarvestableTerrain, WorkStation>> _factories;
+    private readonly Dictionary<Type, Func<World, GameAssets, TerrainTile, WorkStation>> _factories;
 
     public StationBuilder(World _world, GameAssets _assets, Type _stationType)
     {
@@ -35,10 +35,10 @@ public class StationBuilder : Entity
 
         _factories = new()
         {
-            { typeof(Mine), (world, assets, targetTerrain) => new Mine(world, assets, targetTerrain) },
-            { typeof(LumberMill), (world, assets, targetTerrain) => new LumberMill(world, assets, targetTerrain) },
-            { typeof(TimberYard), (world, assets, targetTerrain) => new TimberYard(world, assets, targetTerrain) },
-            { typeof(Warehouse), (world, assets, targetTerrain) => new Warehouse(world, assets) },
+            { typeof(Mine), (world, assets, terrainTile) => new Mine(world, assets, (HarvestableTerrainTile)terrainTile ) },
+            { typeof(LumberMill), (world, assets, terrainTile) => new LumberMill(world, assets, (HarvestableTerrainTile)terrainTile) },
+            { typeof(TimberYard), (world, assets, terrainTile) => new TimberYard(world, assets, (HarvestableTerrainTile)terrainTile) },
+            { typeof(Warehouse), (world, assets, terrainTile) => new Warehouse(world, assets,  terrainTile) },
         };
         
         _texture = _textures[_stationType];
@@ -57,9 +57,9 @@ public class StationBuilder : Entity
         var field = StationType.GetField("mineableResourceTypes");
         var resources = (ResourceType[])field.GetValue(null);
         Console.WriteLine(resources.Length);
-        if (tile is HarvestableTerrain terrain)
+        if (tile is HarvestableTerrainTile terrain)
         {
-            if (resources.Contains(terrain.terrainData.Type)) { return true; }
+            if (resources.Contains(terrain.HarvestableTerrainTileData.Type)) { return true; }
         }
 
         if (resources.Length == 0) { return true; }
@@ -69,7 +69,7 @@ public class StationBuilder : Entity
 
     private WorkStation getNewStation(Vector2 worldTileCoords)
     {
-        return _factories[StationType](world, assets, (HarvestableTerrain)getTile(worldTileCoords));
+        return _factories[StationType](world, assets, (TerrainTile)getTile(worldTileCoords));
     }
 
     public override void Update(GameTime gameTime)

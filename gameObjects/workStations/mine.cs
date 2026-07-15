@@ -14,7 +14,7 @@ public class Mine : WorkStation
         ResourceType.Stone
     ];
 
-    public Mine(World world, GameAssets assets, HarvestableTerrain targetTerrain) : base(world, assets, 2, targetTerrain)
+    public Mine(World world, GameAssets assets, HarvestableTerrainTile targetTerrain) : base(world, assets, 2, targetTerrain)
     {
         maxNumWorkers = 2;
         _texture = assets.Mine;
