@@ -81,7 +81,7 @@ public class CourierRouteAssigner : Entity
                     RepresentedRoute.Source != hoveredStation
                  ){
                     RepresentedRoute.Target = hoveredStation;
-                    Worker isNowCourier = world.FindClosestEntity<Worker>(InputManager.MouseWorldPosition, w => { return w.IsIdle(); });
+                    Worker isNowCourier = world.FindClosestEntity<Worker>(RepresentedRoute.Source._position, w => { return w.IsIdle(); });
                     if (isNowCourier != null){
                         isNowCourier.AssignRoute(RepresentedRoute);
                     }

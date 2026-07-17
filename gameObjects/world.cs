@@ -95,6 +95,7 @@ public class World : Scene
                         terrain = new HarvestableTerrainTile(this, assets, HarvestableTerrainTileDatabase.Data[resourceType], targetTile);
                         gameEntities.Add(terrain);
                     }
+                    if (terrain is not HarvestableTerrainTile && map[x,y] != null){ continue; }
                     map[x, y] = terrain;
                 }
             }
