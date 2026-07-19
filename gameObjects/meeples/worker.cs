@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -6,6 +5,15 @@ using System.Linq;
 using factoryRL.courierRoute;
 
 namespace factoryRL.GameObjects;
+
+public enum CourierState
+{
+    GoingToPickup,
+    PickingUp,
+    GoingToDropoff,
+    DroppingOff,
+    Idle
+}
 
 public class Worker : Meeple
 {
@@ -67,17 +75,55 @@ public class Worker : Meeple
 
     public void AssignRoute(CourierRoute routeToAssign)
     {
-        route = routeToAssign;
+        route = new CourierRoute(routeToAssign);
         _texture = assets.Courier;
     } 
 
     public override void Update(GameTime gameTime)
     {
+        // Idle logic
         int avgFramesToMoveWhileIdle = 300;
         if (Random.Shared.Next(0, avgFramesToMoveWhileIdle) == 0)
         {
             SetIdleTargetPosition(world.mapCenter);
         }
+        // ^Idle logic
+
+        // CourierRoute logic
+        if (route != null)
+        {
+            CourierState state = CourierState.GoingToPickup;
+            targetWorldPosition = route.Source.targetTerrain._position;
+            if (Inventory.Has(route.ResourceType))
+            {
+                state = CourierState.GoingToDropoff;
+                targetWorldPosition = route.Target.targetTerrain._position;    
+            }
+
+            if (Vector2.Distance(targetWorldPosition, worldPosition) <= interactionRange)
+            {
+                if (state == CourierState.GoingToPickup)
+                {
+                    // Pick up item
+                    if (route.Source.Inventory.Has(route.ResourceType))
+                    {
+                        route.Source.Inventory.Remove(route.ResourceType);
+                        Inventory.Add(route.ResourceType);
+                    }
+                }
+                else if (state == CourierState.GoingToDropoff)
+                {
+                    // Deposit item
+                    if (Inventory.Has(route.ResourceType))
+                    {
+                        Inventory.Remove(route.ResourceType);
+                        route.Target.Inventory.Add(route.ResourceType);
+                    }
+                }
+            }
+        }
+        // ^CourierRoute logic
+
         StepTowards(targetWorldPosition);
 
         Rectangle hitBox = new Rectangle((int)worldPosition.X, (int)worldPosition.Y, _texture.Width, _texture.Height);
@@ -93,11 +139,5 @@ public class Worker : Meeple
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
-        // if (inventory.Count == 1)
-        // {
-        //     Texture2D resourceTexture = ResourceDatabase.Data[inventory[0].Type].Texture;
-        //     Vector2 resourcePosition = _position - new Vector2(0, _texture.Height/2);
-        //     spriteBatch.Draw(resourceTexture, resourcePosition, Color.White);
-        // }
     }
 }
