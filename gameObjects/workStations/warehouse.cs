@@ -1,3 +1,4 @@
+using System;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
 using Microsoft.Xna.Framework;
@@ -16,7 +17,6 @@ public class Warehouse : WorkStation
 
     public override void Update(GameTime gameTime)
     {
-
         base.Update(gameTime);
     }
 }
