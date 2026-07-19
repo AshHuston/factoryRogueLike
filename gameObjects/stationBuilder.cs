@@ -56,7 +56,6 @@ public class StationBuilder : Entity
         Entity tile = getTile(worldTileCoords);
         var field = StationType.GetField("mineableResourceTypes");
         var resources = (ResourceType[])field.GetValue(null);
-        Console.WriteLine(resources.Length);
         if (tile is HarvestableTerrainTile terrain)
         {
             if (resources.Contains(terrain.HarvestableTerrainTileData.Type)) { return true; }

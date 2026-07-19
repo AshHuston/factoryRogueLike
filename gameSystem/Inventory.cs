@@ -11,12 +11,12 @@ public class Inventory
         return _items.GetValueOrDefault(type);
     }
 
-    public void Add(ResourceItemType type, int amount)
+    public void Add(ResourceItemType type, int amount = 1)
     {
         _items[type] = GetAmount(type) + amount;
     }
 
-    public int Remove(ResourceItemType type, int amount)
+    public int Remove(ResourceItemType type, int amount = 1)
     {
         int current = GetAmount(type);
 

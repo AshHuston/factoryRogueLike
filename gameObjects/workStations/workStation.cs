@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
@@ -11,11 +10,12 @@ public abstract class WorkStation : Entity
 {
     public int maxNumWorkers;
     public int currentNumWorkers = 0;
-    private TerrainTile targetTerrain;
+    public TerrainTile targetTerrain;
     internal List<Worker> assignedWorkers = [];
     public static readonly ResourceType[] mineableResourceTypes = [];
     public Inventory Inventory { get; } = new();
     private int harvestTimeRemainingMiliseconds;
+    public ResourceItemType exportType = ResourceItemType.None;
 
     public WorkStation(World _world, GameAssets _assets, int maxWorkers, TerrainTile _targetTerrain)
     {
@@ -24,6 +24,11 @@ public abstract class WorkStation : Entity
         targetTerrain = _targetTerrain;
         if (targetTerrain != null){ _position = targetTerrain._position; }
         maxNumWorkers = maxWorkers;
+
+        if (targetTerrain is HarvestableTerrainTile t)
+        {
+            exportType = t.HarvestableTerrainTileData.ItemType;
+        }
     }
 
     public bool CanAssignWorker()

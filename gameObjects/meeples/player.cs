@@ -12,7 +12,6 @@ public class Player : Meeple
     private readonly InputManager input;
     private readonly Texture2D indicatorTexture;
     private Viewport viewport;
-    private readonly int interactionRange = 15;
     private Entity entityInteractingWith = null;
     private int harvestTimeRemainingMiliseconds;
     private Game1 game;
@@ -30,6 +29,7 @@ public class Player : Meeple
         indicatorTexture = gameAssets.MovmentIndicicator;
         mvSpdPx = 5;
         targetWorldPosition = worldPosition;
+        interactionRange = 15;
 
         // Texture2D menuTexture = gameAssets.MenuBackgroundNS;
         // test = new NineSlicedSprite(menuTexture, 4, 4, 70, 70);

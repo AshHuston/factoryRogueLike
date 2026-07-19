@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 namespace factoryRL.GameObjects;
@@ -10,10 +11,15 @@ public abstract class Entity
     public World world;
     protected GameAssets assets;
     public float Alpha = 1;
+    // public Vector2 worldPosition;
 
     public virtual void Interact(Player player) { }
 
-    public virtual void Update(GameTime gameTime) { }
+    public virtual void Update(GameTime gameTime)
+    {
+        // worldPosition = world.ScreenToWorld(_position);
+        // Console.WriteLine($"{GetType().Name}: {_position}");
+    }
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {

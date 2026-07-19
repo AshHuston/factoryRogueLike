@@ -16,6 +16,13 @@ public class CourierRoute
         ResourceType = _itemType;
     }
 
+    public CourierRoute(CourierRoute other)
+    {
+        Source = other.Source;
+        Target = other.Target;
+        ResourceType = other.ResourceType;
+    }
+
     public bool CanPickup()
     {
         return Source.Inventory.Has(ResourceType);

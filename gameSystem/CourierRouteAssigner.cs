@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using factoryRL.courierRoute;
 using factoryRL.GameObjects;
 using factoryRL.GameObjects.Resources;
@@ -8,14 +7,12 @@ using factoryRL.Inputs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using factoryRL.Functions;
-using System.Data.Common;
 
 public class CourierRouteAssigner : Entity
 {
     private InputManager InputManager;
     private CourierRoute RepresentedRoute = new CourierRoute(null, null, ResourceItemType.None); 
     private bool DrawTheLine = false;
-    private Point HoveredTile = new Point(0,0);
 
     public CourierRouteAssigner(World _world, GameAssets _assets)
     {
@@ -23,7 +20,6 @@ public class CourierRouteAssigner : Entity
         assets = _assets;
         InputManager = world.game._inputManager;
     }
-    // This object needs to: watch for click-drags, draw the line, when released check if its a valid route, if it is, find the nearest eligible worker, and assign them the route.
 
     private void ResetRepresentedRoute()
     {
@@ -35,7 +31,6 @@ public class CourierRouteAssigner : Entity
     public override void Update(GameTime gameTime)
     {
         Vector2 mousePos = world.GetTileCoordinates(InputManager.MouseWorldPosition);
-        HoveredTile = new Point((int)mousePos.X, (int)mousePos.Y);
         if (RepresentedRoute.Source != null)
         {
             DrawTheLine = true;
@@ -81,6 +76,7 @@ public class CourierRouteAssigner : Entity
                     RepresentedRoute.Source != hoveredStation
                  ){
                     RepresentedRoute.Target = hoveredStation;
+                    RepresentedRoute.ResourceType = RepresentedRoute.Source.exportType;
                     Worker isNowCourier = world.FindClosestEntity<Worker>(RepresentedRoute.Source._position, w => { return w.IsIdle(); });
                     if (isNowCourier != null){
                         isNowCourier.AssignRoute(RepresentedRoute);

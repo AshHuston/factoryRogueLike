@@ -5,9 +5,10 @@ namespace factoryRL.GameObjects;
 public class Meeple : Entity
 {
     public int mvSpdPx;
-    public Vector2 worldPosition;
     public Vector2 targetWorldPosition;
     public Inventory Inventory { get; } = new();
+    internal int interactionRange = 5;
+    public Vector2 worldPosition;
 
     public void StepTowards(Vector2 targetPosition)
     {

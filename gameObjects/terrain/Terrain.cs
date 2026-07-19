@@ -8,5 +8,6 @@ public class TerrainTile : Entity
         _position = position;
         world = _world;
         _texture = _assets.pixel;
+        
     }
 }
