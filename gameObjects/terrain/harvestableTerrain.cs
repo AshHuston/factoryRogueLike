@@ -40,6 +40,7 @@ public class HarvestableTerrainTile : TerrainTile
             }
         }
         harvestProgressPrevFrame = harvestProgressWheel.GetProgress();
+        base.Update(gameTime);
     }
 
     public override void Draw(SpriteBatch spriteBatch)
