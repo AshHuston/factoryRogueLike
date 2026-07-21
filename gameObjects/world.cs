@@ -30,7 +30,7 @@ public class World : Scene
         map = new Entity[mapWidth, mapHeight];
         mapCenter = new(mapWidth / 2, mapHeight / 2);
         camCenter = new Vector2(map.GetLength(0) * tileSizePixels / 2, map.GetLength(1) * tileSizePixels / 2);
-        GenerateMap();
+        //GenerateMap();
         Add(new CourierRouteAssigner(this, assets));
 
         backgroundTexture = assets.backgroundTextureTile;
@@ -40,7 +40,7 @@ public class World : Scene
         Add(player);
 
         //Test station vvv
-        HarvestableTerrainTile testTerrain = new(this, assets, HarvestableTerrainTileDatabase.Data[ResourceType.Wood], new Vector2(10, 10));
+        HarvestableTerrainTile testTerrain = new(this, assets, HarvestableTerrainTileDatabase.Data[ResourceType.Wood], new Vector2((int)mapCenter.X, (int)mapCenter.Y));
         map[(int)mapCenter.X, (int)mapCenter.Y] = testTerrain;
         Add(testTerrain);
         Add(new TimberYard(this, assets, testTerrain));
@@ -54,7 +54,8 @@ public class World : Scene
             new Rectangle(15, 15, 0, 0)
         );
 
-        for (int i=0; i<1; i++)
+        int TestWorkers = 2; // TESTING PURPOSES
+        for (int i=0; i<TestWorkers; i++)
         {
             Add(new Worker(game, this, assets, camCenter));
         }
@@ -62,7 +63,6 @@ public class World : Scene
 
     public void GenerateMap()
     {
-        List<HarvestableTerrainTile> HarvestableTerrainTiles = new List<HarvestableTerrainTile>();
         float decayFactor = 0.25f;
         ResourceType[] resourceTypes = [
             ResourceType.Iron,
@@ -72,12 +72,12 @@ public class World : Scene
             ResourceType.Wood
         ];
 
-        Random random = new Random();
+        Random random = new();
         int maxRangeFromCenterTiles = 15;
 
         foreach (var resourceType in resourceTypes)
         {
-            Vector2 seedTile = new Vector2(
+            Vector2 seedTile = new(
                 MathF.Floor(mapCenter.X) + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles),
                 MathF.Floor(mapCenter.Y) + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles)
             );
@@ -86,7 +86,7 @@ public class World : Scene
             {
                 for (int y = 0; y < map.GetLength(1); y++)
                 {
-                    Vector2 targetTile = new Vector2(x, y);
+                    Vector2 targetTile = new(x, y);
                     float distanceFromSeed = Vector2.Distance(seedTile, targetTile);
                     float probability = MathF.Max(0, 1 - (distanceFromSeed * decayFactor));
                     TerrainTile terrain = new(this, assets, targetTile);
@@ -103,42 +103,47 @@ public class World : Scene
         RemoveInvalidHarvestableTerrainTile();
     }
 
-    public void AdjustEntityPositions()
-    {
-        for (int x = 0; x < map.GetLength(0); x++)
-        {
-            for (int y = 0; y < map.GetLength(1); y++)
-            {
-                Entity entity = map[x, y];
-                if (entity != null)
-                {
-                    entity._position = new Vector2(
-                        (x * tileSizePixels) - camCenter.X + (game.GraphicsDevice.Viewport.Width / (game.scale*2)),
-                        (y * tileSizePixels) - camCenter.Y + (game.GraphicsDevice.Viewport.Height / (game.scale*2))
-                    );
-                }
-            }
-        }
+    // public void AdjustEntityPositions()
+    // {
+    //     for (int x = 0; x < map.GetLength(0); x++)
+    //     {
+    //         for (int y = 0; y < map.GetLength(1); y++)
+    //         {
+    //             Entity entity = map[x, y];
+    //             if (entity != null)
+    //             {
+    //                 entity._position = new Vector2(
+    //                     (x * tileSizePixels) - camCenter.X + (game.GraphicsDevice.Viewport.Width / (game.scale*2)),
+    //                     (y * tileSizePixels) - camCenter.Y + (game.GraphicsDevice.Viewport.Height / (game.scale*2))
+    //                 );
+    //             }
+    //         }
+    //     }
 
-        foreach (var entity in gameEntities)
-        {
-            if (entity is Meeple m)
-            {
-                m._position = new Vector2(
-                    m.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / (game.scale*2)),
-                    m.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / (game.scale*2))
-                );
-            }
-        }
-    }
+    //     foreach (var entity in gameEntities)
+    //     {
+    //         if (entity is Meeple m)
+    //         {
+    //             m._position = new Vector2(
+    //                 m.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / (game.scale*2)),
+    //                 m.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / (game.scale*2))
+    //             );
+    //         }
+    //     }
+    // }
 
+    // not sure this is actually doing anything right or even useful tbh. 7/18/26
     private bool IsInvalidHarvestableTerrainTile(Entity entity)
     {
         if (entity is HarvestableTerrainTile terrain)
         {
-            bool isOutOfMap = terrain._position.X < 0 || terrain._position.Y < 0 || terrain._position.X >= map.GetLength(0) || terrain._position.Y >= map.GetLength(1);
+            bool isOutOfMap = 
+                terrain.WorldPosition.X < 0
+                || terrain.WorldPosition.Y < 0
+                || terrain.WorldPosition.X >= map.GetLength(0)*tileSizePixels
+                || terrain.WorldPosition.Y >= map.GetLength(1)*tileSizePixels;
 
-            return isOutOfMap || map[(int)terrain._position.X, (int)terrain._position.Y] != terrain;
+            return isOutOfMap || map[(int)terrain.WorldPosition.X, (int)terrain.WorldPosition.Y] != terrain;
         } else {
             return false;
         }
@@ -182,14 +187,28 @@ public class World : Scene
         }
     }
 
+    public Vector2 WorldToScreen(Vector2 worldPos)
+    {
+        return worldPos
+            - camCenter
+            + new Vector2(
+                game.ViewportResolution.width / (game.scale * 2),
+                game.ViewportResolution.height / (game.scale * 2)
+            );
+    }
+
+    public Vector2 ScreenToWorld(Vector2 screenPos)
+    {
+        return screenPos
+            + camCenter
+            - new Vector2(
+                game.ViewportResolution.width / (game.scale * 2),
+                game.ViewportResolution.height / (game.scale * 2)
+            );
+    }
+
     public override void Update(GameTime gameTime) 
     {
-        AdjustEntityPositions();
-        player._position = new Vector2(
-            player.worldPosition.X - camCenter.X + (game.ViewportResolution.width / (game.scale*2)),
-            player.worldPosition.Y - camCenter.Y + (game.ViewportResolution.height / (game.scale*2))
-        );
-
         mouseWorldMapPosition = new Vector2(
             _inputManager.MouseWorldPosition.X - (_inputManager.MouseWorldPosition.X % tileSizePixels) + tileSizePixels / 2,
             _inputManager.MouseWorldPosition.Y - (_inputManager.MouseWorldPosition.Y % tileSizePixels) + tileSizePixels / 2
@@ -212,10 +231,10 @@ public class World : Scene
 
         // TEMP This makes the character, not the mouse, move the screen. This is likely temporary.
         int edgeWidth = 65;
-        if (player._position.X < edgeWidth){ camCenter.X -= player.mvSpdPx; }
-        if (player._position.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
-        if (player._position.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
-        if (player._position.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
+        // if (player.screenPosition.X < edgeWidth){ camCenter.X -= player.mvSpdPx; }
+        // if (player.screenPosition.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
+        // if (player.screenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
+        // if (player.screenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
         
         // ------------------------------------------------------------------------------------
         

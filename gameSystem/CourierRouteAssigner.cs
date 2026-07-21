@@ -39,14 +39,14 @@ public class CourierRouteAssigner : Entity
         if (InputManager.IsLeftClick())
         {   
             WorkStation clickedStation = world.gameEntities.OfType<WorkStation>().FirstOrDefault(s => 
-                EntityFunctions.Clicked(
-                    new Rectangle(
-                        (int)(world.GetTileCoordinates(s._position).X*world.tileSizePixels)-s._texture.Width/2,
-                        (int)(world.GetTileCoordinates(s._position).Y*world.tileSizePixels)-s._texture.Height/2,
-                        s._texture.Width*2,
-                        s._texture.Height*2 //SCALE All these last *2 are for the // SCALE
-                    )
-                )
+                EntityFunctions.Clicked(s)
+                    // new Rectangle(
+                    //     (int)(world.GetTileCoordinates(s._position).X*world.tileSizePixels)-s._texture.Width/2,
+                    //     (int)(world.GetTileCoordinates(s._position).Y*world.tileSizePixels)-s._texture.Height/2,
+                    //     s._texture.Width*2,
+                    //     s._texture.Height*2 //SCALE All these last *2 are for the // SCALE
+                    // )
+                // )
             );
 
             if(clickedStation != null)
@@ -62,14 +62,14 @@ public class CourierRouteAssigner : Entity
         if (InputManager.IsLeftClickReleased())
         {
             if (world.gameEntities.OfType<WorkStation>().FirstOrDefault(s => 
-                EntityFunctions.Clicked(
-                    new Rectangle(
-                        (int)(world.GetTileCoordinates(s._position).X*world.tileSizePixels)-s._texture.Width/2,
-                        (int)(world.GetTileCoordinates(s._position).Y*world.tileSizePixels)-s._texture.Height/2,
-                        s._texture.Width*2,
-                        s._texture.Height*2 //SCALE All these last *2 are for the // SCALE
-                    )
-                )
+                EntityFunctions.Clicked(s)
+                //     new Rectangle(
+                //         (int)(world.GetTileCoordinates(s._position).X*world.tileSizePixels)-s._texture.Width/2,
+                //         (int)(world.GetTileCoordinates(s._position).Y*world.tileSizePixels)-s._texture.Height/2,
+                //         s._texture.Width*2,
+                //         s._texture.Height*2 //SCALE All these last *2 are for the // SCALE
+                //     )
+                // )
             ) is WorkStation hoveredStation)
             {
                 if (RepresentedRoute.Source != null &&
@@ -77,7 +77,7 @@ public class CourierRouteAssigner : Entity
                  ){
                     RepresentedRoute.Target = hoveredStation;
                     RepresentedRoute.ResourceType = RepresentedRoute.Source.exportType;
-                    Worker isNowCourier = world.FindClosestEntity<Worker>(RepresentedRoute.Source._position, w => { return w.IsIdle(); });
+                    Worker isNowCourier = world.FindClosestEntity<Worker>(RepresentedRoute.Source.WorldPosition, w => { return w.IsIdle(); });
                     if (isNowCourier != null){
                         isNowCourier.AssignRoute(RepresentedRoute);
                     }
@@ -99,7 +99,8 @@ public class CourierRouteAssigner : Entity
         {
             world.game.DrawLine(
                 spriteBatch,
-                world.GetTileCoordinates(RepresentedRoute.Source._position*world.tileSizePixels) + new Vector2(world.tileSizePixels/2, world.tileSizePixels/2),
+                RepresentedRoute.Source.screenPosition + new Vector2(world.tileSizePixels/2, world.tileSizePixels/2),
+                //world.GetTileCoordinates(RepresentedRoute.Source._position*world.tileSizePixels) + new Vector2(world.tileSizePixels/2, world.tileSizePixels/2),
                 world.GetContainingTileScreenCoordinates(world.mouseWorldMapPosition),
                 Color.Black,
                 2f

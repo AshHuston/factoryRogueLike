@@ -25,8 +25,8 @@ public static class EntityFunctions
     }
 
     public static bool EntitiesCollide(Entity e1, Entity e2){
-        Vector2 origin1 = e1._position;
-        Vector2 origin2 = e2._position;
+        Vector2 origin1 = e1.WorldPosition;
+        Vector2 origin2 = e2.WorldPosition;
         Texture2D texture1 = e1._texture;
         Texture2D texture2 = e2._texture;
 
@@ -48,7 +48,7 @@ public static class EntityFunctions
 
     public static bool Clicked(Entity e, bool mouseClicked = true){
         if (!mouseClicked) { return false; }
-        Vector2 origin = e._position;
+        Vector2 origin = e.WorldPosition;
         Texture2D texture = e._texture;
 
         Rectangle rect = new Rectangle(

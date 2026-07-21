@@ -22,7 +22,7 @@ public abstract class WorkStation : Entity
         world = _world;
         assets = _assets;
         targetTerrain = _targetTerrain;
-        if (targetTerrain != null){ _position = targetTerrain._position; }
+        WorldPosition = targetTerrain.WorldPosition;
         maxNumWorkers = maxWorkers;
 
         if (targetTerrain is HarvestableTerrainTile t)
@@ -59,7 +59,6 @@ public abstract class WorkStation : Entity
 
     public override void Update(GameTime gameTime)
     {
-        _position = targetTerrain._position;
         currentNumWorkers = assignedWorkers.Count;
 
         if (targetTerrain is HarvestableTerrainTile t) {
@@ -67,7 +66,7 @@ public abstract class WorkStation : Entity
                 float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 harvestTimeRemainingMiliseconds -= (int)(deltaTime*currentNumWorkers);
                 t.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / t.HarvestableTerrainTileData.MiningTimeMiliseconds);
-                t.harvestProgressWheel._position = _position;
+                t.harvestProgressWheel.screenPosition = screenPosition;
 
                 if (harvestTimeRemainingMiliseconds <= 0)
                 {

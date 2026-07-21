@@ -21,19 +21,15 @@ public class Player : Meeple
     public Player(Game1 _game, World _world, GameAssets gameAssets, Vector2 _worldPosition)
     {
         game = _game;
-        worldPosition = _worldPosition;
+        WorldPosition = _worldPosition;
         world = _world;
         input = _game._inputManager;
         viewport = _game.GraphicsDevice.Viewport;
         _texture = gameAssets.Player;
         indicatorTexture = gameAssets.MovmentIndicicator;
         mvSpdPx = 5;
-        targetWorldPosition = worldPosition;
+        targetWorldPosition = WorldPosition;
         interactionRange = 15;
-
-        // Texture2D menuTexture = gameAssets.MenuBackgroundNS;
-        // test = new NineSlicedSprite(menuTexture, 4, 4, 70, 70);
-        // test._position = new Vector2(25, 25);
     }
 
     private void interact(Vector2 interactionMapPosition)
@@ -42,7 +38,6 @@ public class Player : Meeple
         try
         {
             world.map[(int)X, (int)Y].Interact(this);
-            Console.WriteLine($"Interacted with tile at ({X}, {Y})");
         }
         catch (Exception)
         {
@@ -58,7 +53,6 @@ public class Player : Meeple
 
     public override void Update(GameTime gameTime)
     {
-        StepTowards(targetWorldPosition);
         if (!world.hasHoveredMenu){
             if (input.IsLeftClick()) { 
                 targetWorldPosition = new Vector2(
@@ -66,7 +60,7 @@ public class Player : Meeple
                     world.mouseWorldMapPosition.Y - _texture.Height/2
                 );
 
-                if (Vector2.Distance(worldPosition, targetWorldPosition) <= interactionRange)
+                if (Vector2.Distance(WorldPosition, targetWorldPosition) <= interactionRange)
                 {
                     interact(world.mouseWorldMapPosition);
                 }
@@ -74,7 +68,7 @@ public class Player : Meeple
 
             if (input.IsRightClick(true)||input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
             { 
-                targetWorldPosition = worldPosition;
+                targetWorldPosition = WorldPosition;
             } 
 
             if (input.IsLeftClickReleased() && entityInteractingWith != null)
@@ -84,12 +78,12 @@ public class Player : Meeple
             }
         }
     
-        if (entityInteractingWith is HarvestableTerrainTile terrain && Vector2.Distance(worldPosition, targetWorldPosition) <= interactionRange)
+        if (entityInteractingWith is HarvestableTerrainTile terrain && Vector2.Distance(WorldPosition, targetWorldPosition) <= interactionRange)
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             harvestTimeRemainingMiliseconds -= (int)deltaTime;
             terrain.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / terrain.HarvestableTerrainTileData.MiningTimeMiliseconds);
-            terrain.harvestProgressWheel._position = new(Mouse.GetState().X/game.scale, Mouse.GetState().Y/game.scale);
+            terrain.harvestProgressWheel.screenPosition = new(Mouse.GetState().X/game.scale, Mouse.GetState().Y/game.scale);
 
             if (harvestTimeRemainingMiliseconds <= 0)
             {
@@ -98,13 +92,14 @@ public class Player : Meeple
                 harvestTimeRemainingMiliseconds = terrain.HarvestableTerrainTileData.MiningTimeMiliseconds;
             }   
         }
+    
+        StepTowards(targetWorldPosition);
+        base.Update(gameTime);
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        //test.Draw(spriteBatch);
-
-        if (Vector2.Distance(worldPosition, targetWorldPosition) > interactionRange)
+        if (Vector2.Distance(WorldPosition, targetWorldPosition) > interactionRange)
         {
             spriteBatch.Draw(
                 indicatorTexture,

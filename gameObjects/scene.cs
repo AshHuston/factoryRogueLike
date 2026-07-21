@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using factoryRL.Inputs;
 using System.Linq;
 using System;
+using factoryRL.GameObjects.Terrain;
 namespace factoryRL.GameObjects;
 
 public class Scene
@@ -17,6 +18,15 @@ public class Scene
     internal int tileSizePixels;
     internal Texture2D backgroundTexture;
     public bool hasHoveredMenu = false;
+
+    private static readonly Dictionary<Type, int> DrawOrder = new()
+    {
+        { typeof(TerrainTile), 0 },
+        { typeof(HarvestableTerrainTile), 1 },
+        { typeof(WorkStation), 2 },
+        { typeof(Meeple), 3 },
+        { typeof(Player), 4 },
+    };
 
     public Scene(Game1 _game, GameAssets _assets)
     {
@@ -48,7 +58,7 @@ public class Scene
             if (filter != null && !filter(e))
                 continue;
 
-            float distSq = Vector2.DistanceSquared(e._position, target);
+            float distSq = Vector2.DistanceSquared(e.WorldPosition, target);
 
             if (distSq < closestDistSq)
             {
@@ -64,6 +74,24 @@ public class Scene
     {
     }
 
+    private void SortGameEntitiesList()
+    {
+        static int GetOrder(Entity entity)
+        {
+            Type type = entity.GetType();
+            while (type != null)
+            {
+                if (DrawOrder.TryGetValue(type, out int order))
+                    return order;
+
+                type = type.BaseType;
+            }
+            return int.MaxValue;
+        }
+
+        gameEntities = [.. gameEntities.OrderBy(GetOrder)];
+    }
+
     public virtual void Update(GameTime gameTime) 
     {
         foreach (var e in gameEntities)
@@ -73,10 +101,18 @@ public class Scene
 
         hasHoveredMenu = gameEntities.Any(o => o is Menu menu && menu.isHovered);
 
-        gameEntities.AddRange(entitiesToAdd);
-        entitiesToAdd.Clear();
-        gameEntities.RemoveAll(entitiesToRemove.Contains);
-        entitiesToRemove.Clear();
+        if (entitiesToAdd.Count > 0)
+        {
+            SortGameEntitiesList();
+            gameEntities.AddRange(entitiesToAdd);
+            entitiesToAdd.Clear();
+        }
+        if (entitiesToRemove.Count > 0)
+        {
+            SortGameEntitiesList();
+            gameEntities.RemoveAll(entitiesToRemove.Contains);
+            entitiesToRemove.Clear();
+        }
     }
 
     public virtual void Draw(SpriteBatch spriteBatch)

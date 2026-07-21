@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 
 namespace factoryRL.GameObjects;
@@ -8,22 +9,21 @@ public class Meeple : Entity
     public Vector2 targetWorldPosition;
     public Inventory Inventory { get; } = new();
     internal int interactionRange = 5;
-    public Vector2 worldPosition;
 
     public void StepTowards(Vector2 targetPosition)
     {
-        Vector2 direction = targetPosition - worldPosition;
+        Vector2 direction = targetPosition - WorldPosition;
 
         if (direction == Vector2.Zero) return;
 
         direction.Normalize();
 
-        if (Vector2.Distance(worldPosition, targetPosition) <= mvSpdPx)
+        if (Vector2.Distance(WorldPosition, targetPosition) <= mvSpdPx)
         {
-            worldPosition = targetPosition;
+            WorldPosition = targetPosition;
         }else
         {
-            worldPosition += direction * mvSpdPx;
+            WorldPosition += direction * mvSpdPx;
         }
     }
 }

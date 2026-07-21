@@ -3,11 +3,13 @@ using Microsoft.Xna.Framework;
 namespace factoryRL.GameObjects.Terrain;
 public class TerrainTile : Entity
 {
-    public TerrainTile(World _world, GameAssets _assets, Vector2 position)
+    public Vector2 TilePosition;
+
+    public TerrainTile(World _world, GameAssets _assets, Vector2 _tilePosition)
     {
-        _position = position;
         world = _world;
+        TilePosition = _tilePosition;
+        WorldPosition = TilePosition * world.tileSizePixels;
         _texture = _assets.pixel;
-        
     }
 }

@@ -74,7 +74,7 @@ public class StationBuilder : Entity
     public override void Update(GameTime gameTime)
     {
         float offsetForScreenCenter = .25f;
-        _position = world.mouseWorldMapPosition - world.camCenter + new Vector2(world.game.GraphicsDevice.Viewport.Width, world.game.GraphicsDevice.Viewport.Height)*offsetForScreenCenter - new Vector2(_texture.Width/2, _texture.Height/2);
+        screenPosition = world.mouseWorldMapPosition - world.camCenter + new Vector2(world.game.GraphicsDevice.Viewport.Width, world.game.GraphicsDevice.Viewport.Height)*offsetForScreenCenter - new Vector2(_texture.Width/2, _texture.Height/2);
 
         if (world.game._inputManager.IsLeftClick())
         {

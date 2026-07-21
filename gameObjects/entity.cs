@@ -7,22 +7,34 @@ public abstract class Entity
 {
     public bool IsAlive = true;
     public Texture2D _texture;
-    public Vector2 _position = new(-5000, -5000); //Just to avoid new sprites flickering on screen
+    public Vector2 WorldPosition = new(-5000, -5000); //Just to avoid new sprites flickering on screen
     public World world;
     protected GameAssets assets;
     public float Alpha = 1;
-    // public Vector2 worldPosition;
+    public Vector2 screenPosition;
+    public bool isUIElement = false;
+
+    private Vector2 GetScreenPosition(bool isUIElement)
+    {
+        if (!isUIElement){
+            return world.WorldToScreen(WorldPosition);
+        }
+        return screenPosition;
+    }
 
     public virtual void Interact(Player player) { }
 
     public virtual void Update(GameTime gameTime)
     {
-        // worldPosition = world.ScreenToWorld(_position);
-        // Console.WriteLine($"{GetType().Name}: {_position}");
+        screenPosition = GetScreenPosition(isUIElement);
     }
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(_texture, _position, Color.White*Alpha);
+        spriteBatch.Draw(
+            _texture,
+            screenPosition,
+            Color.White * Alpha
+        );
     }
 }

@@ -55,7 +55,7 @@ public class AnimatedSprite : Entity
         {
             spriteBatch.Draw(
                 _texture,
-                _position,
+                screenPosition,
                 animationFrames[currentFrameIndex],
                 Color.White
             );
@@ -68,7 +68,7 @@ public class AnimatedSprite : Entity
         {
             spriteBatch.Draw(
                 _texture,
-                _position,
+                screenPosition,
                 animationFrames[frame],
                 Color.White
             );

@@ -21,17 +21,17 @@ public class Worker : Meeple
     public CourierRoute route = null;
     public WorkStation assignedWorkStation = null;
 
-    public Worker(Game1 _game, World _world, GameAssets gameAssets, Vector2 _worldPosition)
+    public Worker(Game1 _game, World _world, GameAssets gameAssets, Vector2 _worldPosition) : base()
     {
         // This is just a test for now.
         // Inventory.Add(ResourceItemType.IronOre, 1);
         // ------------------------------
 
-        worldPosition = _worldPosition;
+        WorldPosition = _worldPosition;
         world = _world;
         _texture = gameAssets.Worker;
         mvSpdPx = 3;
-        targetWorldPosition = worldPosition;
+        targetWorldPosition = WorldPosition;
         assets = gameAssets;
     }
     
@@ -69,6 +69,7 @@ public class Worker : Meeple
                 return false;
             }
         }
+        
         assignedWorkStation = null;
         return route == null;
     }
@@ -93,14 +94,14 @@ public class Worker : Meeple
         if (route != null)
         {
             CourierState state = CourierState.GoingToPickup;
-            targetWorldPosition = route.Source.targetTerrain._position;
+            targetWorldPosition = route.Source.targetTerrain.WorldPosition;
             if (Inventory.Has(route.ResourceType))
             {
                 state = CourierState.GoingToDropoff;
-                targetWorldPosition = route.Target.targetTerrain._position;    
+                targetWorldPosition = route.Target.targetTerrain.WorldPosition;    
             }
 
-            if (Vector2.Distance(targetWorldPosition, worldPosition) <= interactionRange)
+            if (Vector2.Distance(targetWorldPosition, WorldPosition) <= interactionRange)
             {
                 if (state == CourierState.GoingToPickup)
                 {
@@ -126,14 +127,17 @@ public class Worker : Meeple
 
         StepTowards(targetWorldPosition);
 
-        Rectangle hitBox = new Rectangle((int)worldPosition.X, (int)worldPosition.Y, _texture.Width, _texture.Height);
+        
         if (world.game._inputManager.IsRightClick())
         {
+            Rectangle hitBox = new((int)WorldPosition.X, (int)WorldPosition.Y, _texture.Width, _texture.Height);
             if (hitBox.Contains(world.game._inputManager.MouseWorldPosition) && Alpha != 0)// Invisible (inside a station) = nonclickable
             {
                 UnasignFromAll();
             }
         }
+
+        base.Update(gameTime);
     }
 
     public override void Draw(SpriteBatch spriteBatch)

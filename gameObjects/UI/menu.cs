@@ -88,7 +88,7 @@ public abstract class Menu : Entity
         screenBounds.Height = height;
 
         MenuBackground.Resize(4, 4, height, width);
-        MenuBackground._position = new Vector2(screenBounds.X, screenBounds.Y);
+        MenuBackground.screenPosition = new Vector2(screenBounds.X, screenBounds.Y);
 
         isHovered = screenBounds.Contains(world._inputManager.MouseScreenPosition);
 
