@@ -48,17 +48,36 @@ public static class EntityFunctions
 
     public static bool Clicked(Entity e, bool mouseClicked = true){
         if (!mouseClicked) { return false; }
-        Vector2 origin = e.WorldPosition;
+        Vector2 origin = e.screenPosition;
         Texture2D texture = e._texture;
 
         Rectangle rect = new Rectangle(
-            (int)MathF.Round(origin.X)+texture.Width/2,
-            (int)MathF.Round(origin.Y)+texture.Height/2,
+            (int)MathF.Round(origin.X)+texture.Width,
+            (int)MathF.Round(origin.Y)+texture.Height,
             texture.Width,
             texture.Height
         );
 
         return Clicked(rect, mouseClicked);
+    }
+
+    public static bool Hovered(Rectangle rect){
+        MouseState mouseState = Mouse.GetState();
+        return rect.Contains(mouseState.X/2, mouseState.Y/2);
+    }
+
+    public static bool Hovered(Entity e){
+        Vector2 origin = e.screenPosition;
+        Texture2D texture = e._texture;
+
+        Rectangle rect = new Rectangle(
+            (int)MathF.Round(origin.X),
+            (int)MathF.Round(origin.Y),
+            texture.Width,
+            texture.Height
+        );
+
+        return Hovered(rect);
     }
 
     // THIS IS COMPLETLEY UNTESTED

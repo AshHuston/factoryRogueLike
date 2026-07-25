@@ -7,6 +7,7 @@ public static class ResourceDatabase
     private static GameAssets _assets;
 
     public static Dictionary<ResourceType, ResourceData> Data;
+    public static Dictionary<ResourceItemType, ResourceData> ItemData;
 
     public static void Initialize(GameAssets assets)
     {
@@ -53,6 +54,57 @@ public static class ResourceDatabase
             },
             {
                 ResourceType.Wood,
+                new ResourceData
+                {
+                    Name = "Wood",
+                    Texture = _assets.Forest,
+                    Type = ResourceType.Wood,
+                    fuelRank = 1,
+                }
+            }
+        };
+
+        ItemData = new Dictionary<ResourceItemType, ResourceData>()
+        {
+            {
+                ResourceItemType.IronOre,
+                new ResourceData
+                {
+                    Name = "Iron",
+                    Texture = _assets.IronOre,
+                    Type = ResourceType.Iron,
+                }
+            },
+            {
+                ResourceItemType.CopperOre,
+                new ResourceData
+                {
+                    Name = "Copper",
+                    Texture = _assets.CopperOre,
+                    Type = ResourceType.Copper,
+                }
+            },
+            {
+                ResourceItemType.Coal,
+                new ResourceData
+                {
+                    Name = "Coal",
+                    Texture = _assets.CoalOre,
+                    Type = ResourceType.Coal,
+                    fuelRank = 2,
+                }
+            },
+            {
+                ResourceItemType.Stone,
+                new ResourceData
+                {
+                    Name = "Stone",
+                    Texture = _assets.StoneOre,
+                    Type = ResourceType.Stone,
+                }
+            },
+            {
+                ResourceItemType.Wood,
                 new ResourceData
                 {
                     Name = "Wood",

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace factoryRL.GameObjects.Resources
 {
     public enum ResourceType

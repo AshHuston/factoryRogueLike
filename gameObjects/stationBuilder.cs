@@ -14,7 +14,7 @@ public class StationBuilder : Entity
 
     public StationBuilder(World _world, GameAssets _assets, Type _stationType)
     {
-
+        isUIElement = true;
         foreach (var builder in _world.gameEntities
             .OfType<StationBuilder>()
             .Where(b => !ReferenceEquals(b, this)))

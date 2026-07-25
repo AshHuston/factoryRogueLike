@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
 using factoryRL.courierRoute;
+using factoryRL.GameObjects.Resources;
 
 namespace factoryRL.GameObjects;
 
@@ -35,6 +36,16 @@ public class Worker : Meeple
         assets = gameAssets;
     }
     
+    public void setTargetPosition(Vector2 worldPosition)
+    {
+        targetWorldPosition = worldPosition;
+    }
+
+    public void setTargetPosition(Entity e)
+    {
+        setTargetPosition(e.WorldPosition);
+    }
+
     private void SetIdleTargetPosition(Vector2 rangeCenter)
     {
         if (IsIdle())
@@ -58,6 +69,7 @@ public class Worker : Meeple
         route = null;
         assignedWorkStation = null;
         _texture = assets.Worker;
+        Alpha = 1;
     }
 
     public bool IsIdle()
@@ -86,7 +98,7 @@ public class Worker : Meeple
         int avgFramesToMoveWhileIdle = 300;
         if (Random.Shared.Next(0, avgFramesToMoveWhileIdle) == 0)
         {
-            SetIdleTargetPosition(world.mapCenter);
+            SetIdleTargetPosition(new(world.mapCenter.X, world.mapCenter.Y));
         }
         // ^Idle logic
 
@@ -125,9 +137,6 @@ public class Worker : Meeple
         }
         // ^CourierRoute logic
 
-        StepTowards(targetWorldPosition);
-
-        
         if (world.game._inputManager.IsRightClick())
         {
             Rectangle hitBox = new((int)WorldPosition.X, (int)WorldPosition.Y, _texture.Width, _texture.Height);
@@ -137,11 +146,23 @@ public class Worker : Meeple
             }
         }
 
+        StepTowards(targetWorldPosition);
+
         base.Update(gameTime);
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
+        if (route != null && Inventory.Has(route.ResourceType))
+        {
+            Vector2 offset = new(0, -15);
+            Console.WriteLine(ResourceDatabase.ItemData[route.ResourceType]);
+            spriteBatch.Draw(
+                ResourceDatabase.ItemData[route.ResourceType].Texture,
+                screenPosition + offset,
+                Color.White
+            );
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace factoryRL.GameObjects;
 public class World : Scene
 {
     internal Entity[,] map;
-    internal Vector2 mapCenter;
+    internal Point mapCenter;
     public Vector2 camCenter;
     internal Game1 game;
     internal Player player;
@@ -30,7 +30,7 @@ public class World : Scene
         map = new Entity[mapWidth, mapHeight];
         mapCenter = new(mapWidth / 2, mapHeight / 2);
         camCenter = new Vector2(map.GetLength(0) * tileSizePixels / 2, map.GetLength(1) * tileSizePixels / 2);
-        //GenerateMap();
+        GenerateMap();
         Add(new CourierRouteAssigner(this, assets));
 
         backgroundTexture = assets.backgroundTextureTile;
@@ -40,8 +40,8 @@ public class World : Scene
         Add(player);
 
         //Test station vvv
-        HarvestableTerrainTile testTerrain = new(this, assets, HarvestableTerrainTileDatabase.Data[ResourceType.Wood], new Vector2((int)mapCenter.X, (int)mapCenter.Y));
-        map[(int)mapCenter.X, (int)mapCenter.Y] = testTerrain;
+        HarvestableTerrainTile testTerrain = new(this, assets, HarvestableTerrainTileDatabase.Data[ResourceType.Wood], new Vector2(mapCenter.X, mapCenter.Y));
+        map[mapCenter.X, mapCenter.Y] = testTerrain;
         Add(testTerrain);
         Add(new TimberYard(this, assets, testTerrain));
         // ----------------------------------------------------------------------------------------------------------------
@@ -78,8 +78,8 @@ public class World : Scene
         foreach (var resourceType in resourceTypes)
         {
             Vector2 seedTile = new(
-                MathF.Floor(mapCenter.X) + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles),
-                MathF.Floor(mapCenter.Y) + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles)
+                mapCenter.X + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles),
+                mapCenter.Y + random.Next(-maxRangeFromCenterTiles, maxRangeFromCenterTiles)
             );
             
             for (int x = 0; x < map.GetLength(0); x++)
@@ -87,9 +87,9 @@ public class World : Scene
                 for (int y = 0; y < map.GetLength(1); y++)
                 {
                     Vector2 targetTile = new(x, y);
+                    TerrainTile terrain = new(this, assets, targetTile);
                     float distanceFromSeed = Vector2.Distance(seedTile, targetTile);
                     float probability = MathF.Max(0, 1 - (distanceFromSeed * decayFactor));
-                    TerrainTile terrain = new(this, assets, targetTile);
                     if (random.NextDouble() < probability)
                     {
                         terrain = new HarvestableTerrainTile(this, assets, HarvestableTerrainTileDatabase.Data[resourceType], targetTile);
@@ -137,13 +137,14 @@ public class World : Scene
     {
         if (entity is HarvestableTerrainTile terrain)
         {
+            Vector2 tile = GetTileCoordinates(terrain.WorldPosition);
             bool isOutOfMap = 
-                terrain.WorldPosition.X < 0
-                || terrain.WorldPosition.Y < 0
-                || terrain.WorldPosition.X >= map.GetLength(0)*tileSizePixels
-                || terrain.WorldPosition.Y >= map.GetLength(1)*tileSizePixels;
+                tile.X < 0
+                || tile.Y < 0
+                || tile.X >= map.GetLength(0)
+                || tile.Y >= map.GetLength(1);
 
-            return isOutOfMap || map[(int)terrain.WorldPosition.X, (int)terrain.WorldPosition.Y] != terrain;
+            return isOutOfMap || map[(int)tile.X, (int)tile.Y] != terrain;
         } else {
             return false;
         }
@@ -231,10 +232,10 @@ public class World : Scene
 
         // TEMP This makes the character, not the mouse, move the screen. This is likely temporary.
         int edgeWidth = 65;
-        // if (player.screenPosition.X < edgeWidth){ camCenter.X -= player.mvSpdPx; }
-        // if (player.screenPosition.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
-        // if (player.screenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
-        // if (player.screenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
+        if (player.screenPosition.X < edgeWidth){ camCenter.X -= player.mvSpdPx; }
+        if (player.screenPosition.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
+        if (player.screenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
+        if (player.screenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
         
         // ------------------------------------------------------------------------------------
         
