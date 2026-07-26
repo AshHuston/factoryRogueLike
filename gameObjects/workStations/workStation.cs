@@ -150,6 +150,8 @@ public abstract class WorkStation : Entity
                 screenPosition,
                 Color.CornflowerBlue
             );
+
+            // Needs to display the inventory and the workercount.
         }
     }
 }
