@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using factoryRL.Functions;
 using factoryRL.GameObjects.Resources;
@@ -19,6 +20,7 @@ public abstract class WorkStation : Entity
     public Inventory Inventory { get; } = new();
     private int harvestTimeRemainingMiliseconds;
     public ResourceItemType exportType = ResourceItemType.None;
+    private TextMenu menu;
 
     public WorkStation(World _world, GameAssets _assets, int maxWorkers, TerrainTile _targetTerrain)
     {
@@ -32,6 +34,26 @@ public abstract class WorkStation : Entity
         {
             exportType = t.HarvestableTerrainTileData.ItemType;
         }
+
+        int menuWidth = 80;
+        int menuHeight = 100;
+        int menuMargin = 10;
+        SpriteFont font = assets.Pixel1Font;
+        menu = new TextMenu(
+            world,
+            assets,
+            new Rectangle(world.game.VirtualResolution.width-menuWidth-menuMargin, menuMargin, menuWidth, menuHeight),
+            [
+                new TextMenuOption("X", font, Color.Red, () => CloseMenu()),
+                new TextMenuOption("+ Worker", font, Color.Black, () => AssignWorker()),
+                new TextMenuOption("- Worker", font, Color.Black, () => UnassignWorker()),
+                // Upgrade
+                // Sell/scrap
+                // Vein info
+            ],
+            menuWidth,
+            menuHeight
+        );
     }
 
     public bool CanAssignWorker()
@@ -50,14 +72,41 @@ public abstract class WorkStation : Entity
         return false;
     }
 
+    public bool AssignWorker()
+    {
+        Worker foundWorker = world.FindClosestEntity<Worker>(WorldPosition, (w) => !assignedWorkers.Contains(w));
+        return foundWorker == null ? false : AssignWorker(foundWorker);
+    }
+
     public bool UnassignWorker(Worker worker)
     {
         if (assignedWorkers.Remove(worker))
         {
-            currentNumWorkers--;
+            worker.Alpha = 1;
             return true;
         }
         return false;
+    }
+
+    public bool UnassignWorker()
+    {
+        return assignedWorkers.Count > 0 
+            ? UnassignWorker(assignedWorkers[0])
+            : false;
+    }
+
+    private void OpenMenu()
+    {
+        foreach (WorkStation w in world.gameEntities.OfType<WorkStation>())
+        {
+            w.CloseMenu();
+        }
+        menu.open();
+    }
+
+    private void CloseMenu()
+    {
+        menu.close();
     }
 
     public override void Update(GameTime gameTime)
@@ -79,13 +128,10 @@ public abstract class WorkStation : Entity
             }
         }
         
-        // TEMPORARY way to assign workers.
-        if (world._inputManager.IsRightClick() && world._inputManager.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.LeftShift, false) && EntityFunctions.Hovered(this))
+        if (world._inputManager.IsRightClick() && EntityFunctions.Hovered(this))
         {
-            Worker foundWorker = world.FindClosestEntity<Worker>(WorldPosition, (w) => !assignedWorkers.Contains(w));
-            AssignWorker(foundWorker);
+            OpenMenu();
         }
-        // ^^^
 
         foreach (Worker w in assignedWorkers) {
             if (w.WorldPosition == WorldPosition){ w.Alpha = 0; }
@@ -97,5 +143,13 @@ public abstract class WorkStation : Entity
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
+        if (menu.isOpen)
+        {
+            spriteBatch.Draw(
+                assets.hoveredTileIndicator,
+                screenPosition,
+                Color.CornflowerBlue
+            );
+        }
     }
 }

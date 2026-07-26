@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using factoryRL.Functions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -25,6 +26,7 @@ public abstract class Menu : Entity
     private int heightScaleSpeedPixels = 7;
     private bool isClosing = false;
     private int removeThreshold = 5;
+    public bool isOpen;
 
     public Menu(World _world, GameAssets _assets, Rectangle _screenBounds, 
     IMenuOption[] _options, int _targetWidth, int _targetHeight)
@@ -41,6 +43,8 @@ public abstract class Menu : Entity
     private void removeFromWorld()
     {
         world.Remove(this);
+
+        // Are these useful/needed?
         width = 0;
         height = 0;
     }
@@ -52,6 +56,7 @@ public abstract class Menu : Entity
             height = targetHeight;    
         };
         isClosing = false;
+        isOpen = true;
         world.Add(this);
     }
 
@@ -80,6 +85,7 @@ public abstract class Menu : Entity
             width -= widthScaleSpeedPixels; 
             height -= heightScaleSpeedPixels;
             if (width<=removeThreshold || height<=removeThreshold){
+                isOpen = false;
                 removeFromWorld();
             }
         }
@@ -90,7 +96,7 @@ public abstract class Menu : Entity
         MenuBackground.Resize(4, 4, height, width);
         MenuBackground.screenPosition = new Vector2(screenBounds.X, screenBounds.Y);
 
-        isHovered = screenBounds.Contains(world._inputManager.MouseScreenPosition);
+        isHovered = EntityFunctions.Hovered(screenBounds);
 
         base.Update(gameTime);
     }
