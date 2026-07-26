@@ -6,7 +6,6 @@ using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
 using factoryRL.GameObjects;
 using System;
-using factoryRL.Functions;
 
 namespace factoryRL;
 
@@ -55,10 +54,13 @@ public class Game1 : Game
             CoalTerrain = Content.Load<Texture2D>("coalTerrain"),
             StoneTerrain = Content.Load<Texture2D>("stoneTerrain"),
             CopperTerrain = Content.Load<Texture2D>("copperTerrain"),
+            IronOre = Content.Load<Texture2D>("ironOre"),
+            CoalOre = Content.Load<Texture2D>("coalOre"),
+            StoneOre = Content.Load<Texture2D>("stoneOre"),
+            CopperOre = Content.Load<Texture2D>("copperOre"),
             Forest = Content.Load<Texture2D>("forestTerrain"),
             Player = Content.Load<Texture2D>("player"),
             Worker = Content.Load<Texture2D>("worker"),
-            IronOre = Content.Load<Texture2D>("ironTerrain"),
             MovmentIndicicator = Content.Load<Texture2D>("MovementIndicator"),
             backgroundTextureTile = Content.Load<Texture2D>("grassTile"),
             hoveredTileIndicator = Content.Load<Texture2D>("tileFrame"),

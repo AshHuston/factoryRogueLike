@@ -156,10 +156,10 @@ public class Worker : Meeple
         base.Draw(spriteBatch);
         if (route != null && Inventory.Has(route.ResourceType))
         {
-            Vector2 offset = new(0, -15);
-            Console.WriteLine(ResourceDatabase.ItemData[route.ResourceType]);
+            Texture2D sprite = ResourceDatabase.ItemData[route.ResourceType].Texture;
+            Vector2 offset = new(sprite.Width/2, -15);
             spriteBatch.Draw(
-                ResourceDatabase.ItemData[route.ResourceType].Texture,
+                sprite,
                 screenPosition + offset,
                 Color.White
             );
