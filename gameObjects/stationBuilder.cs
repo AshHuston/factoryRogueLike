@@ -11,8 +11,9 @@ public class StationBuilder : Entity
 {
     private Type StationType;
     private readonly Dictionary<Type, Func<World, GameAssets, TerrainTile, WorkStation>> _factories;
+    public int goldCost;
 
-    public StationBuilder(World _world, GameAssets _assets, Type _stationType)
+    public StationBuilder(World _world, GameAssets _assets, Type _stationType, int _goldCost)
     {
         isUIElement = true;
         foreach (var builder in _world.gameEntities
@@ -43,6 +44,7 @@ public class StationBuilder : Entity
         
         _texture = _textures[_stationType];
         StationType = _stationType;
+        goldCost = _goldCost;
     }
 
     private Entity getTile(Vector2 worldTileCoords)

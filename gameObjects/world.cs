@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace factoryRL.GameObjects;
 
@@ -221,7 +222,13 @@ public class World : Scene
             if (isDisplayingBuildMenu)
             {
                 buildMenu.close();
-                gameEntities.RemoveAll(entity => entity is StationBuilder);
+                int totalGoldCost = 0;
+                foreach (var entity in gameEntities.OfType<StationBuilder>().ToList())
+                {
+                    totalGoldCost += entity.goldCost;
+                    gameEntities.Remove(entity);
+                }   
+                AddGold(totalGoldCost);
                 isDisplayingBuildMenu = false;
             }
             else
@@ -240,7 +247,7 @@ public class World : Scene
         // ------------------------------------------------------------------------------------
 
         // TEMP test gold
-        // if(_inputManager.IsKeyPressed(Keys.Space)) { AddGold(); }
+        //if(_inputManager.IsKeyPressed(Keys.Space)) { AddGold(); }
         
         base.Update(gameTime);
     }
