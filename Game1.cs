@@ -72,6 +72,7 @@ public class Game1 : Game
             Pixel1Font = Content.Load<SpriteFont>("fonts/pixel1"),
             Courier = Content.Load<Texture2D>("courier"),
             Warehouse = Content.Load<Texture2D>("warehouse"),
+            workerIcon = Content.Load<Texture2D>("worker-mini"),
             pixel = pixel
         };
 

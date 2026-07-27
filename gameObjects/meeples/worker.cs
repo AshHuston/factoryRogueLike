@@ -59,7 +59,7 @@ public class Worker : Meeple
         }
     }
 
-    private void UnasignFromAll()
+    public void UnasignFromAll()
     {
         WorkStation[] stations = world.gameEntities.OfType<WorkStation>().ToArray();
         foreach (WorkStation station in stations)

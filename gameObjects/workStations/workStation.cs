@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using factoryRL.Functions;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
@@ -20,7 +18,8 @@ public abstract class WorkStation : Entity
     public Inventory Inventory { get; } = new();
     private int harvestTimeRemainingMiliseconds;
     public ResourceItemType exportType = ResourceItemType.None;
-    private TextMenu menu;
+    internal TextMenu menu;
+    internal WorkStationPanel panel;
 
     public WorkStation(World _world, GameAssets _assets, int maxWorkers, TerrainTile _targetTerrain)
     {
@@ -35,10 +34,23 @@ public abstract class WorkStation : Entity
             exportType = t.HarvestableTerrainTileData.ItemType;
         }
 
+        InitializeMenuAndPanel();
+    }
+
+    internal virtual void InitializeMenuAndPanel()
+    {
         int menuWidth = 80;
         int menuHeight = 100;
         int menuMargin = 10;
         SpriteFont font = assets.Pixel1Font;
+        int panelPaddingPx = 10;
+        int panelWidth = menuWidth;
+        int panelItemHeight = 10;
+        int uniqueItems = Inventory.GetUniqueItemCount();
+        int panelHeight = ((uniqueItems+2)*panelPaddingPx) + ((1+uniqueItems)*panelItemHeight);
+        int panelMargin = menuMargin;
+        int panelY = (int)(1.5*panelMargin) + menuHeight;
+
         menu = new TextMenu(
             world,
             assets,
@@ -54,6 +66,15 @@ public abstract class WorkStation : Entity
             menuWidth,
             menuHeight
         );
+
+        panel = new WorkStationPanel(
+            world,
+            assets,
+            new Rectangle(world.game.VirtualResolution.width-panelMargin-panelWidth, panelY, panelWidth, panelHeight),
+            this,
+            panelWidth,
+            panelHeight
+        );
     }
 
     public bool CanAssignWorker()
@@ -65,6 +86,7 @@ public abstract class WorkStation : Entity
     {
         if (!assignedWorkers.Contains(worker) && CanAssignWorker())
         {
+            worker.UnasignFromAll();
             assignedWorkers.Add(worker);
             worker.setTargetPosition(this);
             return true;
@@ -104,7 +126,7 @@ public abstract class WorkStation : Entity
         menu.open();
     }
 
-    private void CloseMenu()
+    internal void CloseMenu()
     {
         menu.close();
     }
@@ -112,6 +134,7 @@ public abstract class WorkStation : Entity
     public override void Update(GameTime gameTime)
     {
         currentNumWorkers = assignedWorkers.Count;
+        int startOfFrameInvSize = Inventory.GetUniqueItemCount();
 
         if (currentNumWorkers > 0 && targetTerrain is HarvestableTerrainTile t) 
         {
@@ -137,7 +160,10 @@ public abstract class WorkStation : Entity
             if (w.WorldPosition == WorldPosition){ w.Alpha = 0; }
         }
 
-        base.Update(gameTime);
+        if (menu.isOpen && !panel.isOpen) { panel.open(); }
+        if (menu.isClosing) { panel.close(); }
+
+        base.Update(gameTime);  
     }
 
     public override void Draw(SpriteBatch spriteBatch)
@@ -150,8 +176,6 @@ public abstract class WorkStation : Entity
                 screenPosition,
                 Color.CornflowerBlue
             );
-
-            // Needs to display the inventory and the workercount.
         }
     }
 }

@@ -1,10 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using factoryRL.GameObjects.Resources;
 
 public class Inventory
 {
     private readonly Dictionary<ResourceItemType, int> _items = new();
+
+    public int GetUniqueItemCount()
+    {
+        return _items.Count;    
+    }
+
+    public List<ResourceItemType> GetUniqueItems()
+    {
+        return [.. _items.Keys];
+    }
 
     public int GetAmount(ResourceItemType type)
     {

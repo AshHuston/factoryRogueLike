@@ -24,7 +24,7 @@ public abstract class Menu : Entity
     internal int height = 0;
     private int widthScaleSpeedPixels = 5;
     private int heightScaleSpeedPixels = 7;
-    private bool isClosing = false;
+    public bool isClosing = false;
     private int removeThreshold = 5;
     public bool isOpen;
 

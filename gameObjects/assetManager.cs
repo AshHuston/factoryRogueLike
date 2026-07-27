@@ -7,6 +7,7 @@ public class GameAssets
     public Texture2D backgroundTextureTile;
     public Texture2D ProgressWheel;
     internal Texture2D pixel;
+    internal Texture2D workerIcon;
 
     public Texture2D IronOre { get; internal set; }
     public Texture2D CopperOre { get; internal set; }
