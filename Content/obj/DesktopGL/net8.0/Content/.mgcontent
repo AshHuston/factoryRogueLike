@@ -11,6 +11,7 @@
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/courier.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/fonts/pixel1.spritefont</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/forestTerrain.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/goldCoin.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/grassTile.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/ironOre.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/ironTerrain.png</File>
@@ -29,6 +30,7 @@
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/worker.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

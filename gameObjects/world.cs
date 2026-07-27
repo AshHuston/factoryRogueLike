@@ -1,7 +1,9 @@
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
+using factoryRL.Inputs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
@@ -18,6 +20,7 @@ public class World : Scene
     internal Vector2 mouseWorldMapPosition = new Vector2(0, 0);
     private BuildMenu buildMenu;
     private bool isDisplayingBuildMenu = false;
+    private int playerGold = 0;
 
     private SpriteFont testFont;
 
@@ -103,34 +106,31 @@ public class World : Scene
         RemoveInvalidHarvestableTerrainTile();
     }
 
-    // public void AdjustEntityPositions()
-    // {
-    //     for (int x = 0; x < map.GetLength(0); x++)
-    //     {
-    //         for (int y = 0; y < map.GetLength(1); y++)
-    //         {
-    //             Entity entity = map[x, y];
-    //             if (entity != null)
-    //             {
-    //                 entity._position = new Vector2(
-    //                     (x * tileSizePixels) - camCenter.X + (game.GraphicsDevice.Viewport.Width / (game.scale*2)),
-    //                     (y * tileSizePixels) - camCenter.Y + (game.GraphicsDevice.Viewport.Height / (game.scale*2))
-    //                 );
-    //             }
-    //         }
-    //     }
+    public int Gold()
+    {
+        return playerGold;
+    }
 
-    //     foreach (var entity in gameEntities)
-    //     {
-    //         if (entity is Meeple m)
-    //         {
-    //             m._position = new Vector2(
-    //                 m.worldPosition.X - camCenter.X + (game.GraphicsDevice.Viewport.Width / (game.scale*2)),
-    //                 m.worldPosition.Y - camCenter.Y + (game.GraphicsDevice.Viewport.Height / (game.scale*2))
-    //             );
-    //         }
-    //     }
-    // }
+    public int AddGold(int amt = 1)
+    {
+        playerGold += amt;
+        return playerGold;
+    }
+
+    public bool SubtractGold(int amt = 1)
+    {
+        if (playerGold>=amt){ 
+            playerGold -= amt;
+            return true;
+        }
+        return false;
+    }
+
+    public int SetGold(int amt)
+    {
+        playerGold = amt;
+        return playerGold;
+    }
 
     // not sure this is actually doing anything right or even useful tbh. 7/18/26
     private bool IsInvalidHarvestableTerrainTile(Entity entity)
@@ -237,8 +237,10 @@ public class World : Scene
         if (player.screenPosition.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
         if (player.screenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
         if (player.screenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
-        
         // ------------------------------------------------------------------------------------
+
+        // TEMP test gold
+        // if(_inputManager.IsKeyPressed(Keys.Space)) { AddGold(); }
         
         base.Update(gameTime);
     }
@@ -259,5 +261,24 @@ public class World : Scene
                 0f
             );   
         }
+
+        int UImargin = 8;
+        int UIpadding = 4;
+        spriteBatch.Draw(
+            assets.goldCoin,
+            new Vector2(UImargin, game.VirtualResolution.height-assets.goldCoin.Height-UImargin),
+            Color.White
+        );
+        spriteBatch.DrawString(
+            assets.Pixel1Font,
+            $"{playerGold}",
+            new Vector2(UImargin+UIpadding+assets.goldCoin.Width, game.VirtualResolution.height-assets.goldCoin.Height-UImargin),
+            Color.Black,
+            0,
+            new Vector2(0,0),
+            2,
+            new SpriteEffects(),
+            1
+        );
     }
 }

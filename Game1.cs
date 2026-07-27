@@ -50,6 +50,7 @@ public class Game1 : Game
 
         _assets = new GameAssets
         {
+            pixel = pixel,
             IronTerrain = Content.Load<Texture2D>("ironTerrain"),
             CoalTerrain = Content.Load<Texture2D>("coalTerrain"),
             StoneTerrain = Content.Load<Texture2D>("stoneTerrain"),
@@ -73,7 +74,7 @@ public class Game1 : Game
             Courier = Content.Load<Texture2D>("courier"),
             Warehouse = Content.Load<Texture2D>("warehouse"),
             workerIcon = Content.Load<Texture2D>("worker-mini"),
-            pixel = pixel
+            goldCoin = Content.Load<Texture2D>("goldCoin"),
         };
 
         ResourceDatabase.Initialize(_assets);
