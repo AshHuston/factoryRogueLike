@@ -221,6 +221,7 @@ public class World : Scene
             if (isDisplayingBuildMenu)
             {
                 buildMenu.close();
+                gameEntities.RemoveAll(entity => entity is StationBuilder);
                 isDisplayingBuildMenu = false;
             }
             else

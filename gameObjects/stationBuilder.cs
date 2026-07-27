@@ -77,7 +77,7 @@ public class StationBuilder : Entity
         float offsetForScreenCenter = .25f;
         screenPosition = world.mouseWorldMapPosition - world.camCenter + new Vector2(world.game.GraphicsDevice.Viewport.Width, world.game.GraphicsDevice.Viewport.Height)*offsetForScreenCenter - new Vector2(_texture.Width/2, _texture.Height/2);
 
-        if (world.game._inputManager.IsLeftClick())
+        if (world.game._inputManager.IsLeftClick() && !world.hasHoveredMenu)
         {
             Vector2 worldTileCoords = world.GetTileCoordinates(world.mouseWorldMapPosition);
             if (IsLegalTile(worldTileCoords))
