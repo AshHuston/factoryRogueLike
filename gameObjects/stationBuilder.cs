@@ -54,6 +54,7 @@ public class StationBuilder : Entity
     private bool IsLegalTile(Vector2 worldTileCoords)
     {
         Entity tile = getTile(worldTileCoords);
+        if (world.gameEntities.OfType<WorkStation>().Any(ws => ws.targetTerrain == tile)) { return false; }
         var field = StationType.GetField("mineableResourceTypes");
         var resources = (ResourceType[])field.GetValue(null);
         if (tile is HarvestableTerrainTile terrain)
@@ -84,6 +85,10 @@ public class StationBuilder : Entity
                 world.Add(getNewStation(worldTileCoords));
                 world.Remove(this);
                 // SOUND EFFECT -> Should be a weighty sound effect to *feel* the placement of a workstation.
+            }
+            else
+            {
+                Console.WriteLine("That is an illegal tile!");
             }
         }
         
