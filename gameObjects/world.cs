@@ -13,7 +13,6 @@ public class World : Scene
     internal Point mapCenter;
     public Vector2 camCenter;
     internal Game1 game;
-    internal Player player;
     private Texture2D hoverIndicatorTexture;
     internal Vector2 mouseWorldMapPosition = new Vector2(0, 0);
     private BuildMenu buildMenu;
@@ -37,14 +36,11 @@ public class World : Scene
         backgroundTexture = assets.backgroundTextureTile;
         hoverIndicatorTexture = assets.hoveredTileIndicator;
 
-        player = new Player(game, this, assets, camCenter);
-        Add(player);
-
         //Test station vvv
-        HarvestableTerrainTile testTerrain = new(this, assets, HarvestableTerrainTileDatabase.Data[ResourceType.Wood], new Vector2(mapCenter.X, mapCenter.Y));
-        map[mapCenter.X, mapCenter.Y] = testTerrain;
-        Add(testTerrain);
-        Add(new TimberYard(this, assets, testTerrain));
+        // HarvestableTerrainTile testTerrain = new(this, assets, HarvestableTerrainTileDatabase.Data[ResourceType.Wood], new Vector2(mapCenter.X, mapCenter.Y));
+        // map[mapCenter.X, mapCenter.Y] = testTerrain;
+        // Add(testTerrain);
+        // Add(new TimberYard(this, assets, testTerrain));
         // ----------------------------------------------------------------------------------------------------------------
 
         testFont = assets.Pixel1Font;
@@ -237,10 +233,11 @@ public class World : Scene
 
         // TEMP This makes the character, not the mouse, move the screen. This is likely temporary.
         int edgeWidth = 15;
-        if (_inputManager.MouseScreenPosition.X < edgeWidth){ camCenter.X -= player.mvSpdPx; }
-        if (_inputManager.MouseScreenPosition.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
-        if (_inputManager.MouseScreenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
-        if (_inputManager.MouseScreenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
+        int panSpdPx = 8;
+        if (_inputManager.MouseScreenPosition.X < edgeWidth){ camCenter.X -= panSpdPx; }
+        if (_inputManager.MouseScreenPosition.Y < edgeWidth){ camCenter.Y -= panSpdPx; }
+        if (_inputManager.MouseScreenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += panSpdPx; }
+        if (_inputManager.MouseScreenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += panSpdPx; }
         // ------------------------------------------------------------------------------------
 
         // TEMP test gold
