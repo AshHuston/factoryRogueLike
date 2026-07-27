@@ -1,11 +1,8 @@
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
-using factoryRL.Inputs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace factoryRL.GameObjects;
@@ -171,8 +168,8 @@ public class World : Scene
 
     public override void DrawBackground(SpriteBatch spriteBatch)
     {
-        int tilesX = (game.GraphicsDevice.Viewport.Width / tileSizePixels) + 2;
-        int tilesY = (game.GraphicsDevice.Viewport.Height / tileSizePixels) + 2;
+        int tilesX = (game.GraphicsDevice.Viewport.Width / tileSizePixels) + 4;
+        int tilesY = (game.GraphicsDevice.Viewport.Height / tileSizePixels) + 4;
         Vector2 topLeftTile = GetTileCoordinates(camCenter) - new Vector2(tilesX, tilesY) / 2;
 
         for (int x = 0; x < tilesX; x++)
@@ -239,11 +236,11 @@ public class World : Scene
         }
 
         // TEMP This makes the character, not the mouse, move the screen. This is likely temporary.
-        int edgeWidth = 65;
-        if (player.screenPosition.X < edgeWidth){ camCenter.X -= player.mvSpdPx; }
-        if (player.screenPosition.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
-        if (player.screenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
-        if (player.screenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
+        int edgeWidth = 15;
+        if (_inputManager.MouseScreenPosition.X < edgeWidth){ camCenter.X -= player.mvSpdPx; }
+        if (_inputManager.MouseScreenPosition.Y < edgeWidth){ camCenter.Y -= player.mvSpdPx; }
+        if (_inputManager.MouseScreenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += player.mvSpdPx; }
+        if (_inputManager.MouseScreenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += player.mvSpdPx; }
         // ------------------------------------------------------------------------------------
 
         // TEMP test gold
