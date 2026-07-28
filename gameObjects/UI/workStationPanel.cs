@@ -23,6 +23,7 @@ public class WorkStationPanel : Entity
     private int removeThreshold = 5;
     private WorkStation targetStation;
     public bool isOpen = false;
+    int panelPaddingPx;
 
     public WorkStationPanel(World _world, GameAssets _assets, Rectangle _screenBounds, 
     WorkStation _targetStation, int _targetWidth, int _targetHeight)
@@ -64,7 +65,7 @@ public class WorkStationPanel : Entity
 
     public override void Update(GameTime gameTime)
     {
-        int panelPaddingPx = 10;
+        panelPaddingPx = 8;
         int panelItemHeight = 10;
         int uniqueItems = targetStation.Inventory.GetUniqueItemCount();
         targetHeight = ((uniqueItems+2)*panelPaddingPx) + ((1+uniqueItems)*panelItemHeight);
@@ -105,17 +106,16 @@ public class WorkStationPanel : Entity
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        int paddingPx = 5;
         MenuBackground.Draw(spriteBatch);
         spriteBatch.Draw(
             assets.workerIcon,
-            MenuBackground.screenPosition + new Vector2 (paddingPx, paddingPx),
+            MenuBackground.screenPosition + new Vector2 (panelPaddingPx, panelPaddingPx),
             Color.White
         );
         spriteBatch.DrawString(
             assets.Pixel1Font,
             $"{targetStation.assignedWorkers.Count}/{targetStation.maxNumWorkers}",
-            MenuBackground.screenPosition + new Vector2 (paddingPx+10, paddingPx+4),
+            MenuBackground.screenPosition + new Vector2 (panelPaddingPx+10, panelPaddingPx+4),
             Color.Black
         );
 
@@ -126,13 +126,13 @@ public class WorkStationPanel : Entity
             i++;
             spriteBatch.Draw(
                 ResourceDatabase.ItemData[item].Texture,
-                MenuBackground.screenPosition + new Vector2 (paddingPx, i*(paddingPx+lineHeight)),
+                MenuBackground.screenPosition + new Vector2 (panelPaddingPx, i*(panelPaddingPx+lineHeight)),
                 Color.White
             );
             spriteBatch.DrawString(
                 assets.Pixel1Font,
                 $"x{targetStation.Inventory.GetAmount(item)}",
-                MenuBackground.screenPosition + new Vector2(paddingPx+14, i*(paddingPx+lineHeight)+4),
+                MenuBackground.screenPosition + new Vector2((int)(1.5*panelPaddingPx)+ResourceDatabase.ItemData[item].Texture.Width, i*(panelPaddingPx+lineHeight)+4),
                 Color.Black
             );
         }

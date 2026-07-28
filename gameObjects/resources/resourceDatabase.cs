@@ -108,7 +108,7 @@ public static class ResourceDatabase
                 new ResourceData
                 {
                     Name = "Wood",
-                    Texture = _assets.Forest,
+                    Texture = _assets.logItem,
                     Type = ResourceType.Wood,
                     fuelRank = 1,
                 }

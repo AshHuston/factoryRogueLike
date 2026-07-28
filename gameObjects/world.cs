@@ -17,7 +17,7 @@ public class World : Scene
     internal Vector2 mouseWorldMapPosition = new Vector2(0, 0);
     private BuildMenu buildMenu;
     private bool isDisplayingBuildMenu = false;
-    private int playerGold = 0;
+    private int playerGold = 100;
 
     private SpriteFont testFont;
 
