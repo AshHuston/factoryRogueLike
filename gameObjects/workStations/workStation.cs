@@ -134,7 +134,6 @@ public abstract class WorkStation : Entity
     public override void Update(GameTime gameTime)
     {
         currentNumWorkers = assignedWorkers.Count;
-        int startOfFrameInvSize = Inventory.GetUniqueItemCount();
 
         if (currentNumWorkers > 0 && targetTerrain is HarvestableTerrainTile t) 
         {

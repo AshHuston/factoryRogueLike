@@ -31,10 +31,12 @@ public abstract class Entity
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(
-            _texture,
-            screenPosition,
-            Color.White * Alpha
-        );
+        if (_texture != null){
+            spriteBatch.Draw(
+                _texture,
+                screenPosition,
+                Color.White * Alpha
+            );
+        }
     }
 }

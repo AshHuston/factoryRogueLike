@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using factoryRL.GameObjects.Resources;
 
 public class Inventory
@@ -49,5 +48,15 @@ public class Inventory
     public bool Has(ResourceItemType type, int amount = 1)
     {
         return GetAmount(type) >= amount;
+    }
+
+    public void Clone(Inventory source)
+{
+        _items.Clear();
+
+        foreach (var item in source._items)
+        {
+            _items[item.Key] = item.Value;
+        }
     }
 }
