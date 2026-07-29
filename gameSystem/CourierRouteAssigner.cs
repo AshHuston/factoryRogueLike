@@ -59,7 +59,9 @@ public class CourierRouteAssigner : Entity
                     RepresentedRoute.Source != hoveredStation
                  ){
                     RepresentedRoute.Target = hoveredStation;
-                    RepresentedRoute.ResourceType = RepresentedRoute.Source.exportType;
+                    RepresentedRoute.ResourceType = RepresentedRoute.Source.exportType != ResourceItemType.None ?
+                        RepresentedRoute.Source.exportType :
+                        RepresentedRoute.Source.Inventory.GetRandomItemtype() ?? ResourceItemType.None;
                     Worker isNowCourier = world.FindClosestEntity<Worker>(RepresentedRoute.Source.WorldPosition, w => { return w.IsIdle(); });
                     if (isNowCourier != null){
                         isNowCourier.AssignRoute(RepresentedRoute);

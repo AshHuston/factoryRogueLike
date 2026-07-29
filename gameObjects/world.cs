@@ -1,3 +1,4 @@
+using factoryRL.contract;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
 using Microsoft.Xna.Framework;
@@ -13,13 +14,14 @@ public class World : Scene
     internal Point mapCenter;
     public Vector2 camCenter;
     internal Game1 game;
-    private Texture2D hoverIndicatorTexture;
+    private readonly Texture2D hoverIndicatorTexture;
     internal Vector2 mouseWorldMapPosition = new Vector2(0, 0);
-    private BuildMenu buildMenu;
+    private readonly BuildMenu buildMenu;
     private bool isDisplayingBuildMenu = false;
     private int playerGold = 100;
-
-    private SpriteFont testFont;
+    //                                                  DIAL These will change how often a cart spawns  v
+    private (float Base, float Current, float increaseRate) miniContractCartSpawnRate = (0.000001f, 0.000001f, 0.001f);
+    private readonly Random random = new();
 
     public World(Game1 _game, GameAssets assets) : base(_game, assets)
     {
@@ -40,16 +42,17 @@ public class World : Scene
         // HarvestableTerrainTile testTerrain = new(this, assets, HarvestableTerrainTileDatabase.Data[ResourceType.Wood], new Vector2(mapCenter.X, mapCenter.Y));
         // map[mapCenter.X, mapCenter.Y] = testTerrain;
         // Add(testTerrain);
-        // Add(new TimberYard(this, assets, testTerrain));
+        Add(new SalesHouse(this, assets, (TerrainTile)map[mapCenter.X, mapCenter.Y]));
         // ----------------------------------------------------------------------------------------------------------------
 
-        testFont = assets.Pixel1Font;
 
         buildMenu = new BuildMenu(
             this,
             assets,
             new Rectangle(15, 15, 0, 0)
         );
+
+        
 
         int TestWorkers = 2; // TESTING PURPOSES
         for (int i=0; i<TestWorkers; i++)
@@ -202,6 +205,82 @@ public class World : Scene
             );
     }
 
+    private Contract getMiniContract()
+    {
+        // TODO temporary. Needss to actually generate one.
+        return new Contract(this, assets, [(ResourceItemType.Coal, 7)], 100, TimerDisplayType.Wheel);
+    }
+    
+    public TerrainTile FindEmptyTileNear(Vector2 tileCoords, int minRange = 3, int maxRange = 10)
+    {
+        for (int attempt = 0; attempt < 100; attempt++)
+        {
+            int dx = random.Next(-maxRange, maxRange + 1);
+            int dy = random.Next(-maxRange, maxRange + 1);
+
+            float distance = MathF.Sqrt(dx * dx + dy * dy);
+
+            if (distance < minRange || distance > maxRange)
+                continue;
+
+            int x = (int)tileCoords.X + dx;
+            int y = (int)tileCoords.Y + dy;
+
+            if (
+                x < 0 ||
+                y < 0 ||
+                x >= map.GetLength(0) ||
+                y >= map.GetLength(1)
+            )
+            {
+                continue;
+            }
+
+            if (map[x, y] is TerrainTile terrain &&
+                terrain is not HarvestableTerrainTile)
+            {
+                return terrain;
+            }
+        }
+
+        return null;
+    }
+
+    private TerrainTile FindOffScreenTile()
+    {
+        Vector2 offset = new((random.Next(2) * 2 - 1) * game.VirtualResolution.width, (random.Next(2) * 2 - 1) * game.VirtualResolution.width);
+        Vector2 offScreenCoords = camCenter+offset;
+        Vector2 tileCoords = GetTileCoordinates(offScreenCoords);
+        return (TerrainTile)map[(int)tileCoords.X, (int)tileCoords.Y]; 
+    }
+
+    private void SpawnMiniContractCart()
+    {
+        Add(new Cart(this, assets, FindOffScreenTile(), getMiniContract()));
+        miniContractCartSpawnRate.Current = miniContractCartSpawnRate.Base;
+    }
+
+    private bool CanSpawnMiniContractCart()
+    {
+        if (gameEntities.OfType<Cart>().Any()) { return false; }
+        // Add any other falsy paths we may want.
+
+        return true;
+    }
+
+    private void MaybeSpawnMiniContractCart()
+    {
+        if (!CanSpawnMiniContractCart()){ return; }
+        float roll = random.NextSingle();
+        if (roll <= miniContractCartSpawnRate.Current)
+        {
+            SpawnMiniContractCart();
+            Console.WriteLine("Made a cart!");
+            return;
+        }
+        miniContractCartSpawnRate.Current += miniContractCartSpawnRate.increaseRate;
+    }
+
     public override void Update(GameTime gameTime) 
     {
         mouseWorldMapPosition = new Vector2(
@@ -243,6 +322,8 @@ public class World : Scene
         // TEMP test gold
         //if(_inputManager.IsKeyPressed(Keys.Space)) { AddGold(); }
         
+        MaybeSpawnMiniContractCart();
+
         base.Update(gameTime);
     }
 

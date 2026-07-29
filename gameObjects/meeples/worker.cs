@@ -106,7 +106,7 @@ public class Worker : Meeple
         if (route != null)
         {
             CourierState state = CourierState.GoingToPickup;
-            targetWorldPosition = route.Source.targetTerrain.WorldPosition;
+            if (route.Source != null) { targetWorldPosition = route.Source.targetTerrain.WorldPosition; }
             if (Inventory.Has(route.ResourceType))
             {
                 state = CourierState.GoingToDropoff;
@@ -133,6 +133,11 @@ public class Worker : Meeple
                         route.Target.Inventory.Add(route.ResourceType);
                     }
                 }
+            }
+
+            if (!Inventory.Has(route.ResourceType) && route.Source == null) 
+            {
+                UnasignFromAll();
             }
         }
         // ^CourierRoute logic
