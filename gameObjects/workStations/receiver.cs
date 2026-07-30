@@ -12,6 +12,7 @@ public abstract class Receiver : WorkStation
 {
     public static new readonly ResourceType[] mineableResourceTypes = [];
     public Contract currentContract;
+    public ReceiverContractPanel contractPanel;
 
     public Receiver(World world, GameAssets assets, TerrainTile targetTerrain) : base(world, assets, 0, targetTerrain)
     {
@@ -52,6 +53,13 @@ public abstract class Receiver : WorkStation
             panelWidth,
             panelHeight
         );
+
+        contractPanel = new ReceiverContractPanel(
+            world,
+            assets,
+            this,
+            panelWidth
+        );
     }
 
     internal virtual bool AttemptCompleteContract()
@@ -73,6 +81,8 @@ public abstract class Receiver : WorkStation
 
     public override void Update(GameTime gameTime)
     {
+        if (menu.isOpen && !contractPanel.isOpen) { contractPanel.open(); }
+        if (menu.isClosing) { contractPanel.close(); }
         base.Update(gameTime);
     }
 }
