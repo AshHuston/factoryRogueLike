@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace factoryRL.GameObjects.Terrain;
 public class TerrainTile : Entity
@@ -10,6 +11,13 @@ public class TerrainTile : Entity
         world = _world;
         TilePosition = _tilePosition;
         WorldPosition = TilePosition * world.tileSizePixels;
-        _texture = _assets.pixel;
+        assets = _assets;
+        _texture = assets.backgroundTextureTile;
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {   
+        if (_texture == assets.backgroundTextureTile) { return; }
+        base.Draw(spriteBatch);
     }
 }

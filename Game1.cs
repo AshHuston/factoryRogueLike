@@ -76,6 +76,7 @@ public class Game1 : Game
             workerIcon = Content.Load<Texture2D>("worker-mini"),
             goldCoin = Content.Load<Texture2D>("goldCoin"),
             logItem = Content.Load<Texture2D>("logItem"),
+            heap = Content.Load<Texture2D>("heap")
         };
 
         ResourceDatabase.Initialize(_assets);

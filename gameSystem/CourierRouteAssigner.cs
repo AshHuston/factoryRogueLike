@@ -38,7 +38,7 @@ public class CourierRouteAssigner : Entity
 
         if (InputManager.IsLeftClick())
         {   
-            WorkStation clickedStation = world.gameEntities.OfType<WorkStation>().FirstOrDefault(s => EntityFunctions.Hovered(s));
+            WorkStation clickedStation = world.gameEntities.OfType<WorkStation>().FirstOrDefault(s => EntityFunctions.Clicked(s));
 
             if(clickedStation != null)
             {

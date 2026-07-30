@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using factoryRL.GameObjects;
+using factoryRL.GameObjects.Terrain;
 namespace factoryRL.Functions;
 
 public static class EntityFunctions
@@ -33,40 +34,16 @@ public static class EntityFunctions
         return SpritesCollideRectangles(origin1, texture1, origin2, texture2);
     }
 
-    public static bool Clicked(Rectangle rect, bool mouseClicked = true){
-        if (!mouseClicked) { return false; }
+    public static bool Clicked(Rectangle rect, bool rightClick = false){
         MouseState mouseState = Mouse.GetState();
-        return rect.Contains(mouseState.X/2, mouseState.Y/2);
+        if ((!rightClick && mouseState.LeftButton == ButtonState.Pressed) || (rightClick && mouseState.RightButton == ButtonState.Pressed))
+        {
+            return rect.Contains(mouseState.X/2, mouseState.Y/2);
+        }
+        return false;
     }
 
-    // This will need to be added when I add circles.
-    // public static bool Clicked(Circle circ, bool mouseClicked){
-    //     if (!mouseClicked) { return false; }
-    //     MouseState mouseState = Mouse.GetState();
-    //     return rect.Contains(mouseState.X, mouseState.Y);
-    // }
-
-    public static bool Clicked(Entity e, bool mouseClicked = true){
-        if (!mouseClicked) { return false; }
-        Vector2 origin = e.screenPosition;
-        Texture2D texture = e._texture;
-
-        Rectangle rect = new Rectangle(
-            (int)MathF.Round(origin.X)+texture.Width,
-            (int)MathF.Round(origin.Y)+texture.Height,
-            texture.Width,
-            texture.Height
-        );
-
-        return Clicked(rect, mouseClicked);
-    }
-
-    public static bool Hovered(Rectangle rect){
-        MouseState mouseState = Mouse.GetState();
-        return rect.Contains(mouseState.X/2, mouseState.Y/2);
-    }
-
-    public static bool Hovered(Entity e){
+    public static bool Clicked(Entity e, bool rightClick = false){
         Vector2 origin = e.screenPosition;
         Texture2D texture = e._texture;
 
@@ -77,8 +54,25 @@ public static class EntityFunctions
             texture.Height
         );
 
-        return Hovered(rect);
+        return Clicked(rect, rightClick);
     }
 
-    // THIS IS COMPLETLEY UNTESTED
+    public static bool Hovered(Rectangle rect){
+        MouseState mouseState = Mouse.GetState();
+        return rect.Contains(mouseState.X/2, mouseState.Y/2);
+    }
+
+    public static bool Hovered(Entity e){
+        Vector2 origin = e.screenPosition;
+        Texture2D texture = e._texture;
+        
+        Rectangle rect = new Rectangle(
+            (int)MathF.Round(origin.X),
+            (int)MathF.Round(origin.Y),
+            texture.Width,
+            texture.Height
+        );
+
+        return Hovered(rect);
+    }
 }

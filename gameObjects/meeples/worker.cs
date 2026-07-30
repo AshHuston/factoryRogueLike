@@ -145,7 +145,7 @@ public class Worker : Meeple
         if (world.game._inputManager.IsRightClick())
         {
             Rectangle hitBox = new((int)WorldPosition.X, (int)WorldPosition.Y, _texture.Width, _texture.Height);
-            if (hitBox.Contains(world.game._inputManager.MouseWorldPosition) && Alpha != 0)// Invisible (inside a station) = nonclickable
+            if (hitBox.Contains(world.game._inputManager.MouseWorldPosition) && Alpha != 0)
             {
                 UnasignFromAll();
             }

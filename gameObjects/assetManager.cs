@@ -9,6 +9,7 @@ public class GameAssets
     internal Texture2D pixel;
     internal Texture2D workerIcon;
     internal Texture2D goldCoin;
+    internal Texture2D heap;
 
     public Texture2D IronOre { get; internal set; }
     public Texture2D CopperOre { get; internal set; }

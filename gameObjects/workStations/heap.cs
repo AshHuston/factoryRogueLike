@@ -15,7 +15,7 @@ public class Heap : WorkStation
     public Heap(World world, GameAssets assets, TerrainTile targetTerrain, Inventory sourceInv) : base(world, assets, 0, targetTerrain)
     {
         maxNumWorkers = 0;
-        _texture = assets.LumberMill; // DEMO Change this
+        _texture = assets.heap;
         Inventory.Clone(sourceInv);
     }
 
@@ -63,6 +63,8 @@ public class Heap : WorkStation
                 if (w.route?.Target == this) { w.UnasignFromAll(); }
                 if (w.route?.Source == this) { w.route.Source = null; }
             }
+            menu.close();
+            panel.close();
             world.Remove(this);
         }
         base.Update(gameTime);

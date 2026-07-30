@@ -27,8 +27,8 @@ public class World : Scene
     {
         game=_game;
         tileSizePixels = (int)Math.Round(32*game.scale);
-        int mapWidth = 500;
-        int mapHeight = 500;
+        int mapWidth = 200;
+        int mapHeight = 200;
         map = new Entity[mapWidth, mapHeight];
         mapCenter = new(mapWidth / 2, mapHeight / 2);
         camCenter = new Vector2(map.GetLength(0) * tileSizePixels / 2, map.GetLength(1) * tileSizePixels / 2);
@@ -93,10 +93,10 @@ public class World : Scene
                     if (random.NextDouble() < probability)
                     {
                         terrain = new HarvestableTerrainTile(this, assets, HarvestableTerrainTileDatabase.Data[resourceType], targetTile);
-                        gameEntities.Add(terrain);
                     }
                     if (terrain is not HarvestableTerrainTile && map[x,y] != null){ continue; }
                     map[x, y] = terrain;
+                    gameEntities.Add(terrain);
                 }
             }
         }

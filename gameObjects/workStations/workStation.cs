@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using factoryRL.Functions;
@@ -150,10 +151,8 @@ public abstract class WorkStation : Entity
             }
         }
         
-        if (world._inputManager.IsRightClick() && EntityFunctions.Hovered(this))
-        {
-            OpenMenu();
-        }
+        if (EntityFunctions.Clicked(targetTerrain, true)||EntityFunctions.Clicked(this, true)) { OpenMenu(); }
+        
 
         foreach (Worker w in assignedWorkers) {
             if (w.WorldPosition == WorldPosition){ w.Alpha = 0; }
