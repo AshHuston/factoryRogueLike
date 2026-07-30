@@ -66,7 +66,15 @@ public class Worker : Meeple
         {
             station.UnassignWorker(this);
         }
-        route = null;
+        if (route != null)
+        {
+            if (Inventory.Has(route.ResourceType))
+            {
+                Inventory.Remove(route.ResourceType);
+                route.Source.Inventory.Add(route.ResourceType);
+            }
+            route = null;
+        }
         assignedWorkStation = null;
         _texture = assets.Worker;
         Alpha = 1;

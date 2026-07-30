@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using System.Security.Principal;
-using System.Threading;
 using factoryRL.contract;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
@@ -40,7 +38,7 @@ public abstract class Receiver : WorkStation
             new Rectangle(world.game.VirtualResolution.width-menuWidth-menuMargin, menuMargin, menuWidth, menuHeight),
             [
                 new TextMenuOption("X", font, Color.Red, () => CloseMenu()),
-                new TextMenuOption("Complete Contract", font, Color.Black, () => AttemptCompleteContract()),
+                new TextMenuOption("Submit", font, Color.Black, () => AttemptCompleteContract()),
             ],
             menuWidth,
             menuHeight
@@ -60,7 +58,6 @@ public abstract class Receiver : WorkStation
     {
         if (Inventory.Remove(currentContract.requirements))
         {
-            Console.WriteLine("We have it!");
             menu.close();
             currentContract.timer.Stop(true);
             foreach (Worker w in world.gameEntities.OfType<Worker>().Where((w)=> w.route?.Target == this || w.route?.Source == this ))
@@ -70,7 +67,7 @@ public abstract class Receiver : WorkStation
             }
             return true;
         }
-        Console.WriteLine("We dont have it...");
+        Console.WriteLine("We dont have it..."); // JUICE Could add a sound effect here.
         return false;
     }
 

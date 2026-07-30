@@ -10,7 +10,7 @@ public class SalesHouse : Receiver
 
     public SalesHouse(World world, GameAssets assets, TerrainTile targetTerrain) : base(world, assets, targetTerrain)
     {
-        _texture = assets.Warehouse; // DEMO change this
+        _texture = assets.saleshouse;
     }
 
     public override void Update(GameTime gameTime)

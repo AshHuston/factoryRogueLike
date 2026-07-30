@@ -17,8 +17,8 @@ public class Game1 : Game
     private GameAssets _assets;
     public Scene currentScene;
     private RenderTarget2D _gameRenderTarget;
-    public (int width, int height) VirtualResolution { get; set; } = (600, 400);
-    public (int width, int height) ViewportResolution { get; set; } = (1200, 800);
+    public (int width, int height) VirtualResolution { get; set; } = (900, 600);
+    public (int width, int height) ViewportResolution { get; set; } = (1800, 1200);
     public float scale = 1f;
 
     private Texture2D pixel;
@@ -76,7 +76,9 @@ public class Game1 : Game
             workerIcon = Content.Load<Texture2D>("worker-mini"),
             goldCoin = Content.Load<Texture2D>("goldCoin"),
             logItem = Content.Load<Texture2D>("logItem"),
-            heap = Content.Load<Texture2D>("heap")
+            heap = Content.Load<Texture2D>("heap"),
+            saleshouse = Content.Load<Texture2D>("saleshouse"),
+            Cart = Content.Load<Texture2D>("cart")
         };
 
         ResourceDatabase.Initialize(_assets);

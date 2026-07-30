@@ -120,6 +120,7 @@ public abstract class WorkStation : Entity
 
     private void OpenMenu()
     {
+        if (menu.isOpen) { return; }
         foreach (WorkStation w in world.gameEntities.OfType<WorkStation>())
         {
             w.CloseMenu();

@@ -69,6 +69,8 @@ public class WorkStationPanel : Entity
         int panelItemHeight = 10;
         int uniqueItems = targetStation.Inventory.GetUniqueItemCount();
         targetHeight = ((uniqueItems+2)*panelPaddingPx) + ((1+uniqueItems)*panelItemHeight);
+        int workerLineHeight = panelItemHeight;
+        if (targetStation.maxNumWorkers < 1){ targetHeight -= workerLineHeight; }
 
         if (!isClosing){
             width = Math.Clamp(
@@ -107,26 +109,28 @@ public class WorkStationPanel : Entity
     public override void Draw(SpriteBatch spriteBatch)
     {
         MenuBackground.Draw(spriteBatch);
-        spriteBatch.Draw(
-            assets.workerIcon,
-            MenuBackground.screenPosition + new Vector2 (panelPaddingPx, panelPaddingPx),
-            Color.White
-        );
-        spriteBatch.DrawString(
-            assets.Pixel1Font,
-            $"{targetStation.assignedWorkers.Count}/{targetStation.maxNumWorkers}",
-            MenuBackground.screenPosition + new Vector2 (panelPaddingPx+10, panelPaddingPx+4),
-            Color.Black
-        );
+        if (targetStation.maxNumWorkers > 0){
+            spriteBatch.Draw(
+                assets.workerIcon,
+                MenuBackground.screenPosition + new Vector2 (panelPaddingPx, panelPaddingPx),
+                Color.White
+            );
+            spriteBatch.DrawString(
+                assets.Pixel1Font,
+                $"{targetStation.assignedWorkers.Count}/{targetStation.maxNumWorkers}",
+                MenuBackground.screenPosition + new Vector2 (panelPaddingPx+10, panelPaddingPx+4),
+                Color.Black
+            );
+        }
 
-        int i = 0;
+        int i = targetStation.maxNumWorkers > 0 ? 0 : -1;
         int lineHeight = 14;
         foreach (ResourceItemType item in targetStation.Inventory.GetUniqueItems())
         {
             i++;
             spriteBatch.Draw(
                 ResourceDatabase.ItemData[item].Texture,
-                MenuBackground.screenPosition + new Vector2 (panelPaddingPx, i*(panelPaddingPx+lineHeight)),
+                MenuBackground.screenPosition + new Vector2 (panelPaddingPx, Math.Max(panelPaddingPx, i*(panelPaddingPx+lineHeight))),
                 Color.White
             );
             spriteBatch.DrawString(

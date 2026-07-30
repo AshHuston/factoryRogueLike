@@ -47,8 +47,7 @@ public class TextMenu : Menu
         {
             string substring = text.Substring(0, length);
 
-            if (font.MeasureString(substring).X <= maxWidth)
-                return substring;
+            if (font.MeasureString(substring).X <= maxWidth) { return substring; }
         }
 
         return "";
@@ -87,7 +86,7 @@ public class TextMenu : Menu
             if (option == hoveredOption)
             {
                 Texture2D hoverBackground = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-                hoverBackground.SetData(new[] { new Color(128, 128, 128, 128) });
+                hoverBackground.SetData([new Color(128, 128, 128, 128)]);
                 spriteBatch.Draw(
                     hoverBackground,
                     new Rectangle(

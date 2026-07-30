@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using factoryRL.GameObjects;
 using factoryRL.GameObjects.Resources;
@@ -11,19 +10,22 @@ public class Contract
     public List<(ResourceItemType Item, int Quantity)> requirements;
     private Receiver receiver;
     private World world;
+    public int goldvalue;
 
     public Contract(
         World _world,
         GameAssets _assets,
         List<(ResourceItemType Item, int Quantity)> _requirements,
         int timerSeconds,
-        TimerDisplayType timerType
+        TimerDisplayType timerType,
+        int _goldValue = 0
     )
     {
         timer = new ContractTimer(_world, _assets, this, timerSeconds, timerType);
         world = _world;
         world.Add(timer);
         requirements = _requirements;
+        goldvalue = _goldValue;
     }
 
     public void SetReceiver(Receiver _receiver)

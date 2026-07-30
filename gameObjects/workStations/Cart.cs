@@ -20,7 +20,7 @@ public class Cart : Receiver
     {
         spawnWorldPos = WorldPosition;
         targetWorldPos = FindWorldPosNearSalesHouse();
-        _texture = assets.Warehouse; // DEMO change this
+        _texture = assets.Cart;
         currentContract = _contract;
         currentContract.SetReceiver(this);
     }
@@ -28,7 +28,7 @@ public class Cart : Receiver
     private Vector2 FindWorldPosNearSalesHouse()
     {
         SalesHouse salesHouse = world.FindClosestEntity<SalesHouse>(WorldPosition);
-        // if (salesHouse == null){ return null; } Shoudl we handle a world with no saleshouse?
+        // if (salesHouse == null){ return null; } Should we handle a world with no saleshouse?
         return world.FindEmptyTileNear(world.GetTileCoordinates(salesHouse.WorldPosition), 2, 4).WorldPosition;
     }
 
@@ -53,6 +53,7 @@ public class Cart : Receiver
         {
             Leave();
             currentContract.timer.Stop();
+            world.AddGold(currentContract.goldvalue);
             return true;
         }
         return false;
@@ -83,6 +84,10 @@ public class Cart : Receiver
         if (!currentContract.timer.HasStarted() && WorldPosition == targetWorldPos) { 
             targetTerrain = (TerrainTile)world.map[(int)world.GetTileCoordinates(WorldPosition).X, (int)world.GetTileCoordinates(WorldPosition).Y]; //This should really be set elsewhere.
             currentContract.Start();
+            foreach ((ResourceItemType Item, int Quantity) r in currentContract.requirements)
+            {
+                Console.WriteLine(r);
+            }
         }
 
         if (WorldPosition==targetWorldPos && targetWorldPos==spawnWorldPos) { world.Remove(this); }

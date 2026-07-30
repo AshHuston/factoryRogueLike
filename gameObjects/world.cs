@@ -4,6 +4,7 @@ using factoryRL.GameObjects.Terrain;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace factoryRL.GameObjects;
@@ -95,8 +96,9 @@ public class World : Scene
                         terrain = new HarvestableTerrainTile(this, assets, HarvestableTerrainTileDatabase.Data[resourceType], targetTile);
                     }
                     if (terrain is not HarvestableTerrainTile && map[x,y] != null){ continue; }
+                    if (map[x,y] is HarvestableTerrainTile) { continue; }
                     map[x, y] = terrain;
-                    gameEntities.Add(terrain);
+                    Add(terrain);
                 }
             }
         }
@@ -208,7 +210,76 @@ public class World : Scene
     private Contract getMiniContract()
     {
         // TODO temporary. Needss to actually generate one.
-        return new Contract(this, assets, [(ResourceItemType.Coal, 7)], 100, TimerDisplayType.Wheel);
+        return new Contract(this, assets, [(ResourceItemType.Coal, 7)], 100, TimerDisplayType.Wheel, 100);
+    }
+
+    public Contract GenerateMiniContract()
+    {
+        Random random = new();
+
+        // 1. Difficulty from 1.0 to 10.0
+        float difficulty = (float)(1 + random.NextDouble() * 9);
+
+        // 2. Pick 1-2 resource types
+        int resourceCount = difficulty switch
+        {
+            < 4 => 1,
+            < 7 => random.Next(1, 3),
+            _ => random.Next(2, 4)
+        };
+
+        ResourceItemType[] allResources =
+        [
+            ResourceItemType.Coal,
+            ResourceItemType.IronOre,
+            ResourceItemType.Stone,
+            ResourceItemType.CopperOre,
+            ResourceItemType.Wood
+        ];
+
+        List<(ResourceItemType Item, int Amount)> requirements = [];
+
+        foreach (ResourceItemType resource in allResources
+            .OrderBy(_ => random.Next())
+            .Take(resourceCount))
+        {
+            int amount = random.Next(15, 61);
+            requirements.Add((resource, amount));
+        }
+
+        int totalResources = requirements.Sum(r => r.Amount);
+
+        // Difficulty affects time pressure.
+        // Higher difficulty = less time per resource.
+        float secondsPerResource = MathHelper.Lerp(
+            4.0f,   // easy
+            1.0f,   // hard
+            (difficulty - 1) / 9f
+        );
+
+        int timeSeconds = (int)MathF.Round(
+            totalResources * secondsPerResource
+        );
+
+        // Difficulty affects payout.
+        float rewardMultiplier = MathHelper.Lerp(
+            0.8f,   // easy
+            2.0f,   // hard
+            (difficulty - 1) / 9f
+        );
+
+        int goldReward = (int)MathF.Round(
+            totalResources * rewardMultiplier
+        );
+
+        return new Contract(
+            this,
+            assets,
+            requirements,
+            timeSeconds,
+            TimerDisplayType.Wheel,
+            goldReward
+        );
     }
     
     public TerrainTile FindEmptyTileNear(Vector2 tileCoords, int minRange = 3, int maxRange = 10)
@@ -256,7 +327,7 @@ public class World : Scene
 
     private void SpawnMiniContractCart()
     {
-        Add(new Cart(this, assets, FindOffScreenTile(), getMiniContract()));
+        Add(new Cart(this, assets, FindOffScreenTile(), GenerateMiniContract()));
         miniContractCartSpawnRate.Current = miniContractCartSpawnRate.Base;
     }
 
@@ -311,7 +382,7 @@ public class World : Scene
         }
 
         // TEMP This makes the character, not the mouse, move the screen. This is likely temporary.
-        int edgeWidth = 15;
+        int edgeWidth = 5;
         int panSpdPx = 8;
         if (_inputManager.MouseScreenPosition.X < edgeWidth){ camCenter.X -= panSpdPx; }
         if (_inputManager.MouseScreenPosition.Y < edgeWidth){ camCenter.Y -= panSpdPx; }

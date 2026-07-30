@@ -38,6 +38,7 @@ public abstract class Menu : Entity
         targetWidth = _targetWidth;
         targetHeight = _targetHeight;
         MenuBackground = new NineSlicedSprite(assets.MenuBackgroundNS, 4, 4, 12, 12);
+
     }
 
     private void removeFromWorld()
