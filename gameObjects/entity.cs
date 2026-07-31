@@ -16,7 +16,7 @@ public abstract class Entity
 
     private Vector2 GetScreenPosition(bool isUIElement)
     {
-        if (!isUIElement){
+        if (!isUIElement && world != null){
             return world.WorldToScreen(WorldPosition);
         }
         return screenPosition;
@@ -26,11 +26,11 @@ public abstract class Entity
 
     public virtual void Update(GameTime gameTime)
     {
-        screenPosition = GetScreenPosition(isUIElement);
     }
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {
+        screenPosition = GetScreenPosition(isUIElement);
         if (_texture != null){
             spriteBatch.Draw(
                 _texture,

@@ -19,6 +19,13 @@ public abstract class Receiver : WorkStation
         maxNumWorkers = 0;
     }
 
+    public void setContract(Contract contract)
+    {
+        currentContract = contract;
+        InitializeMenuAndPanel();
+        
+    }
+
     internal override void InitializeMenuAndPanel()
     {
         int menuWidth = 80;

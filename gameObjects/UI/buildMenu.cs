@@ -49,7 +49,7 @@ public class BuildMenu : Menu
             _assets,
             _screenBounds,
             [ // menu visual length = 5
-               new BuildMenuOption(
+                new BuildMenuOption(
                     _world,
                     _assets.Mine,
                     Color.Black,
@@ -61,11 +61,11 @@ public class BuildMenu : Menu
                             typeof(Mine),
                             goldCost))),
                             
-               new BuildMenuOption(
+                new BuildMenuOption(
                     _world,
                     _assets.TimberYard,
                     Color.Black,
-                    35,
+                    25,
                     goldCost => _world.Add(
                         new StationBuilder(
                             _world,
@@ -73,23 +73,23 @@ public class BuildMenu : Menu
                             typeof(TimberYard),
                             goldCost))),
 
-                new BuildMenuOption(
-                    _world,
-                    _assets.Warehouse,
-                    Color.Black,
-                    35,
-                    goldCost => _world.Add(
-                        new StationBuilder(
-                            _world,
-                            _assets,
-                            typeof(Warehouse),
-                            goldCost))),
+                // new BuildMenuOption(
+                //     _world,
+                //     _assets.Warehouse,
+                //     Color.Black,
+                //     35,
+                //     goldCost => _world.Add(
+                //         new StationBuilder(
+                //             _world,
+                //             _assets,
+                //             typeof(Warehouse),
+                //             goldCost))),
 
                 new BuildMenuOption(
                     _world,
                     _assets.Worker,
                     Color.Black,
-                    35,
+                    15,
                     goldCost => _world.Add(
                         new Worker(
                             _world.game,

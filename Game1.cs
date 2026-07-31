@@ -6,6 +6,8 @@ using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
 using factoryRL.GameObjects;
 using System;
+using System.Collections.Generic;
+using factoryRL.contract;
 
 namespace factoryRL;
 
@@ -20,6 +22,9 @@ public class Game1 : Game
     public (int width, int height) VirtualResolution { get; set; } = (900, 600);
     public (int width, int height) ViewportResolution { get; set; } = (1800, 1200);
     public float scale = 1f;
+    private (World World, Scene GameOver, TitleScreen Title) scenes;
+    public int currentRound = 0;
+    public Dictionary<int, Contract> gameContracts;
 
     private Texture2D pixel;
 
@@ -88,7 +93,14 @@ public class Game1 : Game
         ResourceDatabase.Initialize(_assets);
         HarvestableTerrainTileDatabase.Initialize(_assets);
 
-        currentScene = new World(this, _assets);
+        scenes.World = new World(this, _assets);
+        scenes.Title = new TitleScreen(this, _assets);
+        //scenes.GameOver = new GameOverScreen();
+
+        currentScene = scenes.Title;
+
+        GameContracts.Initialize(scenes.World, _assets);
+        gameContracts = GameContracts.DEMOContracts;
     }
 
     public void DrawLine(
@@ -112,6 +124,22 @@ public class Game1 : Game
             new Vector2(edge.Length(), thickness),
             SpriteEffects.None,
             0);
+    }
+
+    public void GoToGameOverScreen()
+    {
+        currentScene = scenes.GameOver;
+    }
+
+    public void GoToTitleScreen()
+    {
+        currentScene = scenes.Title;
+    }
+
+    public void GoToWorldScreen()
+    {
+        scenes.World.setMainContract(gameContracts[currentRound]);
+        currentScene = scenes.World;
     }
 
     protected override void Update(GameTime gameTime)

@@ -89,8 +89,6 @@ public class ContractTimer: Entity
             }
 
             Wheel?.SetProgress(remainingTimeSeconds / totalSeconds);
-
-            int displaySeconds = (int)Math.Ceiling(remainingTimeSeconds);
         }
         base.Update(gameTime);
     }
@@ -107,7 +105,7 @@ public class ContractTimer: Entity
             {
                 spriteBatch.DrawString(
                     assets.Pixel1Font,
-                    FormatTime(remainingTimeSeconds),
+                    FormatTime((int)Math.Ceiling(remainingTimeSeconds)),
                     new Vector2((world.game.VirtualResolution.width/2)-15 , 10),
                     Color.Black,
                     0,

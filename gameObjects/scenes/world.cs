@@ -23,6 +23,7 @@ public class World : Scene
     //                                                  DIAL These will change how often a cart spawns  v
     private (float Base, float Current, float increaseRate) miniContractCartSpawnRate = (0.000001f, 0.000001f, 0.00001f);
     private readonly Random random = new();
+    private SalesHouse salesHouse;
 
     public World(Game1 _game, GameAssets assets) : base(_game, assets)
     {
@@ -38,8 +39,8 @@ public class World : Scene
 
         backgroundTexture = assets.backgroundTextureTile;
         hoverIndicatorTexture = assets.hoveredTileIndicator;
-
-        Add(new SalesHouse(this, assets, (TerrainTile)map[mapCenter.X, mapCenter.Y]));
+        salesHouse = new SalesHouse(this, assets, (TerrainTile)map[mapCenter.X, mapCenter.Y]);
+        Add(salesHouse);
         
         buildMenu = new BuildMenu(
             this,
@@ -336,6 +337,13 @@ public class World : Scene
             return;
         }
         miniContractCartSpawnRate.Current += miniContractCartSpawnRate.increaseRate;
+    }
+
+    public void setMainContract(Contract contract)
+    {
+        salesHouse.setContract(contract);
+        //Add(contract.timer);
+        contract.Start();
     }
 
     public override void Update(GameTime gameTime) 
