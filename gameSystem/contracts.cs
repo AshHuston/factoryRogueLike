@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using factoryRL.GameObjects;
 using factoryRL.GameObjects.Resources;
 
@@ -49,6 +50,10 @@ public class Contract
         if (receiver is Cart c){
             c.Leave();
             world.Remove(timer);
+            foreach (Worker w in world.gameEntities.OfType<Worker>().Where((w)=>w.route?.Target==receiver || w.route?.Source == receiver))
+            {
+                w.UnasignFromAll();
+            }
             return;
         }
 

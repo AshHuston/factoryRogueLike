@@ -382,8 +382,8 @@ public class World : Scene
         }
 
         // TEMP This makes the character, not the mouse, move the screen. This is likely temporary.
-        int edgeWidth = 5;
-        int panSpdPx = 8;
+        int edgeWidth = 2;
+        int panSpdPx = 5;
         if (_inputManager.MouseScreenPosition.X < edgeWidth){ camCenter.X -= panSpdPx; }
         if (_inputManager.MouseScreenPosition.Y < edgeWidth){ camCenter.Y -= panSpdPx; }
         if (_inputManager.MouseScreenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += panSpdPx; }

@@ -31,6 +31,10 @@ public class Game1 : Game
 
         _inputManager = new InputManager(this);
 
+        var displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+        ViewportResolution = (displayMode.Width, (int)(displayMode.Height*.95));
+        VirtualResolution = (ViewportResolution.width/2, ViewportResolution.height/2);
+
         _graphics.PreferredBackBufferWidth = ViewportResolution.width;
         _graphics.PreferredBackBufferHeight = ViewportResolution.height;
         _graphics.ApplyChanges();
