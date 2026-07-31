@@ -21,7 +21,7 @@ public class World : Scene
     private bool isDisplayingBuildMenu = false;
     private int playerGold = 100;
     //                                                  DIAL These will change how often a cart spawns  v
-    private (float Base, float Current, float increaseRate) miniContractCartSpawnRate = (0.000001f, 0.000001f, 0.001f);
+    private (float Base, float Current, float increaseRate) miniContractCartSpawnRate = (0.000001f, 0.000001f, 0.00001f);
     private readonly Random random = new();
 
     public World(Game1 _game, GameAssets assets) : base(_game, assets)
@@ -39,21 +39,13 @@ public class World : Scene
         backgroundTexture = assets.backgroundTextureTile;
         hoverIndicatorTexture = assets.hoveredTileIndicator;
 
-        //Test station vvv
-        // HarvestableTerrainTile testTerrain = new(this, assets, HarvestableTerrainTileDatabase.Data[ResourceType.Wood], new Vector2(mapCenter.X, mapCenter.Y));
-        // map[mapCenter.X, mapCenter.Y] = testTerrain;
-        // Add(testTerrain);
         Add(new SalesHouse(this, assets, (TerrainTile)map[mapCenter.X, mapCenter.Y]));
-        // ----------------------------------------------------------------------------------------------------------------
-
-
+        
         buildMenu = new BuildMenu(
             this,
             assets,
             new Rectangle(15, 15, 0, 0)
         );
-
-        
 
         int TestWorkers = 2; // TESTING PURPOSES
         for (int i=0; i<TestWorkers; i++)
@@ -205,12 +197,6 @@ public class World : Scene
                 game.ViewportResolution.width / (game.scale * 2),
                 game.ViewportResolution.height / (game.scale * 2)
             );
-    }
-
-    private Contract getMiniContract()
-    {
-        // TODO temporary. Needss to actually generate one.
-        return new Contract(this, assets, [(ResourceItemType.Coal, 7)], 100, TimerDisplayType.Wheel, 100);
     }
 
     public Contract GenerateMiniContract()
@@ -389,9 +375,6 @@ public class World : Scene
         if (_inputManager.MouseScreenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += panSpdPx; }
         if (_inputManager.MouseScreenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += panSpdPx; }
         // ------------------------------------------------------------------------------------
-
-        // TEMP test gold
-        //if(_inputManager.IsKeyPressed(Keys.Space)) { AddGold(); }
         
         MaybeSpawnMiniContractCart();
 

@@ -140,9 +140,9 @@ public class Game1 : Game
         // if (_inputManager.IsKeyPressed(Keys.R)){ ViewportResolution = (1800, 900); }
         // -------------------------------------------------------------------------------------------------------------------
 
-        _graphics.PreferredBackBufferWidth = ViewportResolution.width;
-        _graphics.PreferredBackBufferHeight = ViewportResolution.height;
-        _graphics.ApplyChanges();
+        // _graphics.PreferredBackBufferWidth = ViewportResolution.width;
+        // _graphics.PreferredBackBufferHeight = ViewportResolution.height;
+        // _graphics.ApplyChanges();
 
         scale = ViewportResolution.width / VirtualResolution.width;
 
