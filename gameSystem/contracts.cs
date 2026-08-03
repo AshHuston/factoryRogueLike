@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using factoryRL.GameObjects;
 using factoryRL.GameObjects.Resources;
+using Microsoft.Xna.Framework;
 
 namespace factoryRL.contract;
 
@@ -12,6 +13,7 @@ public class Contract
     private Receiver receiver;
     private World world;
     public int goldvalue;
+    private readonly GameAssets assets;
 
     public Contract(
         World _world,
@@ -22,6 +24,7 @@ public class Contract
         int _goldValue = 0
     )
     {
+        assets = _assets;
         timer = new ContractTimer(_world, _assets, this, timerSeconds, timerType);
         world = _world;
         world.Add(timer);
@@ -41,7 +44,14 @@ public class Contract
 
     public virtual void CompleteContract(int excessSeconds)
     {
-        // Handle moving onto the perk selection and the screen to move onto the next "blind"
+        int maxBonusGold = 200;
+        (int flat, int bonus) gold = (
+            flat: goldvalue,
+            bonus: (int)(timer.remainingTimeSeconds / timer.totalSeconds * maxBonusGold)
+        );
+
+        Game1 g = world.game;
+        g.currentScene =  new PerkSelectScreen(g, assets, g.currentRound, gold, g.perks.GetRandomPerks());
     }
 
     public virtual void FailContract()

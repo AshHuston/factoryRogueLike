@@ -14,7 +14,7 @@ public static class GameContracts
         DEMOContracts = new Dictionary<int, Contract>()
         {
             {
-                0,
+                1,
                 new Contract(
                     _world,
                     _assets,
@@ -27,7 +27,7 @@ public static class GameContracts
                 )
             },
             {
-                1,
+                2,
                 new Contract(
                     _world,
                     _assets,
@@ -41,7 +41,7 @@ public static class GameContracts
                 )
             },
             {
-                2,
+                3,
                 new Contract(
                     _world,
                     _assets,
@@ -56,7 +56,7 @@ public static class GameContracts
                 )
             },
             {
-                3,
+                4,
                 new Contract(
                     _world,
                     _assets,
@@ -72,7 +72,7 @@ public static class GameContracts
                 )
             },
             {
-                4,
+                5,
                 new Contract(
                     _world,
                     _assets,
@@ -88,7 +88,7 @@ public static class GameContracts
                 )
             },
             {
-                5,
+                6,
                 new Contract(
                     _world,
                     _assets,

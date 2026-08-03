@@ -78,8 +78,8 @@ public abstract class Receiver : WorkStation
             foreach (Worker w in world.gameEntities.OfType<Worker>().Where((w)=> w.route?.Target == this || w.route?.Source == this ))
             {
                 w.UnasignFromAll();
-                currentContract.CompleteContract((int)currentContract.timer.remainingTimeSeconds);
             }
+            if (this is not Cart) { currentContract.CompleteContract((int)currentContract.timer.remainingTimeSeconds); }
             return true;
         }
         Console.WriteLine("We dont have it..."); // JUICE Could add a sound effect here.

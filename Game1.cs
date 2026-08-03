@@ -8,6 +8,7 @@ using factoryRL.GameObjects;
 using System;
 using System.Collections.Generic;
 using factoryRL.contract;
+using factoryRL.perks;
 
 namespace factoryRL;
 
@@ -23,8 +24,9 @@ public class Game1 : Game
     public (int width, int height) ViewportResolution { get; } = (1800, 1200);
     public float scale = 1f;
     private (World World, Scene GameOver, TitleScreen Title) scenes;
-    public int currentRound = 0;
+    public int currentRound = 1;
     public Dictionary<int, Contract> gameContracts;
+    public PerkManager perks = new PerkManager();
 
     private Texture2D pixel;
 
@@ -52,9 +54,12 @@ public class Game1 : Game
 
     public void ResetGame()
     {
-        scenes.World = null;
+        foreach (Perk perk in Enum.GetValues<Perk>())
+        {
+            perks.Deactivate(perk);
+        }
+        
         scenes.World = new World(this, _assets);
-        // Reset all the perks here too.
     }
 
     protected override void LoadContent()
@@ -141,12 +146,14 @@ public class Game1 : Game
         currentScene = scenes.Title;
     }
 
-    public void GoToWorldScreen()
+    public World GoToWorldScreen()
     {
         GameContracts.Initialize(scenes.World, _assets);
         gameContracts = GameContracts.DEMOContracts;
+        gameContracts[currentRound].goldvalue = currentRound*50;
         scenes.World.setMainContract(gameContracts[currentRound]);
         currentScene = scenes.World;
+        return scenes.World;
     }
 
     protected override void Update(GameTime gameTime)

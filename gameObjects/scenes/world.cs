@@ -21,7 +21,7 @@ public class World : Scene
     private bool isDisplayingBuildMenu = false;
     private int playerGold = 100;
     //                                                  DIAL These will change how often a cart spawns  v
-    private (float Base, float Current, float increaseRate) miniContractCartSpawnRate = (0.000001f, 0.000001f, 0.00001f);
+    private (float Base, float Current, float increaseRate) miniContractCartSpawnRate = (0.000001f, 0.000001f, 0.001f);
     private readonly Random random = new();
     private SalesHouse salesHouse;
 
