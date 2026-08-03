@@ -28,7 +28,7 @@ public class World : Scene
     public World(Game1 _game, GameAssets assets) : base(_game, assets)
     {
         game=_game;
-        tileSizePixels = (int)Math.Round(32*game.scale);
+        tileSizePixels = 32;
         int mapWidth = 200;
         int mapHeight = 200;
         map = new Entity[mapWidth, mapHeight];
@@ -342,7 +342,6 @@ public class World : Scene
     public void setMainContract(Contract contract)
     {
         salesHouse.setContract(contract);
-        //Add(contract.timer);
         contract.Start();
     }
 
@@ -375,14 +374,28 @@ public class World : Scene
             }
         }
 
-        // TEMP This makes the character, not the mouse, move the screen. This is likely temporary.
+        // int edgeWidth = 2;
+        // int panSpdPx = 5;
+        // if (_inputManager.MouseScreenPosition.X < edgeWidth){ camCenter.X -= panSpdPx; }
+        // if (_inputManager.MouseScreenPosition.Y < edgeWidth){ camCenter.Y -= panSpdPx; }
+        // if (_inputManager.MouseScreenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += panSpdPx; }
+        // if (_inputManager.MouseScreenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += panSpdPx; }
+
         int edgeWidth = 2;
         int panSpdPx = 5;
-        if (_inputManager.MouseScreenPosition.X < edgeWidth){ camCenter.X -= panSpdPx; }
-        if (_inputManager.MouseScreenPosition.Y < edgeWidth){ camCenter.Y -= panSpdPx; }
-        if (_inputManager.MouseScreenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels){ camCenter.X += panSpdPx; }
-        if (_inputManager.MouseScreenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels){ camCenter.Y += panSpdPx; }
-        // ------------------------------------------------------------------------------------
+        camCenter += new Vector2(
+            _inputManager.MouseScreenPosition.X < edgeWidth
+                ? -panSpdPx
+                : _inputManager.MouseScreenPosition.X > game.VirtualResolution.width - edgeWidth - tileSizePixels
+                    ? panSpdPx
+                    : 0,
+
+            _inputManager.MouseScreenPosition.Y < edgeWidth
+                ? -panSpdPx
+                : _inputManager.MouseScreenPosition.Y > game.VirtualResolution.height - edgeWidth - tileSizePixels
+                    ? panSpdPx
+                    : 0
+        );
         
         MaybeSpawnMiniContractCart();
 

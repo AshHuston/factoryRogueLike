@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using factoryRL.GameObjects;
-using factoryRL.GameObjects.Terrain;
 namespace factoryRL.Functions;
 
 public static class EntityFunctions

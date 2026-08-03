@@ -24,9 +24,7 @@ public abstract class Entity
 
     public virtual void Interact(Player player) { }
 
-    public virtual void Update(GameTime gameTime)
-    {
-    }
+    public virtual void Update(GameTime gameTime) { }
 
     public virtual void Draw(SpriteBatch spriteBatch)
     {

@@ -58,5 +58,6 @@ public class Contract
         }
 
         // Or the gameover screen
+        world.game.GoToGameOverScreen();
     }
 }

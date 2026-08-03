@@ -19,8 +19,8 @@ public class Game1 : Game
     private GameAssets _assets;
     public Scene currentScene;
     private RenderTarget2D _gameRenderTarget;
-    public (int width, int height) VirtualResolution { get; set; } = (900, 600);
-    public (int width, int height) ViewportResolution { get; set; } = (1800, 1200);
+    public (int width, int height) VirtualResolution { get; } = (900, 600);
+    public (int width, int height) ViewportResolution { get; } = (1800, 1200);
     public float scale = 1f;
     private (World World, Scene GameOver, TitleScreen Title) scenes;
     public int currentRound = 0;
@@ -50,8 +50,16 @@ public class Game1 : Game
         base.Initialize();
     }
 
+    public void ResetGame()
+    {
+        scenes.World = null;
+        scenes.World = new World(this, _assets);
+        // Reset all the perks here too.
+    }
+
     protected override void LoadContent()
     {
+        scale = ViewportResolution.width / VirtualResolution.width;
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         pixel = new Texture2D(GraphicsDevice, 1, 1);
@@ -92,15 +100,12 @@ public class Game1 : Game
 
         ResourceDatabase.Initialize(_assets);
         HarvestableTerrainTileDatabase.Initialize(_assets);
-
-        scenes.World = new World(this, _assets);
+        
+        ResetGame();
         scenes.Title = new TitleScreen(this, _assets);
-        //scenes.GameOver = new GameOverScreen();
+        scenes.GameOver = new GameOverScreen(this, _assets);
 
         currentScene = scenes.Title;
-
-        GameContracts.Initialize(scenes.World, _assets);
-        gameContracts = GameContracts.DEMOContracts;
     }
 
     public void DrawLine(
@@ -138,6 +143,8 @@ public class Game1 : Game
 
     public void GoToWorldScreen()
     {
+        GameContracts.Initialize(scenes.World, _assets);
+        gameContracts = GameContracts.DEMOContracts;
         scenes.World.setMainContract(gameContracts[currentRound]);
         currentScene = scenes.World;
     }
