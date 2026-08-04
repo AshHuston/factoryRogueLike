@@ -1,5 +1,6 @@
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
+using Microsoft.Xna.Framework;
 
 namespace factoryRL.GameObjects;
 
@@ -14,5 +15,12 @@ public class LumberMill : WorkStation
     {
         maxNumWorkers = 2;
         _texture = assets.LumberMill;
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        if (world.game.perks.IsActive(perks.Perk.INCREASE_WORKERS_TIMBERMILL)) { maxNumWorkers = baseMaxNumWorkers + 1; }
+        if (world.game.perks.IsActive(perks.Perk.INCREASE_SPEED_TIMBERMILL)) { mineSpeedMultiplier = 1.5f; }
+        base.Update(gameTime);
     }
 }

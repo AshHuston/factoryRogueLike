@@ -24,10 +24,6 @@ public class Worker : Meeple
 
     public Worker(Game1 _game, World _world, GameAssets gameAssets, Vector2 _worldPosition) : base()
     {
-        // This is just a test for now.
-        // Inventory.Add(ResourceItemType.IronOre, 1);
-        // ------------------------------
-
         WorldPosition = _worldPosition;
         world = _world;
         _texture = gameAssets.Worker;

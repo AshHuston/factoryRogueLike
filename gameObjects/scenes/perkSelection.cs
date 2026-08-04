@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using factoryRL.perks;
 using Microsoft.Xna.Framework.Input;
-using System.Net.Mail;
 
 public class PerkSelectScreen : Scene
 {
@@ -22,9 +21,13 @@ public class PerkSelectScreen : Scene
         game = _game;
         perkOptions = _perkOptions;
 
+        int interestGold = game.perks.IsActive(Perk.GOLD_GENERATES_INTEREST) ? game.Gold()/10 : 0;
+        game.AddGold(interestGold); // This placemnt means the game gives the player contract gold and then adds interest.
+
         displayText = [
             $"Congratulations on completing round {_completedRound}!",
             "",
+            interestGold>0 ? $"Interest: {interestGold}" : "",
             $"Base gold: {gold.flat}",
             $"Bonus gold: {gold.bonus}",
             "",
@@ -79,9 +82,9 @@ public class PerkSelectScreen : Scene
 
         Keys[] keys =
         [
-            Keys.NumPad1,
-            Keys.NumPad2,
-            Keys.NumPad3
+            Keys.D1,
+            Keys.D2,
+            Keys.D3
         ];
         for (int i = 0; i < keys.Length; i++)
         {

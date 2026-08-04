@@ -1,4 +1,5 @@
 using System;
+using factoryRL.perks;
 using Microsoft.Xna.Framework;
 
 namespace factoryRL.GameObjects;
@@ -18,12 +19,15 @@ public class Meeple : Entity
 
         direction.Normalize();
 
-        if (Vector2.Distance(WorldPosition, targetPosition) <= mvSpdPx)
+        float perkSpeedMultiplier = 1.5f;
+        int stepLength = (int)(this is Worker && world.game.perks.IsActive(Perk.INCREASE_WORKER_MOVESPEED) ? mvSpdPx*perkSpeedMultiplier : mvSpdPx);
+
+        if (Vector2.Distance(WorldPosition, targetPosition) <= stepLength)
         {
             WorldPosition = targetPosition;
         }else
         {
-            WorldPosition += direction * mvSpdPx;
+            WorldPosition += direction * stepLength;
         }
     }
 }

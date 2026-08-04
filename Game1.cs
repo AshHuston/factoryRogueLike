@@ -27,6 +27,7 @@ public class Game1 : Game
     public int currentRound = 1;
     public Dictionary<int, Contract> gameContracts;
     public PerkManager perks = new PerkManager();
+    private int playerGold = 100;
 
     private Texture2D pixel;
 
@@ -113,6 +114,33 @@ public class Game1 : Game
         currentScene = scenes.Title;
     }
 
+    public int Gold()
+    {
+        return playerGold;
+    }
+
+    public int AddGold(int amt = 1)
+    {
+        playerGold += amt;
+        return playerGold;
+    }
+
+    public bool SubtractGold(int amt = 1)
+    {
+        if (playerGold>=amt){ 
+            playerGold -= amt;
+            return true;
+        }
+        return false;
+    }
+
+    public int SetGold(int amt)
+    {
+        playerGold = amt;
+        return playerGold;
+    }
+
+
     public void DrawLine(
         SpriteBatch spriteBatch,
         Vector2 start,
@@ -151,6 +179,7 @@ public class Game1 : Game
         GameContracts.Initialize(scenes.World, _assets);
         gameContracts = GameContracts.DEMOContracts;
         gameContracts[currentRound].goldvalue = currentRound*50;
+        gameContracts[currentRound].timer.totalSeconds += perks.IsActive(Perk.INCREASE_ROUND_TIMER_LENGTH) ? 60 : 0;
         scenes.World.setMainContract(gameContracts[currentRound]);
         currentScene = scenes.World;
         return scenes.World;

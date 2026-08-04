@@ -4,6 +4,7 @@ using System.Linq;
 using factoryRL.Functions;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
+using factoryRL.perks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,6 +12,7 @@ namespace factoryRL.GameObjects;
 
 public abstract class WorkStation : Entity
 {
+    public int baseMaxNumWorkers;
     public int maxNumWorkers;
     public int currentNumWorkers = 0;
     public TerrainTile targetTerrain;
@@ -21,6 +23,7 @@ public abstract class WorkStation : Entity
     public ResourceItemType exportType = ResourceItemType.None;
     internal TextMenu menu;
     internal WorkStationPanel panel;
+    internal float mineSpeedMultiplier = 1f;
 
     public WorkStation(World _world, GameAssets _assets, int maxWorkers, TerrainTile _targetTerrain)
     {
@@ -29,6 +32,7 @@ public abstract class WorkStation : Entity
         targetTerrain = _targetTerrain;
         WorldPosition = targetTerrain.WorldPosition;
         maxNumWorkers = maxWorkers;
+        baseMaxNumWorkers = maxWorkers;
 
         if (targetTerrain is HarvestableTerrainTile t)
         {
@@ -140,7 +144,8 @@ public abstract class WorkStation : Entity
         if (currentNumWorkers > 0 && targetTerrain is HarvestableTerrainTile t) 
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            harvestTimeRemainingMiliseconds -= (int)(deltaTime*currentNumWorkers);
+            float perkMineSpeedMultiplier = world.game.perks.IsActive(Perk.INCREASE_WORKER_MINESPEED) ? 1.25f : 1;
+            harvestTimeRemainingMiliseconds -= (int)(deltaTime * currentNumWorkers * perkMineSpeedMultiplier * mineSpeedMultiplier);
             t.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / t.HarvestableTerrainTileData.MiningTimeMiliseconds);
             t.harvestProgressWheel.screenPosition = screenPosition;
 

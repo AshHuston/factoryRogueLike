@@ -1,5 +1,6 @@
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
+using Microsoft.Xna.Framework;
 
 namespace factoryRL.GameObjects;
 
@@ -18,5 +19,12 @@ public class Mine : WorkStation
     {
         maxNumWorkers = 2;
         _texture = assets.Mine;
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        if (world.game.perks.IsActive(perks.Perk.INCREASE_WORKERS_MINE)) { maxNumWorkers = baseMaxNumWorkers + 1; }
+        if (world.game.perks.IsActive(perks.Perk.INCREASE_SPEED_MINE)) { mineSpeedMultiplier = 1.5f; }
+        base.Update(gameTime);
     }
 }

@@ -26,7 +26,7 @@ public class BuildMenuOption : IMenuOption
 
         OnClick = () =>
         {
-            if (world.SubtractGold(Cost))
+            if (world.game.SubtractGold(Cost))
             {
                 purchaseAction(Cost);
             }
@@ -53,7 +53,7 @@ public class BuildMenu : Menu
                     _world,
                     _assets.Mine,
                     Color.Black,
-                    35, 
+                    35 - (_world.game.perks.IsActive(perks.Perk.DISCOUNT_MINE) ? 10 : 0),
                     goldCost => _world.Add(
                         new StationBuilder(
                             _world,
@@ -65,7 +65,7 @@ public class BuildMenu : Menu
                     _world,
                     _assets.TimberYard,
                     Color.Black,
-                    25,
+                    25 - (_world.game.perks.IsActive(perks.Perk.DISCOUNT_TIMBERMILL) ? 10 : 0),
                     goldCost => _world.Add(
                         new StationBuilder(
                             _world,
@@ -89,7 +89,7 @@ public class BuildMenu : Menu
                     _world,
                     _assets.Worker,
                     Color.Black,
-                    15,
+                    15 - (_world.game.perks.IsActive(perks.Perk.DISCOUNT_WORKER) ? 5 : 0),
                     goldCost => _world.Add(
                         new Worker(
                             _world.game,
@@ -98,7 +98,7 @@ public class BuildMenu : Menu
                             _world.camCenter))),
             ],
             120, // option width + padding + padding
-            220 // option width + padding*5 + padding
+            136 // option width + padding*4 + padding
         ) 
     {
     }

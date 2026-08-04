@@ -53,7 +53,7 @@ public class Cart : Receiver
         {
             Leave();
             currentContract.timer.Stop();
-            world.AddGold(currentContract.goldvalue);
+            world.game.AddGold(currentContract.goldvalue);
             return true;
         }
         return false;

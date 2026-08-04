@@ -1,6 +1,7 @@
 using factoryRL.contract;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
+using factoryRL.perks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -19,7 +20,6 @@ public class World : Scene
     internal Vector2 mouseWorldMapPosition = new Vector2(0, 0);
     private readonly BuildMenu buildMenu;
     private bool isDisplayingBuildMenu = false;
-    private int playerGold = 100;
     //                                                  DIAL These will change how often a cart spawns  v
     private (float Base, float Current, float increaseRate) miniContractCartSpawnRate = (0.000001f, 0.000001f, 0.001f);
     private readonly Random random = new();
@@ -97,33 +97,6 @@ public class World : Scene
         }
         RemoveInvalidHarvestableTerrainTile();
     }
-
-    public int Gold()
-    {
-        return playerGold;
-    }
-
-    public int AddGold(int amt = 1)
-    {
-        playerGold += amt;
-        return playerGold;
-    }
-
-    public bool SubtractGold(int amt = 1)
-    {
-        if (playerGold>=amt){ 
-            playerGold -= amt;
-            return true;
-        }
-        return false;
-    }
-
-    public int SetGold(int amt)
-    {
-        playerGold = amt;
-        return playerGold;
-    }
-
     // not sure this is actually doing anything right or even useful tbh. 7/18/26
     private bool IsInvalidHarvestableTerrainTile(Entity entity)
     {
@@ -244,9 +217,11 @@ public class World : Scene
             (difficulty - 1) / 9f
         );
 
-        int timeSeconds = (int)MathF.Round(
+        float timeSeconds = MathF.Round(
             totalResources * secondsPerResource
         );
+
+        timeSeconds *= game.perks.IsActive(Perk.INCREASE_CART_TIME) ? 1.5f : 1;
 
         // Difficulty affects payout.
         float rewardMultiplier = MathHelper.Lerp(
@@ -254,6 +229,8 @@ public class World : Scene
             2.0f,   // hard
             (difficulty - 1) / 9f
         );
+
+        rewardMultiplier *= game.perks.IsActive(Perk.INCREASE_CART_GOLD) ? 2 : 1;
 
         int goldReward = (int)MathF.Round(
             totalResources * rewardMultiplier
@@ -263,7 +240,7 @@ public class World : Scene
             this,
             assets,
             requirements,
-            timeSeconds,
+            (int)timeSeconds,
             TimerDisplayType.Wheel,
             goldReward
         );
@@ -330,10 +307,10 @@ public class World : Scene
     {
         if (!CanSpawnMiniContractCart()){ return; }
         float roll = random.NextSingle();
-        if (roll <= miniContractCartSpawnRate.Current)
+        float oddsOfSpawn = miniContractCartSpawnRate.Current * (game.perks.IsActive(Perk.INCREASE_CART_FREQUENCY) ? 2: 1);
+        if (roll <= oddsOfSpawn)
         {
             SpawnMiniContractCart();
-            Console.WriteLine("Made a cart!");
             return;
         }
         miniContractCartSpawnRate.Current += miniContractCartSpawnRate.increaseRate;
@@ -364,7 +341,7 @@ public class World : Scene
                     totalGoldCost += entity.goldCost;
                     gameEntities.Remove(entity);
                 }   
-                AddGold(totalGoldCost);
+                game.AddGold(totalGoldCost);
                 isDisplayingBuildMenu = false;
             }
             else
@@ -428,7 +405,7 @@ public class World : Scene
         );
         spriteBatch.DrawString(
             assets.Pixel1Font,
-            $"{playerGold}",
+            $"{game.Gold()}",
             new Vector2(UImargin+UIpadding+assets.goldCoin.Width, game.VirtualResolution.height-assets.goldCoin.Height-UImargin),
             Color.Black,
             0,

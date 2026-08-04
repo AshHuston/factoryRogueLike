@@ -74,7 +74,7 @@ public class PerkManager
             Perk.DISCOUNT_WORKER,
             (
                 isActive: false,
-                label: "Workers cost 10gp less"
+                label: "Workers cost 5gp less"
             )
         },
         {
