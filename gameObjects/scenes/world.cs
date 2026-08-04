@@ -67,7 +67,7 @@ public class World : Scene
         ];
 
         Random random = new();
-        int maxRangeFromCenterTiles = 15;
+        int maxRangeFromCenterTiles = 10;
 
         foreach (var resourceType in resourceTypes)
         {

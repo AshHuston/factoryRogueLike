@@ -101,7 +101,7 @@ public abstract class WorkStation : Entity
 
     public bool AssignWorker()
     {
-        Worker foundWorker = world.FindClosestEntity<Worker>(WorldPosition, (w) => !assignedWorkers.Contains(w));
+        Worker foundWorker = world.FindClosestEntity<Worker>(WorldPosition, (w) => !assignedWorkers.Contains(w) && w.IsIdle());
         return foundWorker == null ? false : AssignWorker(foundWorker);
     }
 
@@ -143,9 +143,16 @@ public abstract class WorkStation : Entity
 
         if (currentNumWorkers > 0 && targetTerrain is HarvestableTerrainTile t) 
         {
+            float baseMineSpd = 0.5f;
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             float perkMineSpeedMultiplier = world.game.perks.IsActive(Perk.INCREASE_WORKER_MINESPEED) ? 1.25f : 1;
-            harvestTimeRemainingMiliseconds -= (int)(deltaTime * currentNumWorkers * perkMineSpeedMultiplier * mineSpeedMultiplier);
+            harvestTimeRemainingMiliseconds -= (int)(
+                baseMineSpd *
+                deltaTime *
+                currentNumWorkers *
+                perkMineSpeedMultiplier *
+                mineSpeedMultiplier
+            );
             t.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / t.HarvestableTerrainTileData.MiningTimeMiliseconds);
             t.harvestProgressWheel.screenPosition = screenPosition;
 
@@ -157,7 +164,7 @@ public abstract class WorkStation : Entity
             }
         }
         
-        if (EntityFunctions.Clicked(targetTerrain, true)||EntityFunctions.Clicked(this, true)) { OpenMenu(); }
+        if (EntityFunctions.Clicked(targetTerrain)||EntityFunctions.Clicked(this)) { OpenMenu(); }
         
 
         foreach (Worker w in assignedWorkers) {

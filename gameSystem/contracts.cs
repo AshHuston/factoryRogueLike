@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using factoryRL.GameObjects;
 using factoryRL.GameObjects.Resources;
-using Microsoft.Xna.Framework;
 
 namespace factoryRL.contract;
 
@@ -52,6 +51,11 @@ public class Contract
 
         Game1 g = world.game;
         g.currentScene =  new PerkSelectScreen(g, assets, g.currentRound, gold, g.perks.GetRandomPerks());
+        foreach (Entity e in world.gameEntities)
+        {
+            if (e is Cart c) { c.Leave(); }
+            if (e is ContractTimer t) { world.Remove(t); }
+        }
     }
 
     public virtual void FailContract()

@@ -22,7 +22,7 @@ public class PerkSelectScreen : Scene
         perkOptions = _perkOptions;
 
         int interestGold = game.perks.IsActive(Perk.GOLD_GENERATES_INTEREST) ? game.Gold()/10 : 0;
-        game.AddGold(interestGold); // This placemnt means the game gives the player contract gold and then adds interest.
+        game.AddGold(interestGold + gold.bonus + gold.flat);
 
         displayText = [
             $"Congratulations on completing round {_completedRound}!",
