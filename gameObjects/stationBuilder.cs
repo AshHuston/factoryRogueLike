@@ -10,11 +10,12 @@ namespace factoryRL.GameObjects;
 public class StationBuilder : Entity
 {
     private Type StationType;
-    private readonly Dictionary<Type, Func<World, GameAssets, HarvestableTerrain, WorkStation>> _factories;
+    private readonly Dictionary<Type, Func<World, GameAssets, TerrainTile, WorkStation>> _factories;
+    public int goldCost;
 
-    public StationBuilder(World _world, GameAssets _assets, Type _stationType)
+    public StationBuilder(World _world, GameAssets _assets, Type _stationType, int _goldCost)
     {
-
+        isUIElement = true;
         foreach (var builder in _world.gameEntities
             .OfType<StationBuilder>()
             .Where(b => !ReferenceEquals(b, this)))
@@ -26,6 +27,8 @@ public class StationBuilder : Entity
         {
             { typeof(Mine), _assets.Mine },
             { typeof(LumberMill), _assets.LumberMill },
+            { typeof(TimberYard), _assets.TimberYard },
+            { typeof(Warehouse), _assets.Warehouse },
         };
 
         world = _world;
@@ -33,12 +36,15 @@ public class StationBuilder : Entity
 
         _factories = new()
         {
-            { typeof(Mine), (world, assets, targetTerrain) => new Mine(world, assets, targetTerrain) },
-            { typeof(LumberMill), (world, assets, targetTerrain) => new LumberMill(world, assets, targetTerrain) },
+            { typeof(Mine), (world, assets, terrainTile) => new Mine(world, assets, (HarvestableTerrainTile)terrainTile ) },
+            { typeof(LumberMill), (world, assets, terrainTile) => new LumberMill(world, assets, (HarvestableTerrainTile)terrainTile) },
+            { typeof(TimberYard), (world, assets, terrainTile) => new TimberYard(world, assets, (HarvestableTerrainTile)terrainTile) },
+            { typeof(Warehouse), (world, assets, terrainTile) => new Warehouse(world, assets,  terrainTile) },
         };
         
         _texture = _textures[_stationType];
         StationType = _stationType;
+        goldCost = _goldCost;
     }
 
     private Entity getTile(Vector2 worldTileCoords)
@@ -50,12 +56,12 @@ public class StationBuilder : Entity
     private bool IsLegalTile(Vector2 worldTileCoords)
     {
         Entity tile = getTile(worldTileCoords);
+        if (world.gameEntities.OfType<WorkStation>().Any(ws => ws.targetTerrain == tile)) { return false; }
         var field = StationType.GetField("mineableResourceTypes");
         var resources = (ResourceType[])field.GetValue(null);
-
-        if (tile is HarvestableTerrain terrain)
+        if (tile is HarvestableTerrainTile terrain)
         {
-            if (resources.Contains(terrain.terrainData.Type)) { return true; }
+            if (resources.Contains(terrain.HarvestableTerrainTileData.Type)) { return true; }
         }
 
         if (resources.Length == 0) { return true; }
@@ -65,15 +71,15 @@ public class StationBuilder : Entity
 
     private WorkStation getNewStation(Vector2 worldTileCoords)
     {
-        return _factories[StationType](world, assets, (HarvestableTerrain)getTile(worldTileCoords));
+        return _factories[StationType](world, assets, (TerrainTile)getTile(worldTileCoords));
     }
 
     public override void Update(GameTime gameTime)
     {
         float offsetForScreenCenter = .25f;
-        _position = world.mouseWorldMapPosition - world.camCenter + new Vector2(world.game.GraphicsDevice.Viewport.Width, world.game.GraphicsDevice.Viewport.Height)*offsetForScreenCenter - new Vector2(_texture.Width/2, _texture.Height/2);
+        screenPosition = world.mouseWorldMapPosition - world.camCenter + new Vector2(world.game.GraphicsDevice.Viewport.Width, world.game.GraphicsDevice.Viewport.Height)*offsetForScreenCenter - new Vector2(_texture.Width/2, _texture.Height/2);
 
-        if (world.game._inputManager.IsLeftClick())
+        if (world.game._inputManager.IsLeftClick() && !world.hasHoveredMenu)
         {
             Vector2 worldTileCoords = world.GetTileCoordinates(world.mouseWorldMapPosition);
             if (IsLegalTile(worldTileCoords))
@@ -81,6 +87,10 @@ public class StationBuilder : Entity
                 world.Add(getNewStation(worldTileCoords));
                 world.Remove(this);
                 // SOUND EFFECT -> Should be a weighty sound effect to *feel* the placement of a workstation.
+            }
+            else
+            {
+                Console.WriteLine("That is an illegal tile!");
             }
         }
         

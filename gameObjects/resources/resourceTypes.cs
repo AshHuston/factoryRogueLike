@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace factoryRL.GameObjects.Resources
 {
     public enum ResourceType
@@ -12,6 +14,7 @@ namespace factoryRL.GameObjects.Resources
 
     public enum ResourceItemType
     {
+        None,
         IronOre,
         IronIngot,
         CopperOre,

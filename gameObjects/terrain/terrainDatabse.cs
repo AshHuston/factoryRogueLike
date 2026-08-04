@@ -3,21 +3,21 @@ using factoryRL.GameObjects.Resources;
 
 namespace factoryRL.GameObjects.Terrain;
 
-public static class TerrainDatabase
+public static class HarvestableTerrainTileDatabase
 {
     private static GameAssets _assets;
 
-    public static Dictionary<ResourceType, TerrainData> Data;
+    public static Dictionary<ResourceType, HarvestableTerrainTileData> Data;
 
     public static void Initialize(GameAssets assets)
     {
         _assets = assets;
 
-        Data = new Dictionary<ResourceType, TerrainData>()
+        Data = new Dictionary<ResourceType, HarvestableTerrainTileData>()
         {
             {
                 ResourceType.Iron,
-                new TerrainData
+                new HarvestableTerrainTileData
                 {
                     Name = "Iron",
                     Texture = _assets.IronTerrain,
@@ -28,7 +28,7 @@ public static class TerrainDatabase
             },
             {
                 ResourceType.Copper,
-                new TerrainData
+                new HarvestableTerrainTileData
                 {
                     Name = "Copper",
                     Texture = _assets.CopperTerrain,
@@ -39,7 +39,7 @@ public static class TerrainDatabase
             },
             {
                 ResourceType.Coal,
-                new TerrainData
+                new HarvestableTerrainTileData
                 {
                     Name = "Coal",
                     Texture = _assets.CoalTerrain,
@@ -50,7 +50,7 @@ public static class TerrainDatabase
             },
             {
                 ResourceType.Stone,
-                new TerrainData
+                new HarvestableTerrainTileData
                 {
                     Name = "Stone",
                     Texture = _assets.StoneTerrain,
@@ -61,7 +61,7 @@ public static class TerrainDatabase
             },
             {
                 ResourceType.Wood,
-                new TerrainData
+                new HarvestableTerrainTileData
                 {
                     Name = "Wood",
                     Texture = _assets.Forest,

@@ -4,24 +4,48 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/cart.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/coalOre.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/coalTerrain.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/copperOre.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/copperTerrain.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/courier.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/fonts/pixel1.spritefont</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/forestTerrain.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/goldCoin.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/grassTile.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/heap.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/ironOre.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/ironTerrain.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/logItem.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/mineStation.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/MovementIndicator.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/player.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/progressWheel.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/saleshouse.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/sawmill.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/stoneOre.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/stoneTerrain.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/tileFrame.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/timberyard.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/v2-menuTextureNS.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/warehouse.png</File>
+    <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/worker-mini.png</File>
     <File>/Users/anthonyhuston/code/personal projects [claude ignore]/factoryRogueLike/Content/worker.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

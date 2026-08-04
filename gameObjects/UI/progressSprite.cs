@@ -14,6 +14,7 @@ public class ProgressSprite : AnimatedSprite
         _texture = spriteSheet;
         animationFrames = GetFrames(spriteSheet, frameWidth, frameHeight);
         currentFrameIndex = 0;
+        isUIElement = true;
     }
 
     public void SetProgress(float newProgress)
@@ -37,7 +38,7 @@ public class ProgressSprite : AnimatedSprite
         {
             spriteBatch.Draw(
                 _texture,
-                _position,
+                screenPosition,
                 animationFrames[currentFrameIndex],
                 Color.White
             );

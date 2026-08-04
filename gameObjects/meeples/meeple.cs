@@ -1,63 +1,33 @@
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using factoryRL.GameObjects.Resources;
-using Microsoft.Xna.Framework.Graphics;
-using System.Runtime.CompilerServices;
 using System;
+using factoryRL.perks;
+using Microsoft.Xna.Framework;
 
 namespace factoryRL.GameObjects;
 
 public class Meeple : Entity
 {
     public int mvSpdPx;
-    public Vector2 worldPosition;
     public Vector2 targetWorldPosition;
-    public List<(ResourceItemType Type, int Amount)> inventory = [];
+    public Inventory Inventory { get; } = new();
+    internal int interactionRange = 5;
 
     public void StepTowards(Vector2 targetPosition)
     {
-        Vector2 direction = targetPosition - worldPosition;
+        Vector2 direction = targetPosition - WorldPosition;
 
         if (direction == Vector2.Zero) return;
 
         direction.Normalize();
 
-        if (Vector2.Distance(worldPosition, targetPosition) <= mvSpdPx)
+        float perkSpeedMultiplier = 1.5f;
+        int stepLength = (int)(this is Worker && world.game.perks.IsActive(Perk.INCREASE_WORKER_MOVESPEED) ? mvSpdPx*perkSpeedMultiplier : mvSpdPx);
+
+        if (Vector2.Distance(WorldPosition, targetPosition) <= stepLength)
         {
-            worldPosition = targetPosition;
+            WorldPosition = targetPosition;
         }else
         {
-            worldPosition += direction * mvSpdPx;
+            WorldPosition += direction * stepLength;
         }
     }
-
-    public void AddToInventory(ResourceItemType type, int amount)
-    {
-        var existingItem = inventory.Find(item => item.Type == type);
-        if (existingItem != default)
-        {
-            existingItem.Amount += amount;
-        }
-        else
-        {
-            inventory.Add((type, amount));
-        }
-    }
-
-    public (ResourceItemType Type, int Amount) RemoveFromInventory(ResourceItemType type, int amount)
-    {
-        var existingItem = inventory.Find(item => item.Type == type);
-        if (existingItem != default)
-        {
-            int amountToRemove = Math.Min(existingItem.Amount, amount);
-            existingItem.Amount -= amountToRemove;
-            if (existingItem.Amount <= 0)
-            {
-                inventory.Remove(existingItem);
-            }
-            return (type, amountToRemove);
-        }
-        return (type, 0);
-    }
-
 }

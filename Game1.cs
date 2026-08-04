@@ -5,6 +5,10 @@ using factoryRL.Inputs;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
 using factoryRL.GameObjects;
+using System;
+using System.Collections.Generic;
+using factoryRL.contract;
+using factoryRL.perks;
 
 namespace factoryRL;
 
@@ -16,9 +20,16 @@ public class Game1 : Game
     private GameAssets _assets;
     public Scene currentScene;
     private RenderTarget2D _gameRenderTarget;
-    public (int width, int height) VirtualResolution { get; set; } = (600, 400);
-    public (int width, int height) ViewportResolution { get; set; } = (1200, 800);
+    public (int width, int height) VirtualResolution { get; } = (900, 600);
+    public (int width, int height) ViewportResolution { get; } = (1800, 1200);
     public float scale = 1f;
+    private (World World, Scene GameOver, TitleScreen Title) scenes;
+    public int currentRound = 1;
+    public Dictionary<int, Contract> gameContracts;
+    public PerkManager perks = new PerkManager();
+    private int playerGold = 100;
+
+    private Texture2D pixel;
 
     public Game1()
     {
@@ -27,6 +38,10 @@ public class Game1 : Game
         IsMouseVisible = true;
 
         _inputManager = new InputManager(this);
+
+        var displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+        ViewportResolution = (displayMode.Width, (int)(displayMode.Height*.95));
+        VirtualResolution = (ViewportResolution.width/2, ViewportResolution.height/2);
 
         _graphics.PreferredBackBufferWidth = ViewportResolution.width;
         _graphics.PreferredBackBufferHeight = ViewportResolution.height;
@@ -38,33 +53,136 @@ public class Game1 : Game
         base.Initialize();
     }
 
+    public void ResetGame()
+    {
+        foreach (Perk perk in Enum.GetValues<Perk>())
+        {
+            perks.Deactivate(perk);
+        }
+        
+        scenes.World = new World(this, _assets);
+    }
+
     protected override void LoadContent()
     {
+        scale = ViewportResolution.width / VirtualResolution.width;
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+        pixel = new Texture2D(GraphicsDevice, 1, 1);
+        pixel.SetData(new[] { Color.White });
+
         _assets = new GameAssets
         {
+            pixel = pixel,
             IronTerrain = Content.Load<Texture2D>("ironTerrain"),
             CoalTerrain = Content.Load<Texture2D>("coalTerrain"),
             StoneTerrain = Content.Load<Texture2D>("stoneTerrain"),
             CopperTerrain = Content.Load<Texture2D>("copperTerrain"),
+            IronOre = Content.Load<Texture2D>("ironOre"),
+            CoalOre = Content.Load<Texture2D>("coalOre"),
+            StoneOre = Content.Load<Texture2D>("stoneOre"),
+            CopperOre = Content.Load<Texture2D>("copperOre"),
             Forest = Content.Load<Texture2D>("forestTerrain"),
             Player = Content.Load<Texture2D>("player"),
             Worker = Content.Load<Texture2D>("worker"),
-            IronOre = Content.Load<Texture2D>("ironTerrain"),
             MovmentIndicicator = Content.Load<Texture2D>("MovementIndicator"),
             backgroundTextureTile = Content.Load<Texture2D>("grassTile"),
             hoveredTileIndicator = Content.Load<Texture2D>("tileFrame"),
             ProgressWheel = Content.Load<Texture2D>("progressWheel"),
             Mine = Content.Load<Texture2D>("mineStation"),
             LumberMill = Content.Load<Texture2D>("sawmill"),
+            TimberYard = Content.Load<Texture2D>("timberyard"),
             MenuBackgroundNS = Content.Load<Texture2D>("v2-menuTextureNS"),
-            Pixel1Font = Content.Load<SpriteFont>("fonts/pixel1")
+            Pixel1Font = Content.Load<SpriteFont>("fonts/pixel1"),
+            Courier = Content.Load<Texture2D>("courier"),
+            Warehouse = Content.Load<Texture2D>("warehouse"),
+            workerIcon = Content.Load<Texture2D>("worker-mini"),
+            goldCoin = Content.Load<Texture2D>("goldCoin"),
+            logItem = Content.Load<Texture2D>("logItem"),
+            heap = Content.Load<Texture2D>("heap"),
+            saleshouse = Content.Load<Texture2D>("saleshouse"),
+            Cart = Content.Load<Texture2D>("cart")
         };
 
         ResourceDatabase.Initialize(_assets);
-        TerrainDatabase.Initialize(_assets);
+        HarvestableTerrainTileDatabase.Initialize(_assets);
+        
+        ResetGame();
+        scenes.Title = new TitleScreen(this, _assets);
+        scenes.GameOver = new GameOverScreen(this, _assets);
 
-        currentScene = new World(this, _assets);
+        currentScene = scenes.Title;
+    }
+
+    public int Gold()
+    {
+        return playerGold;
+    }
+
+    public int AddGold(int amt = 1)
+    {
+        playerGold += amt;
+        return playerGold;
+    }
+
+    public bool SubtractGold(int amt = 1)
+    {
+        if (playerGold>=amt){ 
+            playerGold -= amt;
+            return true;
+        }
+        return false;
+    }
+
+    public int SetGold(int amt)
+    {
+        playerGold = amt;
+        return playerGold;
+    }
+
+
+    public void DrawLine(
+        SpriteBatch spriteBatch,
+        Vector2 start,
+        Vector2 end,
+        Color color,
+        float thickness = 1f)
+    {
+        Vector2 edge = end - start;
+
+        float angle = MathF.Atan2(edge.Y, edge.X);
+
+        spriteBatch.Draw(
+            pixel,
+            start,
+            null,
+            color,
+            angle,
+            Vector2.Zero,
+            new Vector2(edge.Length(), thickness),
+            SpriteEffects.None,
+            0);
+    }
+
+    public void GoToGameOverScreen()
+    {
+        currentScene = scenes.GameOver;
+    }
+
+    public void GoToTitleScreen()
+    {
+        currentScene = scenes.Title;
+    }
+
+    public World GoToWorldScreen()
+    {
+        GameContracts.Initialize(scenes.World, _assets);
+        gameContracts = GameContracts.DEMOContracts;
+        gameContracts[currentRound].goldvalue = currentRound*50;
+        gameContracts[currentRound].timer.totalSeconds += perks.IsActive(Perk.INCREASE_ROUND_TIMER_LENGTH) ? 60 : 0;
+        scenes.World.setMainContract(gameContracts[currentRound]);
+        currentScene = scenes.World;
+        return scenes.World;
     }
 
     protected override void Update(GameTime gameTime)
@@ -93,9 +211,9 @@ public class Game1 : Game
         // if (_inputManager.IsKeyPressed(Keys.R)){ ViewportResolution = (1800, 900); }
         // -------------------------------------------------------------------------------------------------------------------
 
-        _graphics.PreferredBackBufferWidth = ViewportResolution.width;
-        _graphics.PreferredBackBufferHeight = ViewportResolution.height;
-        _graphics.ApplyChanges();
+        // _graphics.PreferredBackBufferWidth = ViewportResolution.width;
+        // _graphics.PreferredBackBufferHeight = ViewportResolution.height;
+        // _graphics.ApplyChanges();
 
         scale = ViewportResolution.width / VirtualResolution.width;
 

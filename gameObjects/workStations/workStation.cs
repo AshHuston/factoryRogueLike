@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using factoryRL.Functions;
 using factoryRL.GameObjects.Resources;
 using factoryRL.GameObjects.Terrain;
+using factoryRL.perks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -9,50 +12,74 @@ namespace factoryRL.GameObjects;
 
 public abstract class WorkStation : Entity
 {
+    public int baseMaxNumWorkers;
     public int maxNumWorkers;
     public int currentNumWorkers = 0;
-    private HarvestableTerrain targetTerrain;
+    public TerrainTile targetTerrain;
     internal List<Worker> assignedWorkers = [];
     public static readonly ResourceType[] mineableResourceTypes = [];
-    public List<(ResourceItemType Type, int Amount)> inventory = [];
+    public Inventory Inventory { get; } = new();
     private int harvestTimeRemainingMiliseconds;
+    public ResourceItemType exportType = ResourceItemType.None;
+    internal TextMenu menu;
+    internal WorkStationPanel panel;
+    internal float mineSpeedMultiplier = 1f;
 
-    public WorkStation(World _world, GameAssets _assets, int maxWorkers, HarvestableTerrain _targetTerrain)
+    public WorkStation(World _world, GameAssets _assets, int maxWorkers, TerrainTile _targetTerrain)
     {
         world = _world;
         assets = _assets;
         targetTerrain = _targetTerrain;
-        _position = targetTerrain._position;
+        WorldPosition = targetTerrain.WorldPosition;
         maxNumWorkers = maxWorkers;
+        baseMaxNumWorkers = maxWorkers;
+
+        if (targetTerrain is HarvestableTerrainTile t)
+        {
+            exportType = t.HarvestableTerrainTileData.ItemType;
+        }
+
+        InitializeMenuAndPanel();
     }
 
-    public void AddToInventory(ResourceItemType type, int amount)
+    internal virtual void InitializeMenuAndPanel()
     {
-        var existingItem = inventory.Find(item => item.Type == type);
-        if (existingItem != default)
-        {
-            existingItem.Amount += amount;
-        }
-        else
-        {
-            inventory.Add((type, amount));
-        }
-    }
+        int menuWidth = 80;
+        int menuHeight = 100;
+        int menuMargin = 10;
+        SpriteFont font = assets.Pixel1Font;
+        int panelPaddingPx = 10;
+        int panelWidth = menuWidth;
+        int panelItemHeight = 10;
+        int uniqueItems = Inventory.GetUniqueItemCount();
+        int panelHeight = ((uniqueItems+2)*panelPaddingPx) + ((1+uniqueItems)*panelItemHeight);
+        int panelMargin = menuMargin;
+        int panelY = (int)(1.5*panelMargin) + menuHeight;
 
-    public (ResourceItemType Type, int Amount) RemoveFromInventory(ResourceItemType type, int amount)
-    {
-        var existingItem = inventory.Find(item => item.Type == type);
-        if (existingItem != default)
-        {
-            int amountToRemove = Math.Min(existingItem.Amount, amount);
-            existingItem.Amount -= amountToRemove;
-            if (existingItem.Amount <= 0)
-            {
-                inventory.Remove(existingItem);
-            }
-            return (type, amountToRemove);
-        }
-        return (type, 0);
+        menu = new TextMenu(
+            world,
+            assets,
+            new Rectangle(world.game.VirtualResolution.width-menuWidth-menuMargin, menuMargin, menuWidth, menuHeight),
+            [
+                new TextMenuOption("X", font, Color.Red, () => CloseMenu()),
+                new TextMenuOption("+ Worker", font, Color.Black, () => AssignWorker()),
+                new TextMenuOption("- Worker", font, Color.Black, () => UnassignWorker()),
+                // Upgrade
+                // Sell/scrap
+                // Vein info
+            ],
+            menuWidth,
+            menuHeight
+        );
+
+        panel = new WorkStationPanel(
+            world,
+            assets,
+            new Rectangle(world.game.VirtualResolution.width-panelMargin-panelWidth, panelY, panelWidth, panelHeight),
+            this,
+            panelWidth,
+            panelHeight
+        );
     }
 
     public bool CanAssignWorker()
@@ -62,52 +89,104 @@ public abstract class WorkStation : Entity
 
     public bool AssignWorker(Worker worker)
     {
-        if (CanAssignWorker())
+        if (!assignedWorkers.Contains(worker) && CanAssignWorker())
         {
+            worker.UnasignFromAll();
             assignedWorkers.Add(worker);
-            currentNumWorkers++;
+            worker.setTargetPosition(this);
             return true;
         }
         return false;
+    }
+
+    public bool AssignWorker()
+    {
+        Worker foundWorker = world.FindClosestEntity<Worker>(WorldPosition, (w) => !assignedWorkers.Contains(w) && w.IsIdle());
+        return foundWorker == null ? false : AssignWorker(foundWorker);
     }
 
     public bool UnassignWorker(Worker worker)
     {
         if (assignedWorkers.Remove(worker))
         {
-            currentNumWorkers--;
+            worker.Alpha = 1;
             return true;
         }
         return false;
     }
 
+    public bool UnassignWorker()
+    {
+        return assignedWorkers.Count > 0 
+            ? UnassignWorker(assignedWorkers[0])
+            : false;
+    }
+
+    private void OpenMenu()
+    {
+        if (menu.isOpen) { return; }
+        foreach (WorkStation w in world.gameEntities.OfType<WorkStation>())
+        {
+            w.CloseMenu();
+        }
+        menu.open();
+    }
+
+    internal void CloseMenu()
+    {
+        menu.close();
+    }
+
     public override void Update(GameTime gameTime)
     {
-        _position = targetTerrain._position;
         currentNumWorkers = assignedWorkers.Count;
-        //currentNumWorkers = 1; //TEMP
 
-        if (targetTerrain != null) {
+        if (currentNumWorkers > 0 && targetTerrain is HarvestableTerrainTile t) 
+        {
+            float baseMineSpd = 0.5f;
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            float perkMineSpeedMultiplier = world.game.perks.IsActive(Perk.INCREASE_WORKER_MINESPEED) ? 1.25f : 1;
+            harvestTimeRemainingMiliseconds -= (int)(
+                baseMineSpd *
+                deltaTime *
+                currentNumWorkers *
+                perkMineSpeedMultiplier *
+                mineSpeedMultiplier
+            );
+            t.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / t.HarvestableTerrainTileData.MiningTimeMiliseconds);
+            t.harvestProgressWheel.screenPosition = screenPosition;
+
+            if (harvestTimeRemainingMiliseconds <= 0)
             {
-                float deltaTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                harvestTimeRemainingMiliseconds -= (int)(deltaTime*currentNumWorkers);
-                targetTerrain.harvestProgressWheel.SetProgress(1 - (float)harvestTimeRemainingMiliseconds / targetTerrain.terrainData.MiningTimeMiliseconds);
-                targetTerrain.harvestProgressWheel._position = _position;
-
-                if (harvestTimeRemainingMiliseconds <= 0)
-                {
-                    var (type, amount) = targetTerrain.HarvestResource();
-                    AddToInventory(type, amount);
-                    harvestTimeRemainingMiliseconds = targetTerrain.terrainData.MiningTimeMiliseconds;
-                }
+                var (type, amount) = t.HarvestResource();
+                Inventory.Add(type, amount);
+                harvestTimeRemainingMiliseconds = t.HarvestableTerrainTileData.MiningTimeMiliseconds;
             }
         }
+        
+        if (EntityFunctions.Clicked(targetTerrain)||EntityFunctions.Clicked(this)) { OpenMenu(); }
+        
 
-        base.Update(gameTime);
+        foreach (Worker w in assignedWorkers) {
+            if (w.WorldPosition == WorldPosition){ w.Alpha = 0; }
+        }
+
+        if (menu.isOpen && !panel.isOpen) { panel.open(); }
+        if (menu.isClosing) { panel.close(); }
+
+        base.Update(gameTime);  
     }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
         base.Draw(spriteBatch);
+        if (menu.isOpen)
+        {
+            spriteBatch.Draw(
+                assets.hoveredTileIndicator,
+                screenPosition,
+                Color.CornflowerBlue
+            );
+        }
     }
 }

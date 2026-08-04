@@ -75,8 +75,8 @@ public class NineSlicedSprite : Entity
         for (int i = 0; i < 9; i++){
             Rectangle sourceRect = slicedSegments[i];
             Rectangle destRect = new Rectangle(
-                gridPositions[i][0] + (int)_position.X,
-                gridPositions[i][1] + (int)_position.Y,
+                gridPositions[i][0] + (int)screenPosition.X,
+                gridPositions[i][1] + (int)screenPosition.Y,
                 gridDimensions[i][0],
                 gridDimensions[i][1]
             );

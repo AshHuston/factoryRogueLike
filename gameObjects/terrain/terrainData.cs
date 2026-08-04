@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace factoryRL.GameObjects.Terrain;
 
-public class TerrainData
+public class HarvestableTerrainTileData
 {
     public string Name { get; set; }
     public int MiningTimeMiliseconds { get; set; }
